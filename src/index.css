@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* loouz Design System — Dark + Neon/Gradient theme. All colors in HSL. */
+
+@layer base {
+     :root {
+        --background: 230 25% 5%;
+        --foreground: 210 40% 95%;
+        --card: 230 25% 8%;
+        --card-foreground: 210 40% 95%;
+        --popover: 230 25% 8%;
+        --popover-foreground: 210 40% 95%;
+        --primary: 265 90% 65%;
+        --primary-foreground: 0 0% 100%;
+        --secondary: 230 25% 14%;
+        --secondary-foreground: 210 40% 95%;
+        --muted: 230 20% 14%;
+        --muted-foreground: 220 15% 55%;
+        --accent: 195 100% 55%;
+        --accent-foreground: 230 25% 5%;
+        --destructive: 0 72% 55%;
+        --destructive-foreground: 0 0% 100%;
+        --border: 230 20% 16%;
+        --input: 230 20% 16%;
+        --ring: 265 90% 65%;
+        --radius: 0.75rem;
+        /* Custom tokens */
+        --neon-purple: 265 90% 65%;
+        --neon-cyan: 195 100% 55%;
+        --neon-blue: 220 90% 60%;
+        --glow-purple: 265 90% 65%;
+        --glow-cyan: 195 100% 55%;
+        --sidebar-background: 230 25% 7%;
+        --sidebar-foreground: 210 40% 95%;
+        --sidebar-primary: 265 90% 65%;
+        --sidebar-primary-foreground: 0 0% 100%;
+        --sidebar-accent: 230 25% 14%;
+        --sidebar-accent-foreground: 210 40% 95%;
+        --sidebar-border: 230 20% 16%;
+        --sidebar-ring: 265 90% 65%;
+    }
+}
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+    body {
+        @apply bg-background text-foreground antialiased;
+        font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+}
+
+@layer utilities {
+    .text-glow-purple {
+        text-shadow: 0 0 20px hsl(var(--neon-purple) / 0.6), 0 0 40px hsl(var(--neon-purple) / 0.3);
+    }
+    .text-glow-cyan {
+        text-shadow: 0 0 20px hsl(var(--neon-cyan) / 0.6), 0 0 40px hsl(var(--neon-cyan) / 0.3);
+    }
+    .box-glow-purple {
+        box-shadow: 0 0 15px hsl(var(--neon-purple) / 0.3), 0 0 30px hsl(var(--neon-purple) / 0.15);
+    }
+    .box-glow-cyan {
+        box-shadow: 0 0 15px hsl(var(--neon-cyan) / 0.3), 0 0 30px hsl(var(--neon-cyan) / 0.15);
+    }
+    .gradient-bg {
+        background: radial-gradient( ellipse at 20% 50%, hsl(var(--neon-purple) / 0.08) 0%, transparent 50%), radial-gradient( ellipse at 80% 20%, hsl(var(--neon-blue) / 0.06) 0%, transparent 50%), radial-gradient( ellipse at 50% 80%, hsl(var(--neon-cyan) / 0.04) 0%, transparent 50%), hsl(var(--background));
+    }
+    .gradient-btn {
+        background: linear-gradient( 135deg, hsl(var(--neon-purple)) 0%, hsl(var(--neon-blue)) 50%, hsl(var(--neon-cyan)) 100%);
+    }
+}
