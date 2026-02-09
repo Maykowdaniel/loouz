@@ -21,7 +21,7 @@ const Index = () => {
         className="animate-fade-in-up mb-4 max-w-3xl text-center text-4xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-br from-white via-purple-50 to-purple-400 bg-clip-text text-transparent drop-shadow-sm"
         style={{ animationDelay: "0.1s", opacity: 0 }}
       >
-        Converse com estranhos, o novo Omegle
+       {t('intro')}
       </h2>
 
       {/* Subtítulo */}
@@ -29,7 +29,7 @@ const Index = () => {
         className="animate-fade-in-up mb-10 max-w-lg text-center text-lg text-zinc-400 sm:text-xl font-medium"
         style={{ animationDelay: "0.2s", opacity: 0 }}
       >
-        A melhor alternativa ao Omegle para bate-papo aleatório por vídeo e texto com estranhos.
+        {t('omegle')}
       </p>
 
       {/* Botão de Ação */}

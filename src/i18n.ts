@@ -15,6 +15,8 @@ i18n
       en: {
         translation: {
           // Index
+          "intro":"Chat with strangers, the new Omegle.",
+          "omegle":"The best alternative to Omegle for random video and text chat with strangers.",
           "btn_enter": "Enter Text Chat",
           "btn_video": "Video Chat (Random)",
           "headline": "Chat with global people, the new Omegle.",
@@ -89,6 +91,8 @@ i18n
       pt: {
         translation: {
           // Index
+           "intro":"Chat with strangers, the new Omegle.",
+          "omegle":"The best alternative to Omegle for random video and text chat with strangers.",
           "btn_enter": "Entrar no Chat de Texto",
           "btn_video": "Vídeo Chat (Aleatório)",
           "headline": "Converse com pessoas globais, o novo Omegle.",
