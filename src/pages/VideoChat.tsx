@@ -7,7 +7,8 @@ import { io, Socket } from "socket.io-client";
 import { useTranslation } from "react-i18next";
 
 // Use seu IP local ou link do Render
-const SOCKET_URL = "http://localhost:3001";
+// Mude para:
+const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 
 const VideoChat = () => {
   const navigate = useNavigate();

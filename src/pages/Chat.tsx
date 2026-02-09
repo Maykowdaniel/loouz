@@ -52,7 +52,7 @@ const Chat = () => {
   }, []);
 
   useEffect(() => {
-    socketRef.current = io("http://localhost:3001");
+    socketRef.current = io("https://loouz-oficial-final.onrender.com");
     socketRef.current.on("connect", () => {
       setIsConnected(true);
       socketRef.current?.emit("join_room", { 

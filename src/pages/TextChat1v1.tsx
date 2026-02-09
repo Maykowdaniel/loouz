@@ -15,7 +15,8 @@ const getFlagEmoji = (countryCode: string) => {
     .replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
 };
 
-const SOCKET_URL = "http://localhost:3001"; 
+// Mude para:
+const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 
 const TextChat1v1 = () => {
   const navigate = useNavigate();
