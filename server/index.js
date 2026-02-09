@@ -16,7 +16,17 @@ const io = new Server(server, {
     }
 });
 
-const activeUsers = new Map();
+// --- MEMÓRIA DO SERVIDOR ---
+const activeUsers = new Map(); // Para salas de grupo (Quartos)
+
+// Memória de Vídeo
+let videoQueue = [];
+const videoPairs = new Map();
+
+// Memória de Texto 1v1
+let textQueue = [];
+const textPairs = new Map();
+const textUsers = new Map(); // Guarda nome/país
 
 function getRoomCount(room) {
     const roomSet = io.sockets.adapter.rooms.get(room);
@@ -26,8 +36,6 @@ function getRoomCount(room) {
 function getCountryByIp(socket) {
     let ip = socket.handshake.headers['x-forwarded-for'] || socket.conn.remoteAddress;
     if (ip && ip.includes('::ffff:')) ip = ip.split('::ffff:')[1];
-
-    // Simula BR em localhost
     if (ip === '127.0.0.1' || ip === '::1') return 'BR';
 
     const geo = geoip.lookup(ip);
@@ -37,14 +45,15 @@ function getCountryByIp(socket) {
 io.on("connection", (socket) => {
     console.log(`Socket conectado: ${socket.id}`);
 
+    // --- 1. CHAT DE SALAS (QUARTOS/GRUPO) ---
     socket.on("join_room", (data) => {
-        // AGORA RECEBEMOS O GENDER AQUI
         const { room, username, gender } = data;
         socket.join(room);
-
         const country = getCountryByIp(socket);
 
-        // Salvamos o gênero na memória junto com os outros dados
+        videoQueue = videoQueue.filter(id => id !== socket.id);
+        textQueue = textQueue.filter(id => id !== socket.id);
+
         activeUsers.set(socket.id, { username, room, country, gender });
 
         socket.to(room).emit("receive_message", {
@@ -62,16 +71,134 @@ io.on("connection", (socket) => {
     socket.on("send_message", (data) => {
         const user = activeUsers.get(socket.id);
         const senderCountry = user ? user.country : 'UN';
-        // Recuperamos o gênero salvo
         const senderGender = user ? user.gender : 'unspecified';
-
-        // Enviamos o gênero junto com a mensagem e a bandeira
         const messageWithDetails = {...data, senderCountry, senderGender };
-
         io.to(data.room).emit("receive_message", messageWithDetails);
     });
 
+    // --- 2. LÓGICA DO VÍDEO 1v1 ---
+    socket.on("join_video_queue", () => {
+        const currentPartner = videoPairs.get(socket.id);
+        if (currentPartner) {
+            io.to(currentPartner).emit("partner_disconnected");
+            videoPairs.delete(currentPartner);
+            videoPairs.delete(socket.id);
+        }
+
+        videoQueue = videoQueue.filter(id => id !== socket.id);
+
+        if (videoQueue.length > 0) {
+            const partnerSocketId = videoQueue.shift();
+
+            if (partnerSocketId === socket.id) {
+                videoQueue.push(socket.id);
+                return;
+            }
+
+            videoPairs.set(socket.id, partnerSocketId);
+            videoPairs.set(partnerSocketId, socket.id);
+
+            io.to(partnerSocketId).emit("start_call", { socketId: socket.id, initiator: true });
+            io.to(socket.id).emit("start_call", { socketId: partnerSocketId, initiator: false });
+        } else {
+            videoQueue.push(socket.id);
+        }
+    });
+
+    socket.on("send_signal", ({ userToCall, signalData }) => {
+        io.to(userToCall).emit("receive_signal", { signal: signalData });
+    });
+
+    // --- 3. LÓGICA DO CHAT DE TEXTO 1V1 ---
+    socket.on("join_text_queue", (userData) => {
+        const { name, gender } = userData || { name: "Estranho", gender: "unspecified" };
+        const country = getCountryByIp(socket);
+
+        textUsers.set(socket.id, { name, gender, country });
+
+        const oldPair = textPairs.get(socket.id);
+        if (oldPair) {
+            io.to(oldPair.partnerId).emit("text_partner_disconnected");
+            textPairs.delete(oldPair.partnerId);
+            textPairs.delete(socket.id);
+        }
+
+        textQueue = textQueue.filter(id => id !== socket.id);
+
+        if (textQueue.length > 0) {
+            const partnerId = textQueue.shift();
+
+            if (partnerId === socket.id) {
+                textQueue.push(socket.id);
+                return;
+            }
+
+            const roomId = `text-room-${socket.id}-${partnerId}`;
+
+            socket.join(roomId);
+
+            const partnerSocket = io.sockets.sockets.get(partnerId);
+            if (partnerSocket) {
+                partnerSocket.join(roomId);
+            }
+
+            textPairs.set(socket.id, { partnerId, roomId });
+            textPairs.set(partnerId, { partnerId: socket.id, roomId });
+
+            const myData = textUsers.get(socket.id);
+            const partnerData = textUsers.get(partnerId);
+
+            // --- AQUI ESTAVA O ERRO, MUDEI A LÓGICA PARA NÃO USAR ?. ---
+
+            // Envia para MIM
+            io.to(socket.id).emit("text_paired", {
+                roomId,
+                partnerName: (partnerData && partnerData.name) ? partnerData.name : "Estranho",
+                partnerCountry: (partnerData && partnerData.country) ? partnerData.country : "UN"
+            });
+
+            // Envia para ELE
+            io.to(partnerId).emit("text_paired", {
+                roomId,
+                partnerName: (myData && myData.name) ? myData.name : "Estranho",
+                partnerCountry: (myData && myData.country) ? myData.country : "UN"
+            });
+
+        } else {
+            textQueue.push(socket.id);
+        }
+    });
+
+    socket.on("send_1v1_message", (data) => {
+        const pair = textPairs.get(socket.id);
+        if (pair) {
+            io.to(pair.roomId).emit("receive_1v1_message", {
+                ...data,
+                sender: socket.id === data.senderId ? "user" : "stranger"
+            });
+        }
+    });
+
+    // --- 4. DESCONEXÃO GERAL ---
     socket.on("disconnect", () => {
+        textUsers.delete(socket.id);
+
+        videoQueue = videoQueue.filter(id => id !== socket.id);
+        const vidPartner = videoPairs.get(socket.id);
+        if (vidPartner) {
+            io.to(vidPartner).emit("partner_disconnected");
+            videoPairs.delete(vidPartner);
+            videoPairs.delete(socket.id);
+        }
+
+        textQueue = textQueue.filter(id => id !== socket.id);
+        const txtPair = textPairs.get(socket.id);
+        if (txtPair) {
+            io.to(txtPair.partnerId).emit("text_partner_disconnected");
+            textPairs.delete(txtPair.partnerId);
+            textPairs.delete(socket.id);
+        }
+
         const user = activeUsers.get(socket.id);
         if (user) {
             io.to(user.room).emit("receive_message", {
@@ -92,5 +219,5 @@ io.on("connection", (socket) => {
 
 const PORT = 3001;
 server.listen(PORT, () => {
-    console.log(`SERVIDOR (COM AVATARES) RODANDO NA PORTA ${PORT}`);
+    console.log(`SERVIDOR ARRUAMADO RODANDO NA PORTA ${PORT}`);
 });

@@ -13,7 +13,7 @@ export interface Message {
   sender: "user" | "stranger" | "system";
   senderName: string;
   senderCountry?: string;
-  senderGender?: "male" | "female" | "unspecified"; // Novo campo
+  senderGender?: "male" | "female" | "unspecified"; 
   text: string;
   timestamp: number;
 }
@@ -26,11 +26,11 @@ const Chat = () => {
     name?: string; 
     roomName?: string; 
     roomId?: string; 
-    gender?: "male" | "female" | "unspecified" // Recebe o gênero
+    gender?: "male" | "female" | "unspecified"
   } | null;
 
   const userName = state?.name || "Visitante";
-  const userGender = state?.gender || "unspecified"; // Pega o gênero ou define padrão
+  const userGender = state?.gender || "unspecified"; 
   const roomName = state?.roomName || "Bate-papo Vooz";
   const roomId = state?.roomId || "global";
 
@@ -53,10 +53,8 @@ const Chat = () => {
 
   useEffect(() => {
     socketRef.current = io("http://localhost:3001");
-
     socketRef.current.on("connect", () => {
       setIsConnected(true);
-      // ENVIANDO O GENDER AQUI
       socketRef.current?.emit("join_room", { 
         room: roomId, 
         username: userName, 
@@ -72,11 +70,10 @@ const Chat = () => {
         sender: data.sender === "system" ? "system" : (isMe ? "user" : "stranger"),
         senderName: data.senderName,
         senderCountry: data.senderCountry,
-        senderGender: data.senderGender, // Recebendo o gênero do servidor
+        senderGender: data.senderGender,
         text: data.text,
         timestamp: data.timestamp || Date.now(),
       };
-
       setMessages((prev) => [...prev, newMessage]);
     });
 
@@ -107,9 +104,10 @@ const Chat = () => {
     inputRef.current?.focus();
   };
 
+  // --- CORREÇÃO AQUI: VOLTA PARA ROOMS ---
   const handleLeaveRoom = () => {
     socketRef.current?.disconnect();
-    navigate("/lobby", { state: { name: userName, gender: userGender } });
+    navigate("/rooms", { state: { name: userName, gender: userGender } });
   };
 
   const handleLogout = () => {
@@ -119,7 +117,6 @@ const Chat = () => {
 
   return (
     <div className="gradient-bg flex h-screen flex-col">
-      {/* Header (Igual ao anterior) */}
       <header className="flex items-center justify-between border-b border-border bg-card/60 px-4 py-3 backdrop-blur-sm">
         <div className="flex items-center gap-3">
           <Button onClick={handleLeaveRoom} variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
@@ -145,7 +142,6 @@ const Chat = () => {
         </Button>
       </header>
 
-      {/* Area de mensagens */}
       <ScrollArea className="flex-1 px-4 py-4">
         <div className="mx-auto max-w-3xl space-y-3">
           {messages.length === 0 && (
@@ -164,7 +160,7 @@ const Chat = () => {
               sender={msg.sender}
               senderName={msg.senderName}
               senderCountry={msg.senderCountry}
-              senderGender={msg.senderGender} // Passando o gênero
+              senderGender={msg.senderGender} 
               text={msg.text}
             />
           ))}
@@ -172,7 +168,6 @@ const Chat = () => {
         </div>
       </ScrollArea>
 
-      {/* Input Area (Igual ao anterior) */}
       <div className="border-t border-border bg-card/60 px-4 py-3 backdrop-blur-sm">
         <div className="mx-auto flex max-w-3xl gap-2">
           <Input

@@ -3,65 +3,70 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, User, LogIn } from "lucide-react";
+import { ArrowLeft, User, LogIn } from "lucide-react"; // LogIn para o botão entrar
+import { useTranslation } from "react-i18next";
 
 type Gender = "male" | "female" | "unspecified";
 
-const genderOptions: { value: Gender; label: string; icon: string }[] = [
-  { value: "male", label: "Masculino", icon: "♂" },
-  { value: "female", label: "Feminino", icon: "♀" },
-  { value: "unspecified", label: "Prefiro não dizer", icon: "—" },
-];
-
 const Setup = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  
   const [name, setName] = useState("");
   const [gender, setGender] = useState<Gender>("unspecified");
   const [error, setError] = useState("");
 
-  const handleSubmit = () => {
+  const genderOptions: { value: Gender; label: string; icon: string }[] = [
+    { value: "male", label: t('male'), icon: "♂" },
+    { value: "female", label: t('female'), icon: "♀" },
+    { value: "unspecified", label: t('unspecified'), icon: "—" },
+  ];
+
+  const handleContinue = () => {
     const trimmed = name.trim();
     if (!trimmed) {
-      setError("Por favor, escolha um nome.");
+      setError(t('error_name')); 
       return;
     }
     if (trimmed.length > 30) {
-      setError("O nome deve ter no máximo 30 caracteres.");
+      setError(t('error_name_len'));
       return;
     }
-    // Navigate to chat with user info via state (no persistence)
+
+    // Leva para o "Lar" (Lobby) com os dados do usuário
     navigate("/lobby", { state: { name: trimmed, gender } });
   };
 
   return (
     <div className="gradient-bg flex min-h-screen flex-col items-center justify-center px-4">
-      {/* Back button */}
+      {/* Botão Voltar */}
       <button
         onClick={() => navigate("/")}
         className="animate-fade-in absolute left-4 top-4 flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground sm:left-6 sm:top-6"
       >
         <ArrowLeft className="h-4 w-4" />
-        Voltar
+        {t('back')}
       </button>
 
       <div className="animate-fade-in-up w-full max-w-sm">
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-glow-purple mb-2 text-3xl font-bold tracking-tight">
-            Entrar no chat
+            Entrar no loouz
           </h1>
           <p className="text-sm text-muted-foreground">
-            Escolha um nome e comece a conversar
+            {t('enter_name')}
           </p>
         </div>
 
-        {/* Form */}
+        {/* Formulário */}
         <div className="space-y-6 rounded-xl border border-border bg-card/50 p-6 backdrop-blur-sm">
-          {/* Name input */}
+          
+          {/* Input de Nome */}
           <div className="space-y-2">
             <Label htmlFor="username" className="text-sm text-foreground">
               <User className="mr-1 inline h-3.5 w-3.5" />
-              Seu nome
+              {t('your_name')}
             </Label>
             <Input
               id="username"
@@ -71,7 +76,7 @@ const Setup = () => {
                 setName(e.target.value);
                 if (error) setError("");
               }}
-              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+              onKeyDown={(e) => e.key === "Enter" && handleContinue()}
               maxLength={30}
               className="border-border bg-background/50 text-foreground placeholder:text-muted-foreground focus-visible:ring-primary"
             />
@@ -82,9 +87,9 @@ const Setup = () => {
             )}
           </div>
 
-          {/* Gender selection */}
+          {/* Seleção de Gênero */}
           <div className="space-y-2">
-            <Label className="text-sm text-foreground">Sexo</Label>
+            <Label className="text-sm text-foreground">{t('gender_label')}</Label>
             <div className="grid grid-cols-3 gap-2">
               {genderOptions.map((opt) => (
                 <button
@@ -103,14 +108,17 @@ const Setup = () => {
             </div>
           </div>
 
-          {/* Submit */}
-          <Button
-            onClick={handleSubmit}
-            className="gradient-btn w-full border-0 py-5 font-semibold text-primary-foreground transition-all duration-300 hover:scale-[1.02] hover:box-glow-purple"
-          >
-            <LogIn className="mr-2 h-4 w-4" />
-            Entrar no chat
-          </Button>
+          {/* ÚNICO BOTÃO DE CONTINUAR */}
+          <div className="pt-2">
+            <Button
+              onClick={handleContinue}
+              className="gradient-btn w-full border-0 py-6 font-semibold text-primary-foreground transition-all duration-300 hover:scale-[1.02] hover:box-glow-purple"
+            >
+              <LogIn className="mr-2 h-4 w-4" />
+              Continuar {/* Pode usar t('continue') se tiver tradução */}
+            </Button>
+          </div>
+
         </div>
       </div>
     </div>

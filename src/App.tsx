@@ -3,12 +3,19 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Index from "./pages/Index";
 import Setup from "./pages/Setup";
-import Chat from "./pages/Chat";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
-import Lobby from "./pages/lobby";
+
+import Lobby from "./pages/lobby"; // Agora é o "Lar"
+import Rooms from "./pages/Rooms"; // <--- IMPORTAR NOVO ARQUIVO "Quartos"
+
+import VideoChat from "./pages/VideoChat";
+import TextChat1v1 from "./pages/TextChat1v1";
+import Chat from "./pages/Chat"; // Chat de sala específica
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -20,10 +27,19 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/setup" element={<Setup />} />
-          <Route path="/chat" element={<Chat />} />
           <Route path="/terms" element={<Terms />} />
-          <Route path="/lobby" element={<Lobby />} /> {/* NOVA ROTA */}
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+
+          {/* Lar (Botões 1v1) */}
+          <Route path="/lobby" element={<Lobby />} />
+
+          {/* Quartos (Lista de Salas) */}
+          <Route path="/rooms" element={<Rooms />} />  {/* <--- MUDANÇA AQUI: Usa o Rooms, não o Chat */}
+
+          {/* Modos de Conversa */}
+          <Route path="/text-chat" element={<TextChat1v1 />} />
+          <Route path="/video" element={<VideoChat />} />
+          <Route path="/chat" element={<Chat />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
