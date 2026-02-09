@@ -91,8 +91,8 @@ i18n
       pt: {
         translation: {
           // Index
-           "intro":"Chat with strangers, the new Omegle.",
-          "omegle":"The best alternative to Omegle for random video and text chat with strangers.",
+          "intro":"Converse com estranhos, o novo Omegle.",
+          "omegle":"A melhor alternativa ao Omegle para bate-papo aleatório por vídeo e texto com estranhos.",
           "btn_enter": "Entrar no Chat de Texto",
           "btn_video": "Vídeo Chat (Aleatório)",
           "headline": "Converse com pessoas globais, o novo Omegle.",
