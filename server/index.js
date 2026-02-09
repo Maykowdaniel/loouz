@@ -217,7 +217,7 @@ io.on("connection", (socket) => {
     });
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001; // <--- O Render vai preencher essa variável automaticamente
 server.listen(PORT, () => {
     console.log(`SERVIDOR ARRUAMADO RODANDO NA PORTA ${PORT}`);
 });
