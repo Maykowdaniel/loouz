@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Globe, Shield, Zap, ChevronDown } from "lucide-react";
+import { MessageSquare, Video, Globe, Shield, Zap, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const Index = () => {
@@ -14,77 +14,100 @@ const Index = () => {
   return (
     <div className="gradient-bg flex flex-col">
       
-      {/* --- HERO SECTION (100% da Tela) --- */}
-      {/* h-[100dvh] garante que ocupe a altura exata da tela do celular/pc */}
-      <div className="relative flex h-[100dvh] w-full flex-col items-center justify-center px-4">
+      {/* --- HERO SECTION (100% da Tela - Layout Flexível) --- */}
+      {/* min-h-[100dvh] garante altura total, mas permite crescer se a tela for muito pequena */}
+      <div className="relative flex min-h-[100dvh] w-full flex-col items-center justify-between px-4 py-8">
         
-        {/* Logo Principal - Centralizado e Grande */}
-        <div className="animate-fade-in-up mb-8 scale-110 sm:scale-125">
-          <h1 className="text-glow-purple text-7xl font-black tracking-tighter sm:text-8xl md:text-9xl">
-            lo<span className="text-accent">uu</span>z
-          </h1>
-        </div>
+        {/* 1. ESPAÇO VAZIO SUPERIOR (Para equilibrar) */}
+        <div className="flex-none h-10 sm:h-20"></div>
 
-        {/* Título Principal */}
-        <h2 
-          className="animate-fade-in-up mb-6 max-w-4xl text-center text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl bg-gradient-to-br from-white via-purple-50 to-purple-400 bg-clip-text text-transparent drop-shadow-sm leading-tight"
-          style={{ animationDelay: "0.1s", opacity: 0 }}
-        >
-          {t('intro')}
-        </h2>
+        {/* 2. CONTEÚDO CENTRAL (Logo, Textos e Botões) */}
+        <div className="flex flex-col items-center justify-center w-full max-w-4xl">
+          
+          {/* Logo Principal */}
+          <div className="animate-fade-in-up mb-6 scale-110 sm:scale-125">
+            <h1 className="text-glow-purple text-7xl font-black tracking-tighter sm:text-8xl md:text-9xl">
+              lo<span className="text-accent">uu</span>z
+            </h1>
+          </div>
 
-        {/* Subtítulo */}
-        <p
-          className="animate-fade-in-up mb-12 max-w-lg text-center text-lg text-zinc-400 sm:text-xl font-medium"
-          style={{ animationDelay: "0.2s", opacity: 0 }}
-        >
-          {t('omegle')}
-        </p>
-
-        {/* Botão de Ação (Hero) */}
-        <div
-          className="animate-fade-in-up mb-8"
-          style={{ animationDelay: "0.3s", opacity: 0 }}
-        >
-          <Button
-            onClick={() => navigate("/setup")}
-            size="lg"
-            className="gradient-btn hover:box-glow-purple h-16 border-0 px-12 text-2xl font-bold text-primary-foreground transition-all duration-300 hover:scale-105 shadow-2xl shadow-purple-900/30 rounded-full"
+          {/* Título Principal */}
+          <h2 
+            className="animate-fade-in-up mb-4 max-w-3xl text-center text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl bg-gradient-to-br from-white via-purple-50 to-purple-400 bg-clip-text text-transparent drop-shadow-sm leading-tight"
+            style={{ animationDelay: "0.1s", opacity: 0 }}
           >
-            <MessageSquare className="mr-3 h-7 w-7" />
-            {t('btn_text_chat')}
-          </Button>
-        </div>
+            {t('intro')}
+          </h2>
 
-        {/* Aviso de Idade e Termos */}
-        <p
-          className="animate-fade-in-up absolute bottom-20 text-center text-xs text-muted-foreground/60"
-          style={{ animationDelay: "0.45s", opacity: 0 }}
-        >
-          {t('age_warning_1')}
-          <button
-            onClick={() => navigate("/terms")}
-            className="text-white/40 underline underline-offset-2 transition-colors hover:text-accent ml-1"
+          {/* Subtítulo */}
+          <p
+            className="animate-fade-in-up mb-10 max-w-lg text-center text-lg text-zinc-400 sm:text-xl font-medium"
+            style={{ animationDelay: "0.2s", opacity: 0 }}
           >
-            {t('age_warning_2')}
-          </button>{" "}
-          {t('age_warning_3')}
-        </p>
+            {t('omegle')}
+          </p>
 
-        {/* Seta indicando rolagem (Pula para chamar atenção) */}
-        <div 
-          onClick={scrollToContent}
-          className="absolute bottom-6 animate-bounce cursor-pointer text-white/20 hover:text-white transition-colors"
-        >
-          <ChevronDown size={32} />
+          {/* --- BOTOES NO ESTILO VOOZ --- */}
+          <div
+            className="animate-fade-in-up flex flex-col w-full max-w-xs gap-4 sm:flex-row sm:max-w-2xl sm:gap-6"
+            style={{ animationDelay: "0.3s", opacity: 0 }}
+          >
+            {/* Botão 1: TEXT CHAT (Estilo Secundário/Claro igual Vooz) */}
+            <Button
+              onClick={() => navigate("/setup")}
+              size="lg"
+              className="flex-1 h-16 rounded-full bg-zinc-200 text-zinc-900 hover:bg-white hover:scale-105 transition-all text-xl font-bold shadow-lg"
+            >
+              <MessageSquare className="mr-2 h-6 w-6" />
+              {t('btn_enter')} {/* "Text Chat" no seu i18n */}
+            </Button>
+
+            {/* Botão 2: VIDEO CHAT (Estilo Principal + PULSANDO) */}
+            <Button
+              onClick={() => navigate("/setup")}
+              size="lg"
+              className="flex-1 h-16 rounded-full gradient-btn text-white hover:box-glow-purple hover:scale-105 transition-all text-xl font-bold shadow-xl shadow-purple-900/30 relative overflow-hidden"
+            >
+              {/* Efeito de Pulso (Anel brilhante) */}
+              <span className="absolute inset-0 rounded-full animate-ping bg-purple-500 opacity-20 duration-1000"></span>
+              
+              <Video className="mr-2 h-6 w-6 relative z-10" />
+              <span className="relative z-10">{t('btn_video')}</span> {/* "Video Chat" no seu i18n */}
+            </Button>
+          </div>
+
         </div>
+
+        {/* 3. RODAPÉ (Aviso de Idade + Seta) */}
+        {/* mb-4 garante margem do fundo da tela */}
+        <div className="flex flex-col items-center gap-4 mt-8 animate-fade-in-up" style={{ animationDelay: "0.45s", opacity: 0 }}>
+          
+          {/* Aviso de Idade (Agora flui com a página, não sobrepõe) */}
+          <p className="text-center text-xs text-muted-foreground/60 max-w-sm px-4">
+            {t('age_warning_1')}
+            <button
+              onClick={() => navigate("/terms")}
+              className="text-white/40 underline underline-offset-2 transition-colors hover:text-accent ml-1"
+            >
+              {t('age_warning_2')}
+            </button>{" "}
+            {t('age_warning_3')}
+          </p>
+
+          {/* Seta Pula-Pula */}
+          <div 
+            onClick={scrollToContent}
+            className="animate-bounce cursor-pointer text-white/20 hover:text-white transition-colors pt-2"
+          >
+            <ChevronDown size={32} />
+          </div>
+        </div>
+
       </div>
 
-      {/* --- SEO SECTION (Abaixo da dobra - Tópicos Limpos) --- */}
-      {/* Sem caixas, apenas texto e ícones flutuando no fundo */}
-      <div id="more-content" className="w-full bg-black/20 py-24 backdrop-blur-sm">
+      {/* --- SEO SECTION (Abaixo da dobra) --- */}
+      <div id="more-content" className="w-full bg-black/40 py-24 backdrop-blur-md border-t border-white/5">
         <div className="mx-auto max-w-5xl px-6">
-          
           <div className="grid grid-cols-1 gap-16 md:grid-cols-3">
             
             {/* Tópico 1 */}
@@ -123,7 +146,6 @@ const Index = () => {
           </div>
         </div>
       </div>
-      
     </div>
   );
 };
