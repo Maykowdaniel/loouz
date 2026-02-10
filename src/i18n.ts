@@ -17,8 +17,8 @@ i18n
           // Index Hero
           "intro": "Chat with strangers, the new Omegle.",
           "omegle": "The best alternative to Omegle for random video and text chat with strangers.",
-          "btn_enter": "Enter Text Chat",
-          "btn_video": "Video Chat (Random)",
+          "btn_enter": "Text Chat",
+          "btn_video": "Video Chat",
           "headline": "Chat with global people, the new Omegle.",
           "objective": "The best alternative to Omegle for random video and text chat with strangers.",
           "btn_text_chat": "Let's go",
@@ -100,8 +100,8 @@ i18n
           // Index Hero
           "intro": "Converse com estranhos, o novo Omegle.",
           "omegle": "A melhor alternativa ao Omegle para bate-papo aleatório por vídeo e texto com estranhos.",
-          "btn_enter": "Entrar no Chat de Texto",
-          "btn_video": "Vídeo Chat (Aleatório)",
+          "btn_enter": "Chat Texto",
+          "btn_video": "Vídeo Chat",
           "headline": "Converse com pessoas globais, o novo Omegle.",
           "objective": "A melhor alternativa ao Omegle para bate-papo aleatório por vídeo e texto com estranhos.",
           "btn_text_chat": "Começar",
