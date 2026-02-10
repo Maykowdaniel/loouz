@@ -12,7 +12,7 @@ import {
 const rooms = [
   {
     id: "global",
-    nameKey: "room_global",
+    nameKey: "aaaaaa",
     descKey: "desc_global",
     icon: Globe,
     color: "text-blue-400",
@@ -98,7 +98,7 @@ const Rooms = () => {
           lo<span className="text-accent">uu</span>z
         </h1>
           <p className="text-xs text-muted-foreground">
-            Olá, <span className="text-foreground font-medium">{userName}</span>
+            Hello, <span className="text-foreground font-medium">{userName}</span>
           </p>
         </div>
         <Button
@@ -114,10 +114,10 @@ const Rooms = () => {
       {/* 2. TÍTULO */}
       <div className="px-6 pt-6 pb-2">
         <h2 className="text-xl font-bold text-white">
-          Salas Públicas
+          public rooms
         </h2>
         <p className="text-xs text-zinc-400">
-          Escolha um tema e entre na conversa
+          Choose a topic and join the conversation
         </p>
       </div>
 

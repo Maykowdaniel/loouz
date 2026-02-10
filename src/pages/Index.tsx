@@ -117,7 +117,7 @@ const Index = () => {
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-purple-500/10 text-purple-400 ring-1 ring-purple-500/20 transition-all group-hover:scale-110 group-hover:bg-purple-500/20 group-hover:text-purple-300">
                 <Globe className="h-6 w-6" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-white">{t('seo_title_1')}</h3>
+              <h3 className="mb-3 text-xl font-bold text-white">What is Louuz?</h3>
               <p className="text-sm text-zinc-400 leading-relaxed">
                 Louuz is the next-generation alternative to Omegle. Created for those who miss the thrill of meeting new people, we offer a modern, fast, and anonymous platform to connect via video or text with strangers from 190+ countries.
               </p>
@@ -128,7 +128,7 @@ const Index = () => {
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-pink-500/10 text-pink-400 ring-1 ring-pink-500/20 transition-all group-hover:scale-110 group-hover:bg-pink-500/20 group-hover:text-pink-300">
                 <Zap className="h-6 w-6" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-white">{t('seo_title_2')}</h3>
+              <h3 className="mb-3 text-xl font-bold text-white">Why is it better than Omegle?</h3>
               <p className="text-sm text-zinc-400 leading-relaxed">
                 Unlike the old platforms, Louuz is designed for 2026. We have moderation, dark mode, and topic-based rooms (like Dating, Crypto, and Stories). It's the safest way to have random video chats and make new friends instantly.
               </p>
@@ -139,7 +139,7 @@ const Index = () => {
               <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/20 transition-all group-hover:scale-110 group-hover:bg-cyan-500/20 group-hover:text-cyan-300">
                 <Shield className="h-6 w-6" />
               </div>
-              <h3 className="mb-3 text-xl font-bold text-white">{t('seo_title_3')}</h3>
+              <h3 className="mb-3 text-xl font-bold text-white">100% Free & Anonymous</h3>
               <p className="text-sm text-zinc-400 leading-relaxed">
                 No registration required. No credit cards. Just pick a nickname and start talking. Whether you want a deep conversation or just to kill boredom, Louuz connects you in seconds with real people.
               </p>

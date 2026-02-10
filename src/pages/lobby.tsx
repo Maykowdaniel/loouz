@@ -61,7 +61,6 @@ const Lobby = () => {
 
       {/* Conteúdo Principal: Escolha do Modo */}
       <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6 animate-fade-in-up">
-        
         {/* CONTADOR DESTAQUE (Prova Social) */}
         <div className="flex items-center gap-2 bg-black/40 border border-green-500/30 px-4 py-2 rounded-full shadow-lg shadow-green-900/10 backdrop-blur-md mb-2">
             <div className="relative flex h-3 w-3">
@@ -87,8 +86,8 @@ const Lobby = () => {
             <MessageCircle size={28} />
           </div>
           <div className="text-left">
-            <h3 className="text-lg font-bold text-white">{t('text_chat_op')}</h3>
-            <p className="text-xs text-purple-200/70">{t('tipe_text')}</p>
+            <h3 className="text-lg font-bold text-white">Text chat</h3>
+            <p className="text-xs text-purple-200/70">Random • 1v1</p>
           </div>
         </button>
 
@@ -101,8 +100,8 @@ const Lobby = () => {
             <Video size={28} />
           </div>
           <div className="text-left">
-            <h3 className="text-lg font-bold text-white">{t('text_video_op')}</h3>
-            <p className="text-xs text-pink-200/70">{t('tipe_video')}</p>
+            <h3 className="text-lg font-bold text-white">Video Chat</h3>
+            <p className="text-xs text-pink-200/70">Camera On • 1v1</p>
           </div>
         </button>
 
