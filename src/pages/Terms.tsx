@@ -14,93 +14,89 @@ const Terms = () => {
           className="mb-8 flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="h-4 w-4" />
-          Voltar à página inicial
+          Back to Home
         </button>
 
         {/* Content */}
         <article className="animate-fade-in-up space-y-6">
           <h1 className="text-glow-purple text-3xl font-bold tracking-tight">
-            Termos de Uso
+            Terms of Service
           </h1>
 
           <p className="text-sm text-muted-foreground">
-            Última atualização: Fevereiro de 2026
+            Last updated: February 2026
           </p>
 
           <section className="space-y-3">
             <h2 className="text-lg font-semibold text-foreground">
-              1. Aceitação dos Termos
+              1. Acceptance of Terms
             </h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Ao acessar e utilizar o loouz, você concorda com estes Termos de
-              Uso. Se não concordar com qualquer parte destes termos, não
-              utilize a plataforma. O uso continuado do serviço constitui
-              aceitação destes termos e de quaisquer atualizações futuras.
+              By accessing and using Louuz, you agree to comply with these Terms of Service. 
+              If you do not agree with any part of these terms, you must not use the platform. 
+              Continued use of the service constitutes your acceptance of these terms and any future updates.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-lg font-semibold text-foreground">
-              2. Idade Mínima
+              2. Age Restriction
             </h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Você deve ter no mínimo <strong className="text-foreground">18 anos de idade</strong> para
-              utilizar o loouz. Ao usar o serviço, você confirma que atende a
-              este requisito. Não nos responsabilizamos pelo uso da plataforma
-              por menores de idade.
+              You must be at least <strong className="text-foreground">18 years old</strong> to use Louuz. 
+              By using this service, you confirm that you meet this age requirement. 
+              We are not responsible for the use of this platform by minors.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-lg font-semibold text-foreground">
-              3. Comportamento Esperado
+              3. User Conduct
             </h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Ao usar o loouz, você concorda em:
+              By using Louuz, you agree NOT to:
             </p>
             <ul className="ml-4 list-disc space-y-1 text-sm text-muted-foreground">
-              <li>Não enviar conteúdo ilegal, ofensivo, ameaçador ou discriminatório</li>
-              <li>Não realizar assédio, bullying ou intimidação de qualquer forma</li>
-              <li>Não compartilhar informações pessoais de terceiros sem consentimento</li>
-              <li>Não utilizar a plataforma para fins comerciais ou spam</li>
-              <li>Não tentar acessar sistemas ou dados de outros usuários</li>
-              <li>Respeitar todos os usuários independentemente de origem, gênero ou crença</li>
+              <li>Transmit any content that is illegal, offensive, threatening, or discriminatory.</li>
+              <li>Engage in harassment, bullying, or intimidation of any kind.</li>
+              <li>Share personal information of others without their consent.</li>
+              <li>Use the platform for commercial purposes, spam, or advertising.</li>
+              <li>Attempt to hack, disrupt, or access private data of other users.</li>
+              <li>Violate the rights of others based on race, gender, religion, or orientation.</li>
             </ul>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-lg font-semibold text-foreground">
-              4. Privacidade e Dados
+              4. Privacy & Data
             </h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              O loouz não armazena mensagens, nomes de usuário ou qualquer dado
-              pessoal de forma persistente. As conversas são temporárias e não
-              ficam salvas após o encerramento. Nenhum dado é compartilhado
-              com terceiros.
+              Louuz does not store messages, usernames, or any personal data persistently. 
+              All conversations are temporary and are not saved after you disconnect. 
+              We do not share any user data with third parties. Your anonymity is our priority.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-lg font-semibold text-foreground">
-              5. Isenção de Responsabilidade
+              5. Disclaimer of Warranties
             </h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              O loouz é fornecido "como está", sem garantias de qualquer tipo.
-              Não nos responsabilizamos pelo conteúdo gerado por outros
-              usuários, pela disponibilidade contínua do serviço, ou por
-              quaisquer danos diretos ou indiretos resultantes do uso da
-              plataforma. Use por sua conta e risco.
+              Louuz is provided on an "as is" basis, without warranties of any kind. 
+              We are not responsible for content generated by other users, service uptime, 
+              or any direct or indirect damages resulting from the use of the platform. 
+              Use at your own risk.
             </p>
           </section>
 
           <section className="space-y-3">
             <h2 className="text-lg font-semibold text-foreground">
-              6. Modificações
+              6. Modifications
             </h2>
             <p className="text-sm leading-relaxed text-muted-foreground">
-              Reservamo-nos o direito de modificar estes termos a qualquer
-              momento. As alterações entram em vigor imediatamente após a
-              publicação. Recomendamos revisar os termos periodicamente.
+              We reserve the right to modify these terms at any time. 
+              Changes become effective immediately upon posting. 
+              We recommend reviewing these terms periodically.
             </p>
           </section>
 
@@ -112,7 +108,7 @@ const Terms = () => {
               className="border-border text-foreground hover:bg-secondary"
             >
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Voltar à página inicial
+              Back to Home
             </Button>
           </div>
         </article>

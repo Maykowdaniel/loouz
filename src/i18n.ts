@@ -54,7 +54,7 @@ i18n
           "connect": "Choose how you want to connect.",
           "text_chat_op":"Text chat",
           "tipe_text" :"Random • 1v1",
-          "text_video_op":"Text chat",
+          "text_video_op":"Video",
           "tipe_video" :"Camera On • 1v1",
           
           // ROOMS

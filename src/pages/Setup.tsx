@@ -25,11 +25,11 @@ const Setup = () => {
   const handleContinue = () => {
     const trimmed = name.trim();
     if (!trimmed) {
-      setError(t('error_name')); 
+      setError("Please choose a name."); 
       return;
     }
     if (trimmed.length > 30) {
-      setError(t('error_name_len'));
+      setError("Name must be max 30 chars.");
       return;
     }
 
@@ -45,17 +45,17 @@ const Setup = () => {
         className="animate-fade-in absolute left-4 top-4 flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground sm:left-6 sm:top-6"
       >
         <ArrowLeft className="h-4 w-4" />
-        {t('back')}
+        Back
       </button>
 
       <div className="animate-fade-in-up w-full max-w-sm">
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-glow-purple mb-2 text-3xl font-bold tracking-tight">
-            Entrar no loouz
+            Enter the louuz
           </h1>
           <p className="text-sm text-muted-foreground">
-            {t('enter_name')}
+            Choose a name and start chatting.
           </p>
         </div>
 
@@ -66,7 +66,7 @@ const Setup = () => {
           <div className="space-y-2">
             <Label htmlFor="username" className="text-sm text-foreground">
               <User className="mr-1 inline h-3.5 w-3.5" />
-              {t('your_name')}
+              Your name
             </Label>
             <Input
               id="username"
@@ -115,7 +115,7 @@ const Setup = () => {
               className="gradient-btn w-full border-0 py-6 font-semibold text-primary-foreground transition-all duration-300 hover:scale-[1.02] hover:box-glow-purple"
             >
               <LogIn className="mr-2 h-4 w-4" />
-              Continuar {/* Pode usar t('continue') se tiver tradução */}
+              Continue {/* Pode usar t('continue') se tiver tradução */}
             </Button>
           </div>
 

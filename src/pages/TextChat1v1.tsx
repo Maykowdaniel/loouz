@@ -47,7 +47,7 @@ const TextChat1v1 = () => {
 
     // Atualizei para receber o gender também, se o backend mandar
     socketRef.current.on("text_paired", (data: any) => {
-      setStatus("Conectado!");
+      setStatus("Connected");
       setIsPaired(true);
       setPartnerName(data.partnerName);
       setPartnerCountry(data.partnerCountry);
@@ -57,7 +57,7 @@ const TextChat1v1 = () => {
       setMessages([{ 
         id: "sys-start", 
         sender: "system", 
-        text: `Você está conversando com ${data.partnerName}. Diga oi!` 
+        text: `You are talking to ${data.partnerName}. Diga oi!` 
       }]);
     });
 
@@ -69,10 +69,10 @@ const TextChat1v1 = () => {
       setMessages((prev) => [...prev, { 
         id: "sys-disc", 
         sender: "system", 
-        text: `${partnerName} se desconectou.` 
+        text: `${partnerName} it disconnected.` 
       }]);
       setIsPaired(false);
-      setStatus("Parceiro saiu. Clique em pular.");
+      setStatus("Partner logged out. Click skip.");
     });
 
     socketRef.current.emit("join_text_queue", { 
@@ -102,8 +102,8 @@ const TextChat1v1 = () => {
   const handleSkip = () => {
     setMessages([]);
     setIsPaired(false);
-    setStatus("Procurando alguém...");
-    setPartnerName("Estranho");
+    setStatus("Looking for someone...");
+    setPartnerName("Strange");
     setPartnerCountry("UN");
     setPartnerGender("unspecified");
     
@@ -167,13 +167,13 @@ const TextChat1v1 = () => {
       <div className="border-t border-border bg-card/60 px-4 py-3 backdrop-blur-sm">
         <div className="max-w-3xl mx-auto flex gap-2">
           <Button onClick={handleSkip} variant="secondary" className="rounded-full px-4 border border-border">
-            <SkipForward size={18} className="mr-2" /> Pular
+            <SkipForward size={18} className="mr-2" /> Skip
           </Button>
           <Input 
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSend()}
-            placeholder="Digite sua mensagem..."
+            placeholder="Enter your message..."
             className="flex-1 border-border bg-background/50 text-foreground rounded-full focus-visible:ring-primary"
             disabled={!isPaired}
           />
