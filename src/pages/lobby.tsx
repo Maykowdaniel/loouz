@@ -73,8 +73,8 @@ const Lobby = () => {
         </div>
 
         <div className="text-center mb-2">
-          <h2 className="text-2xl font-bold text-white mb-2">{t('title')}</h2>
-          <p className="text-zinc-400 text-sm">{t('connect')}</p>
+          <h2 className="text-2xl font-bold text-white mb-2">Meet someone new</h2>
+          <p className="text-zinc-400 text-sm">Choose how you want to connect.</p>
         </div>
 
         {/* Botão Texto 1v1 */}

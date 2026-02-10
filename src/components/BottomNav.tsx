@@ -18,7 +18,7 @@ const BottomNav = () => {
         className={`flex flex-col items-center gap-1 transition-colors ${isActive("/lobby") ? "text-purple-500" : "text-zinc-500 hover:text-zinc-300"}`}
       >
         <Home className={isActive("/lobby") ? "fill-purple-500/20" : ""} size={24} />
-        <span className="text-[11px] font-medium">Lar</span>
+        <span className="text-[11px] font-medium">Home</span>
       </button>
       
       <button 
@@ -27,7 +27,7 @@ const BottomNav = () => {
         className={`flex flex-col items-center gap-1 transition-colors ${isActive("/rooms") ? "text-purple-500" : "text-zinc-500 hover:text-zinc-300"}`}
       >
         <MessageSquare className={isActive("/rooms") ? "fill-purple-500/20" : ""} size={24} />
-        <span className="text-[11px] font-medium">Quartos</span>
+        <span className="text-[11px] font-medium">Rooms</span>
       </button>
     </div>
   );

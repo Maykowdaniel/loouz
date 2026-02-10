@@ -17,9 +17,9 @@ const Setup = () => {
   const [error, setError] = useState("");
 
   const genderOptions: { value: Gender; label: string; icon: string }[] = [
-    { value: "male", label: t('male'), icon: "♂" },
-    { value: "female", label: t('female'), icon: "♀" },
-    { value: "unspecified", label: t('unspecified'), icon: "—" },
+    { value: "male", label: "Male", icon: "♂" },
+  { value: "female", label: "Female", icon: "♀" },
+    { value: "unspecified", label: "Unspecified", icon: "—" },
   ];
 
   const handleContinue = () => {
@@ -89,7 +89,7 @@ const Setup = () => {
 
           {/* Seleção de Gênero */}
           <div className="space-y-2">
-            <Label className="text-sm text-foreground">{t('gender_label')}</Label>
+            <Label className="text-sm text-foreground">Gender</Label>
             <div className="grid grid-cols-3 gap-2">
               {genderOptions.map((opt) => (
                 <button
