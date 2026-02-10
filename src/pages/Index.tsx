@@ -14,7 +14,19 @@ const Index = () => {
   return (
     <div className="gradient-bg flex flex-col">
       
-      {/* --- HERO SECTION (100% da Tela - Layout Flexível) --- */}
+      {/* --- ESTILOS CUSTOMIZADOS PARA A ANIMAÇÃO RADAR --- */}
+      {/* Isso cria o efeito "Onda Suave" que não cresce demais */}
+      <style>{`
+        @keyframes radar {
+          0% { transform: scale(1); opacity: 0.3; }
+          100% { transform: scale(1.35); opacity: 0; }
+        }
+        .animate-radar {
+          animation: radar 3s infinite ease-out;
+        }
+      `}</style>
+
+      {/* --- HERO SECTION (100% da Tela) --- */}
       <div className="relative flex min-h-[100dvh] w-full flex-col items-center justify-between px-4 py-6">
         
         {/* 1. ESPAÇO SUPERIOR */}
@@ -46,7 +58,7 @@ const Index = () => {
             {t('omegle')}
           </p>
 
-          {/* --- BOTOES IGUAIS AO VOOZ (Compactos e Pílula) --- */}
+          {/* --- BOTOES (Compactos e Pílula) --- */}
           <div
             className="animate-fade-in-up flex flex-row items-center justify-center gap-4 w-full"
             style={{ animationDelay: "0.3s", opacity: 0 }}
@@ -59,17 +71,13 @@ const Index = () => {
               TEXT CHAT
             </Button>
 
-            {/* Botão VIDEO CHAT (Pulsação Corrigida: Cresce para fora) */}
+            {/* Botão VIDEO CHAT (Com Animação Radar Suave) */}
             <Button
               onClick={() => navigate("/setup")}
-              // Usei 'relative z-10' para garantir que o botão roxo fique na frente do efeito
-              // Removi 'overflow-hidden' para o efeito poder sair para fora
               className="relative z-10 h-12 w-36 sm:h-14 sm:w-44 rounded-full gradient-btn text-white hover:box-glow-purple hover:scale-105 transition-all text-sm sm:text-base font-black uppercase tracking-wider shadow-xl shadow-purple-900/30 border-0"
             >
-              {/* Efeito de Pulso (Aumentando e Zinza) */}
-              {/* -z-10 joga ele para trás do botão principal */}
-              {/* bg-white/30 cria o tom acinzentado translúcido */}
-              <span className="absolute -z-10 inset-0 rounded-full animate-ping bg-white/30 duration-[2000ms]"></span>
+              {/* Efeito Radar Customizado (Fica atrás do botão) */}
+              <span className="absolute -z-10 inset-0 rounded-full animate-radar bg-white"></span>
               
               <Video className="mr-2 h-5 w-5 sm:h-6 sm:w-6 relative z-20" />
               <span className="relative z-20">VIDEO CHAT</span>
