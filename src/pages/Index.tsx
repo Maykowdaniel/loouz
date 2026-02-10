@@ -47,7 +47,7 @@ const Index = () => {
             className="animate-fade-in-up mb-4 max-w-3xl text-center text-3xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-br from-white via-purple-50 to-purple-400 bg-clip-text text-transparent drop-shadow-sm leading-tight pb-2"
             style={{ animationDelay: "0.1s", opacity: 0 }}
           >
-            {t('intro')}
+            Chat with strangers, the new Omegle
           </h2>
 
           {/* Subtítulo */}
@@ -55,7 +55,7 @@ const Index = () => {
             className="animate-fade-in-up mb-8 max-w-md text-center text-base text-zinc-400 sm:text-lg font-medium"
             style={{ animationDelay: "0.2s", opacity: 0 }}
           >
-            {t('omegle')}
+            The best alternative to Omegle for random video and text chat with strangers.
           </p>
 
           {/* --- BOTOES (Compactos e Pílula) --- */}
@@ -87,14 +87,14 @@ const Index = () => {
         {/* 3. RODAPÉ (Aviso + Seta) */}
         <div className="flex flex-col items-center gap-3 mb-2 animate-fade-in-up z-10" style={{ animationDelay: "0.45s", opacity: 0 }}>
           <p className="text-center text-[10px] sm:text-xs text-muted-foreground/50 max-w-sm px-4">
-            {t('age_warning_1')}
+            You must be 18+ to use loouz.
             <button
               onClick={() => navigate("/terms")}
               className="text-white/40 underline underline-offset-2 transition-colors hover:text-accent ml-1"
             >
-              {t('age_warning_2')}
+              Read terms
             </button>{" "}
-            {t('age_warning_3')}
+            before continuing.
           </p>
 
           <div 
@@ -119,7 +119,7 @@ const Index = () => {
               </div>
               <h3 className="mb-3 text-xl font-bold text-white">{t('seo_title_1')}</h3>
               <p className="text-sm text-zinc-400 leading-relaxed">
-                {t('seo_desc_1')}
+                Louuz is the next-generation alternative to Omegle. Created for those who miss the thrill of meeting new people, we offer a modern, fast, and anonymous platform to connect via video or text with strangers from 190+ countries.
               </p>
             </div>
 
@@ -130,7 +130,7 @@ const Index = () => {
               </div>
               <h3 className="mb-3 text-xl font-bold text-white">{t('seo_title_2')}</h3>
               <p className="text-sm text-zinc-400 leading-relaxed">
-                {t('seo_desc_2')}
+                Unlike the old platforms, Louuz is designed for 2026. We have moderation, dark mode, and topic-based rooms (like Dating, Crypto, and Stories). It's the safest way to have random video chats and make new friends instantly.
               </p>
             </div>
 
@@ -141,7 +141,7 @@ const Index = () => {
               </div>
               <h3 className="mb-3 text-xl font-bold text-white">{t('seo_title_3')}</h3>
               <p className="text-sm text-zinc-400 leading-relaxed">
-                {t('seo_desc_3')}
+                No registration required. No credit cards. Just pick a nickname and start talking. Whether you want a deep conversation or just to kill boredom, Louuz connects you in seconds with real people.
               </p>
             </div>
 

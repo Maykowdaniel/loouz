@@ -42,7 +42,7 @@ const Lobby = () => {
           lo<span className="text-accent">uu</span>z
         </h1>
           <p className="text-xs text-muted-foreground">
-            Olá, <span className="text-foreground font-medium">{userName}</span>
+            hello, <span className="text-foreground font-medium">{userName}</span>
           </p>
         </div>
         
