@@ -1,4 +1,4 @@
-import { CheckCircle, Shield, Zap, Globe, MessageCircle, Video } from "lucide-react";
+import { CheckCircle, Shield, Zap, Globe, MessageCircle, Video, HelpCircle } from "lucide-react";
 
 const SeoExpansion = () => {
   return (
@@ -12,7 +12,7 @@ const SeoExpansion = () => {
         <p className="text-lg md:text-xl leading-relaxed text-zinc-400">
           <strong>Louuz</strong> is the #1 free <strong>Omegle alternative</strong> in 2026. 
           We provide a safe, modern, and anonymous space for <strong>random video chat</strong> with strangers worldwide. 
-          Unlike OmeTV or Chatroulette, Louuz requires <strong>no registration</strong>, no login, and is completely ad-free.
+          Unlike OmeTV, Chatroulette, or the old Omegle site, Louuz requires <strong>no registration</strong>, no login, and is completely ad-free.
         </p>
       </section>
 
@@ -30,22 +30,43 @@ const SeoExpansion = () => {
           </div>
         </div>
         
-        {/* Bloco de Texto Rico para SEO (Keyword Stuffing Inteligente) */}
-        <div className="bg-zinc-900/50 p-8 rounded-3xl border border-zinc-800">
+        {/* Bloco de Texto Rico para SEO */}
+        <div className="bg-zinc-900/50 p-8 rounded-3xl border border-zinc-800 hover:border-purple-500/30 transition-all">
           <h4 className="text-xl font-bold text-white mb-4">Safe Random Video Chat</h4>
           <p className="text-sm text-zinc-400 mb-4">
-            Many users search for "sites like Omegle" but find platforms full of bots. 
+            Many users search for "sites like Omegle" but find platforms full of bots or strict bans. 
             At Louuz, we use advanced technology to connect real people. Our 
             <strong> cam-to-cam chat</strong> allows you to meet new friends, 
             practice languages, or just kill boredom anonymously.
           </p>
           <p className="text-sm text-zinc-400">
             If you miss the classic <strong>Omegle</strong> experience or want something faster than <strong>OmeTV</strong>, Louuz is the place to be.
+            We are the "Omegle unblocked" solution you were looking for.
           </p>
         </div>
       </section>
 
-      {/* SEÇÃO 3: LISTA DE KEYWORDS (A "Caixa do Vooz") */}
+      {/* SEÇÃO 3: FAQ (A ARMA SECRETA DO VOOZ) - NOVO! */}
+      <section className="max-w-4xl mx-auto space-y-8">
+        <h3 className="text-3xl font-bold text-white text-center mb-8">Frequently Asked Questions</h3>
+        
+        <div className="grid gap-6">
+            <FaqItem 
+                question="Is Louuz a good Omegle alternative?" 
+                answer="Yes! Since Omegle shut down, Louuz has become the fastest-growing alternative. We offer the same random video chat experience but with better design, mobile support, and faster connections."
+            />
+            <FaqItem 
+                question="How to get unbanned from OmeTV?" 
+                answer="If you are banned from OmeTV or other sites, you don't need a VPN. Just switch to Louuz! We are a fresh platform with fair moderation. Start chatting immediately without worrying about old bans."
+            />
+            <FaqItem 
+                question="Is this video chat app safe?" 
+                answer="Safety is our priority. Unlike the old Omegle, we have modern moderation systems. However, always remember to keep your personal information private when talking to strangers."
+            />
+        </div>
+      </section>
+
+      {/* SEÇÃO 4: LISTA DE KEYWORDS (A Caixa) */}
       <section className="max-w-5xl mx-auto bg-gradient-to-br from-purple-900/20 to-black p-8 rounded-3xl border border-purple-500/20 text-center">
         <h3 className="text-2xl font-bold text-white mb-8">Louuz is for everyone - Choose your mode</h3>
         
@@ -89,6 +110,18 @@ const KeywordLink = ({ icon, text, desc }: { icon: any, text: string, desc: stri
     </div>
     <p className="text-xs text-zinc-500">{desc}</p>
   </div>
+);
+
+const FaqItem = ({ question, answer }: { question: string, answer: string }) => (
+    <div className="bg-zinc-900/30 p-6 rounded-2xl border border-zinc-800">
+        <h4 className="flex items-center gap-3 text-lg font-bold text-white mb-2">
+            <HelpCircle className="text-purple-500" size={20} />
+            {question}
+        </h4>
+        <p className="text-zinc-400 text-sm leading-relaxed pl-8">
+            {answer}
+        </p>
+    </div>
 );
 
 export default SeoExpansion;
