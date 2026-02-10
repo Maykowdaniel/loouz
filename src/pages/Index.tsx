@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Video, Globe, Shield, Zap, ChevronDown } from "lucide-react";
+import { Video, Globe, Shield, Zap, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const Index = () => {
@@ -17,7 +17,7 @@ const Index = () => {
       {/* --- HERO SECTION (100% da Tela - Layout Flexível) --- */}
       <div className="relative flex min-h-[100dvh] w-full flex-col items-center justify-between px-4 py-6">
         
-        {/* 1. ESPAÇO SUPERIOR (Para dar respiro) */}
+        {/* 1. ESPAÇO SUPERIOR */}
         <div className="flex-none h-16"></div>
 
         {/* 2. CONTEÚDO CENTRAL */}
@@ -51,7 +51,7 @@ const Index = () => {
             className="animate-fade-in-up flex flex-row items-center justify-center gap-4 w-full"
             style={{ animationDelay: "0.3s", opacity: 0 }}
           >
-            {/* Botão TEXT CHAT - Cinza Claro, Texto Escuro, Compacto */}
+            {/* Botão TEXT CHAT */}
             <Button
               onClick={() => navigate("/setup")}
               className="h-12 w-36 sm:h-14 sm:w-44 rounded-full bg-zinc-200 text-zinc-900 hover:bg-white hover:scale-105 transition-all text-sm sm:text-base font-black uppercase tracking-wider shadow-lg border-0"
@@ -59,14 +59,17 @@ const Index = () => {
               TEXT CHAT
             </Button>
 
-            {/* Botão VIDEO CHAT - Roxo, Texto Branco, Compacto + Pulso */}
+            {/* Botão VIDEO CHAT (Com pulso corrigido) */}
             <Button
               onClick={() => navigate("/setup")}
               className="h-12 w-36 sm:h-14 sm:w-44 rounded-full gradient-btn text-white hover:box-glow-purple hover:scale-105 transition-all text-sm sm:text-base font-black uppercase tracking-wider shadow-xl shadow-purple-900/30 relative overflow-hidden border-0"
             >
-              {/* Efeito de Pulso Sutil */}
-              <span className="absolute inset-0 rounded-full animate-ping bg-white opacity-10 duration-1000"></span>
-              VIDEO CHAT
+              {/* Efeito de Pulso (Corrigido: Mais forte e visível) */}
+              {/* opacity-40 faz o branco ficar acinzentado sobre o roxo */}
+              <span className="absolute inset-0 rounded-full animate-ping bg-white opacity-40 duration-[1500ms]"></span>
+              
+              <Video className="mr-2 h-5 w-5 sm:h-6 sm:w-6 relative z-10" />
+              <span className="relative z-10">VIDEO CHAT</span>
             </Button>
           </div>
 
