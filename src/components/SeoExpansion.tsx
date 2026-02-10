@@ -32,7 +32,7 @@ const SeoExpansion = () => {
       <section className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div>
           <h3 className="text-2xl md:text-4xl font-bold text-white mb-6">
-            Why is Louuz better than <span className="text-pink-500 decoration-wavy underline">Omegle</span>?
+            Why is Louuz an alternative to <span className="text-pink-500 decoration-wavy underline">Omegle?</span>?
           </h3>
           <div className="space-y-4">
             <FeatureItem title="Instant Connection" desc="No loading screens. Click 'Start' and match instantly." />
