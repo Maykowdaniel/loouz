@@ -9,11 +9,23 @@ const SeoExpansion = () => {
         <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
           What is <span className="text-purple-500">Louuz</span>?
         </h2>
+        
         <p className="text-lg md:text-xl leading-relaxed text-zinc-400">
-          <strong>Louuz</strong> is the #1 free <strong>Omegle alternative</strong> in 2026. 
-          We provide a safe, modern, and anonymous space for <strong>random video chat</strong> with strangers worldwide. 
-          Unlike OmeTV, Chatroulette, or the old Omegle site, Louuz requires <strong>no registration</strong>, no login, and is completely ad-free.
+          Louuz has established itself as a number one alternative to Omegle in 2026,
+          but our existence goes far beyond filling a gap left by older platforms. 
+          We are a next-generation network, designed for those who understand that 
+          the true magic of the internet lies in the spontaneity of an unexpected encounter.
+          Our main mission is to redefine online social interactions, creating a direct bridge 
+          that brings people from all over the world closer together, breaking down geographical
+         and cultural barriers so that a stranger becomes a new friend in a matter of seconds.
+
+         Unlike services like OmeTV or Chatroulette, Louuz focuses on the purity of human connection through a modern, 
+         safe, and completely anonymous space. We believe that to meet people authentically, you don't need forms or
+         bureaucracy; therefore, our platform requires zero registration, no login, and remains completely ad-free. 
+         We want you to immerse yourself in a video chat experience that is, above all, fun and engaging, offering the most 
+         pleasant environment possible to expand your social circle.
         </p>
+        
       </section>
 
       {/* SEÇÃO 2: POR QUE É MELHOR (Comparativo) */}
