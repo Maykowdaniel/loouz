@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // Adicionado useLocation
+import { useNavigate, useLocation } from "react-router-dom"; 
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Video, VideoOff, Mic, MicOff, SkipForward } from "lucide-react";
 import SimplePeer from "simple-peer";
@@ -7,15 +7,13 @@ import { io, Socket } from "socket.io-client";
 import { useTranslation } from "react-i18next";
 
 // Use seu IP local ou link do Render
-// Mude para:
 const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 
 const VideoChat = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // Hook para pegar o estado
+  const location = useLocation(); 
   const { t } = useTranslation();
   
-  // Recupera dados do usuário para não perder ao voltar
   const state = location.state as { name?: string; gender?: string } | null;
   const userData = {
       name: state?.name || "Visitante",
@@ -33,6 +31,9 @@ const VideoChat = () => {
   const partnerVideo = useRef<HTMLVideoElement>(null);
   const socket = useRef<Socket | null>(null);
   const peerRef = useRef<SimplePeer.Instance | null>(null);
+  
+  // --- CORREÇÃO DO BUG: Buffer para guardar o sinal se chegar cedo demais ---
+  const signalBuffer = useRef<any>(null);
 
   useEffect(() => {
     if (partnerVideo.current && partnerStream) {
@@ -48,9 +49,14 @@ const VideoChat = () => {
         
         socket.current = io(SOCKET_URL);
         
+        // 1. Recebe o sinal (Convite) do parceiro
         socket.current.on("receive_signal", ({ signal }) => {
+          // Se o Peer já existe, conecta normal
           if (peerRef.current && !peerRef.current.destroyed) {
             peerRef.current.signal(signal);
+          } else {
+            // BUG FIX: Se o Peer ainda não existe, GUARDA o sinal para usar depois
+            signalBuffer.current = signal;
           }
         });
 
@@ -58,6 +64,7 @@ const VideoChat = () => {
           handleSkip(); 
         });
 
+        // 2. Inicia a chamada (Cria o Peer)
         socket.current.on("start_call", ({ socketId, initiator }) => {
           setStatus(t('video_connecting'));
 
@@ -86,6 +93,12 @@ const VideoChat = () => {
             handleSkip(); 
           });
 
+          // BUG FIX: Se eu não sou o iniciador (sou o A), verifico se tem sinal guardado
+          if (!initiator && signalBuffer.current) {
+             peer.signal(signalBuffer.current);
+             signalBuffer.current = null; // Limpa o buffer
+          }
+
           peerRef.current = peer;
         });
 
@@ -108,6 +121,9 @@ const VideoChat = () => {
       peerRef.current.destroy();
       peerRef.current = null;
     }
+    // Limpa o buffer ao pular também
+    signalBuffer.current = null;
+    
     setCallAccepted(false);
     setPartnerStream(null);
     setStatus(t('video_searching'));
@@ -131,7 +147,6 @@ const VideoChat = () => {
     }
   };
 
-  // Função para voltar ao Lobby mantendo os dados
   const handleBack = () => {
     navigate("/lobby", { state: userData });
   };
@@ -139,7 +154,6 @@ const VideoChat = () => {
   return (
     <div className="flex h-screen flex-col bg-black text-white">
       <div className="flex items-center justify-between p-4 bg-zinc-900 border-b border-zinc-800">
-        {/* BOTÃO VOLTAR CORRIGIDO */}
         <Button variant="ghost" onClick={handleBack} className="text-white hover:bg-zinc-800">
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
         </Button>
