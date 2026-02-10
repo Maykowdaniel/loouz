@@ -31,8 +31,6 @@ const VideoChat = () => {
   const partnerVideo = useRef<HTMLVideoElement>(null);
   const socket = useRef<Socket | null>(null);
   const peerRef = useRef<SimplePeer.Instance | null>(null);
-  
-  // --- CORREÇÃO DO BUG: Buffer para guardar o sinal se chegar cedo demais ---
   const signalBuffer = useRef<any>(null);
 
   useEffect(() => {
@@ -49,13 +47,11 @@ const VideoChat = () => {
         
         socket.current = io(SOCKET_URL);
         
-        // 1. Recebe o sinal (Convite) do parceiro
         socket.current.on("receive_signal", ({ signal }) => {
-          // Se o Peer já existe, conecta normal
           if (peerRef.current && !peerRef.current.destroyed) {
             peerRef.current.signal(signal);
           } else {
-            // BUG FIX: Se o Peer ainda não existe, GUARDA o sinal para usar depois
+            // Guarda o sinal se o Peer ainda não estiver pronto
             signalBuffer.current = signal;
           }
         });
@@ -64,12 +60,13 @@ const VideoChat = () => {
           handleSkip(); 
         });
 
-        // 2. Inicia a chamada (Cria o Peer)
         socket.current.on("start_call", ({ socketId, initiator }) => {
           setStatus(t('video_connecting'));
 
           if (peerRef.current) {
-            peerRef.current.destroy();
+            try {
+                peerRef.current.destroy();
+            } catch (e) { console.error("Erro ao limpar peer antigo", e) }
           }
 
           const peer = new SimplePeer({
@@ -90,19 +87,39 @@ const VideoChat = () => {
 
           peer.on("error", (err) => {
             console.error("Erro no Peer:", err);
-            handleSkip(); 
+            // Não pula automaticamente no erro para evitar loop infinito em redes instáveis
+            // Apenas reseta o status visual
+            setStatus("Conexão instável... aguarde.");
           });
 
-          // BUG FIX: Se eu não sou o iniciador (sou o A), verifico se tem sinal guardado
+          peer.on("close", () => {
+             handleSkip();
+          });
+
+          // --- A CORREÇÃO MÁGICA PARA MOBILE ---
+          // O celular precisa de um tempo para registrar o objeto Peer na memória
+          // antes de receber o sinal. O setTimeout garante isso.
           if (!initiator && signalBuffer.current) {
-             peer.signal(signalBuffer.current);
-             signalBuffer.current = null; // Limpa o buffer
+             const savedSignal = signalBuffer.current;
+             setTimeout(() => {
+                 if (peer && !peer.destroyed) {
+                     try {
+                        peer.signal(savedSignal);
+                     } catch(e) {
+                         console.error("Erro ao aplicar sinal bufferizado:", e);
+                     }
+                 }
+             }, 500); // 500ms de "respiro" para o processador do celular
+             signalBuffer.current = null;
           }
 
           peerRef.current = peer;
         });
 
-        socket.current.emit("join_video_queue");
+        // Pequeno delay para entrar na fila, garantindo que tudo carregou
+        setTimeout(() => {
+            socket.current?.emit("join_video_queue");
+        }, 1000);
       })
       .catch((err) => {
         console.error("Erro de mídia:", err);
@@ -121,16 +138,16 @@ const VideoChat = () => {
       peerRef.current.destroy();
       peerRef.current = null;
     }
-    // Limpa o buffer ao pular também
     signalBuffer.current = null;
     
     setCallAccepted(false);
     setPartnerStream(null);
     setStatus(t('video_searching'));
     
+    // Delay maior no Pular para limpar a rede
     setTimeout(() => {
       socket.current?.emit("join_video_queue");
-    }, 1000);
+    }, 1500);
   };
 
   const toggleMic = () => {
