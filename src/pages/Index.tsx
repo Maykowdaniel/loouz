@@ -54,22 +54,25 @@ const Index = () => {
             {/* Botão TEXT CHAT */}
             <Button
               onClick={() => navigate("/setup")}
-              className="h-12 w-36 sm:h-14 sm:w-44 rounded-full bg-zinc-200 text-zinc-900 hover:bg-white hover:scale-105 transition-all text-sm sm:text-base font-black uppercase tracking-wider shadow-lg border-0"
+              className="h-12 w-36 sm:h-14 sm:w-44 rounded-full bg-zinc-200 text-zinc-900 hover:bg-white hover:scale-105 transition-all text-sm sm:text-base font-black uppercase tracking-wider shadow-lg border-0 z-20"
             >
               TEXT CHAT
             </Button>
 
-            {/* Botão VIDEO CHAT (Com pulso corrigido) */}
+            {/* Botão VIDEO CHAT (Pulsação Corrigida: Cresce para fora) */}
             <Button
               onClick={() => navigate("/setup")}
-              className="h-12 w-36 sm:h-14 sm:w-44 rounded-full gradient-btn text-white hover:box-glow-purple hover:scale-105 transition-all text-sm sm:text-base font-black uppercase tracking-wider shadow-xl shadow-purple-900/30 relative overflow-hidden border-0"
+              // Usei 'relative z-10' para garantir que o botão roxo fique na frente do efeito
+              // Removi 'overflow-hidden' para o efeito poder sair para fora
+              className="relative z-10 h-12 w-36 sm:h-14 sm:w-44 rounded-full gradient-btn text-white hover:box-glow-purple hover:scale-105 transition-all text-sm sm:text-base font-black uppercase tracking-wider shadow-xl shadow-purple-900/30 border-0"
             >
-              {/* Efeito de Pulso (Corrigido: Mais forte e visível) */}
-              {/* opacity-40 faz o branco ficar acinzentado sobre o roxo */}
-              <span className="absolute inset-0 rounded-full animate-ping bg-white opacity-40 duration-[1500ms]"></span>
+              {/* Efeito de Pulso (Aumentando e Zinza) */}
+              {/* -z-10 joga ele para trás do botão principal */}
+              {/* bg-white/30 cria o tom acinzentado translúcido */}
+              <span className="absolute -z-10 inset-0 rounded-full animate-ping bg-white/30 duration-[2000ms]"></span>
               
-              <Video className="mr-2 h-5 w-5 sm:h-6 sm:w-6 relative z-10" />
-              <span className="relative z-10">VIDEO CHAT</span>
+              <Video className="mr-2 h-5 w-5 sm:h-6 sm:w-6 relative z-20" />
+              <span className="relative z-20">VIDEO CHAT</span>
             </Button>
           </div>
 
