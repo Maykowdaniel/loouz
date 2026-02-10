@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Video, Globe, Shield, Zap, ChevronDown } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import SeoExpansion from "@/components/SeoExpansion"; // ✅ 1. Importação aqui
 
 const Index = () => {
   const navigate = useNavigate();
@@ -15,7 +16,6 @@ const Index = () => {
     <div className="gradient-bg flex flex-col">
       
       {/* --- ESTILOS CUSTOMIZADOS PARA A ANIMAÇÃO RADAR --- */}
-      {/* Isso cria o efeito "Onda Suave" que não cresce demais */}
       <style>{`
         @keyframes radar {
           0% { transform: scale(1); opacity: 0.3; }
@@ -42,8 +42,8 @@ const Index = () => {
             </h1>
           </div>
 
+          {/* Título Principal */}
           <h2 
-            // Adicionei 'pb-2' no final para dar espaço para a perna do 'g' aparecer
             className="animate-fade-in-up mb-4 max-w-3xl text-center text-3xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-br from-white via-purple-50 to-purple-400 bg-clip-text text-transparent drop-shadow-sm leading-tight pb-2"
             style={{ animationDelay: "0.1s", opacity: 0 }}
           >
@@ -76,9 +76,7 @@ const Index = () => {
               onClick={() => navigate("/setup")}
               className="relative z-10 h-12 w-36 sm:h-14 sm:w-44 rounded-full gradient-btn text-white hover:box-glow-purple hover:scale-105 transition-all text-sm sm:text-base font-black uppercase tracking-wider shadow-xl shadow-purple-900/30 border-0"
             >
-              {/* Efeito Radar Customizado (Fica atrás do botão) */}
               <span className="absolute -z-10 inset-0 rounded-full animate-radar bg-white"></span>
-              
               <Video className="mr-2 h-5 w-5 sm:h-6 sm:w-6 relative z-20" />
               <span className="relative z-20">VIDEO CHAT</span>
             </Button>
@@ -88,8 +86,6 @@ const Index = () => {
 
         {/* 3. RODAPÉ (Aviso + Seta) */}
         <div className="flex flex-col items-center gap-3 mb-2 animate-fade-in-up z-10" style={{ animationDelay: "0.45s", opacity: 0 }}>
-          
-          {/* Aviso de Idade */}
           <p className="text-center text-[10px] sm:text-xs text-muted-foreground/50 max-w-sm px-4">
             {t('age_warning_1')}
             <button
@@ -101,7 +97,6 @@ const Index = () => {
             {t('age_warning_3')}
           </p>
 
-          {/* Seta Indicativa */}
           <div 
             onClick={scrollToContent}
             className="animate-bounce cursor-pointer text-white/20 hover:text-white transition-colors"
@@ -112,7 +107,7 @@ const Index = () => {
 
       </div>
 
-      {/* --- SEO SECTION (Abaixo da dobra) --- */}
+      {/* --- SEO SECTION ANTIGO (Abaixo da dobra - Ícones) --- */}
       <div id="more-content" className="w-full bg-black/40 py-20 backdrop-blur-md border-t border-white/5">
         <div className="mx-auto max-w-5xl px-6">
           <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
@@ -153,6 +148,10 @@ const Index = () => {
           </div>
         </div>
       </div>
+
+      {/* --- ✅ 2. NOVA SEÇÃO DE SEO EXPANDIDA (ESTILO VOOZ) --- */}
+      <SeoExpansion />
+
     </div>
   );
 };
