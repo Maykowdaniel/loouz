@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom"; // Adicionado useLocation
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Video, VideoOff, Mic, MicOff, SkipForward } from "lucide-react";
 import SimplePeer from "simple-peer";
@@ -7,13 +7,15 @@ import { io, Socket } from "socket.io-client";
 import { useTranslation } from "react-i18next";
 
 // Use seu IP local ou link do Render
+// Mude para:
 const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 
 const VideoChat = () => {
   const navigate = useNavigate();
-  const location = useLocation(); 
+  const location = useLocation(); // Hook para pegar o estado
   const { t } = useTranslation();
   
+  // Recupera dados do usuário para não perder ao voltar
   const state = location.state as { name?: string; gender?: string } | null;
   const userData = {
       name: state?.name || "Visitante",
@@ -31,7 +33,6 @@ const VideoChat = () => {
   const partnerVideo = useRef<HTMLVideoElement>(null);
   const socket = useRef<Socket | null>(null);
   const peerRef = useRef<SimplePeer.Instance | null>(null);
-  const signalBuffer = useRef<any>(null);
 
   useEffect(() => {
     if (partnerVideo.current && partnerStream) {
@@ -50,9 +51,6 @@ const VideoChat = () => {
         socket.current.on("receive_signal", ({ signal }) => {
           if (peerRef.current && !peerRef.current.destroyed) {
             peerRef.current.signal(signal);
-          } else {
-            // Guarda o sinal se o Peer ainda não estiver pronto
-            signalBuffer.current = signal;
           }
         });
 
@@ -64,9 +62,7 @@ const VideoChat = () => {
           setStatus(t('video_connecting'));
 
           if (peerRef.current) {
-            try {
-                peerRef.current.destroy();
-            } catch (e) { console.error("Erro ao limpar peer antigo", e) }
+            peerRef.current.destroy();
           }
 
           const peer = new SimplePeer({
@@ -87,39 +83,13 @@ const VideoChat = () => {
 
           peer.on("error", (err) => {
             console.error("Erro no Peer:", err);
-            // Não pula automaticamente no erro para evitar loop infinito em redes instáveis
-            // Apenas reseta o status visual
-            setStatus("Conexão instável... aguarde.");
+            handleSkip(); 
           });
-
-          peer.on("close", () => {
-             handleSkip();
-          });
-
-          // --- A CORREÇÃO MÁGICA PARA MOBILE ---
-          // O celular precisa de um tempo para registrar o objeto Peer na memória
-          // antes de receber o sinal. O setTimeout garante isso.
-          if (!initiator && signalBuffer.current) {
-             const savedSignal = signalBuffer.current;
-             setTimeout(() => {
-                 if (peer && !peer.destroyed) {
-                     try {
-                        peer.signal(savedSignal);
-                     } catch(e) {
-                         console.error("Erro ao aplicar sinal bufferizado:", e);
-                     }
-                 }
-             }, 500); // 500ms de "respiro" para o processador do celular
-             signalBuffer.current = null;
-          }
 
           peerRef.current = peer;
         });
 
-        // Pequeno delay para entrar na fila, garantindo que tudo carregou
-        setTimeout(() => {
-            socket.current?.emit("join_video_queue");
-        }, 1000);
+        socket.current.emit("join_video_queue");
       })
       .catch((err) => {
         console.error("Erro de mídia:", err);
@@ -138,16 +108,13 @@ const VideoChat = () => {
       peerRef.current.destroy();
       peerRef.current = null;
     }
-    signalBuffer.current = null;
-    
     setCallAccepted(false);
     setPartnerStream(null);
     setStatus(t('video_searching'));
     
-    // Delay maior no Pular para limpar a rede
     setTimeout(() => {
       socket.current?.emit("join_video_queue");
-    }, 1500);
+    }, 1000);
   };
 
   const toggleMic = () => {
@@ -164,6 +131,7 @@ const VideoChat = () => {
     }
   };
 
+  // Função para voltar ao Lobby mantendo os dados
   const handleBack = () => {
     navigate("/lobby", { state: userData });
   };
@@ -171,6 +139,7 @@ const VideoChat = () => {
   return (
     <div className="flex h-screen flex-col bg-black text-white">
       <div className="flex items-center justify-between p-4 bg-zinc-900 border-b border-zinc-800">
+        {/* BOTÃO VOLTAR CORRIGIDO */}
         <Button variant="ghost" onClick={handleBack} className="text-white hover:bg-zinc-800">
           <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
         </Button>
