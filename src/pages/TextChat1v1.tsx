@@ -6,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowLeft, Send, SkipForward, User, Loader2 } from "lucide-react";
 import { io, Socket } from "socket.io-client";
 import ChatMessage from "@/components/ChatMessage"; 
-import MiniGlobalChat from "../components/MiniGlobalChat";
+import SidePanel from "@/components/SidePanel"; // <--- NOVO
 import { useTranslation } from "react-i18next";
 
 const getFlagEmoji = (countryCode: string) => {
@@ -251,11 +251,10 @@ const TextChat1v1 = () => {
 
       </div>
 
-      {/* === COLUNA DIREITA (Global Chat) - Escondido no Mobile (hidden), Visível no Desktop (md:flex) === */}
-      {/* Ajuste a largura aqui: w-80 ou w-96 */}
-      <div className="hidden md:flex w-96 h-full shadow-2xl z-30">
-         <MiniGlobalChat username={userData.name} />
-      </div>
+     {/* === COLUNA DIREITA (SidePanel) === */}
+<div className="hidden md:flex w-96 h-full shadow-2xl z-30">
+    <SidePanel username={userData.name} /> {/* <--- USANDO O NOVO COMPONENTE */}
+</div>
 
     </div>
   );
