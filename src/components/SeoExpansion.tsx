@@ -5,7 +5,9 @@ const SeoExpansion = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="w-full bg-black text-zinc-300 py-16 px-6 md:px-12 lg:px-24 space-y-24 border-t border-zinc-900">
+    // 1. Removi 'bg-black' para ficar transparente (o gradiente do pai aparecerá)
+    // 2. Mudei a borda para 'border-white/10' para ficar mais sutil
+    <div className="w-full bg-transparent text-zinc-300 py-16 px-6 md:px-12 lg:px-24 space-y-24 border-t border-white/10">
       
       {/* SEÇÃO 1: O QUE É */}
       <section className="max-w-4xl mx-auto text-center space-y-6">
@@ -32,8 +34,8 @@ const SeoExpansion = () => {
           </div>
         </div>
         
-        {/* Bloco de Texto Rico para SEO */}
-        <div className="bg-zinc-900/50 p-8 rounded-3xl border border-zinc-800 hover:border-purple-500/30 transition-all">
+        {/* Bloco de Texto Rico - Ajustei o fundo para ser semi-transparente (glass) */}
+        <div className="bg-white/5 backdrop-blur-sm p-8 rounded-3xl border border-white/10 hover:border-purple-500/30 transition-all">
           <h4 className="text-xl font-bold text-white mb-4">{t('seo_exp.safe_title')}</h4>
           <p className="text-sm text-zinc-400 mb-4">
             {t('seo_exp.safe_p1')}
@@ -56,7 +58,8 @@ const SeoExpansion = () => {
       </section>
 
       {/* SEÇÃO 4: LISTA DE KEYWORDS */}
-      <section className="max-w-5xl mx-auto bg-gradient-to-br from-purple-900/20 to-black p-8 rounded-3xl border border-purple-500/20 text-center">
+      {/* Ajustei o gradiente deste card para combinar melhor com o fundo roxo global */}
+      <section className="max-w-5xl mx-auto bg-gradient-to-br from-purple-900/40 to-black/40 p-8 rounded-3xl border border-purple-500/20 text-center backdrop-blur-md">
         <h3 className="text-2xl font-bold text-white mb-8">{t('seo_exp.footer_headline')}</h3>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left">
@@ -77,21 +80,21 @@ const SeoExpansion = () => {
   );
 };
 
-// Componentes auxiliares (mantidos para estrutura)
+// Componentes auxiliares
 const FeatureItem = ({ title, desc }: { title: string, desc: string }) => (
   <div className="flex gap-4">
-    <div className="mt-1 bg-green-500/10 p-2 rounded-lg h-fit text-green-500">
+    <div className="mt-1 bg-emerald-500/10 p-2 rounded-lg h-fit text-emerald-400">
       <CheckCircle size={20} />
     </div>
     <div>
       <h4 className="text-white font-bold text-lg">{title}</h4>
-      <p className="text-zinc-500 text-sm">{desc}</p>
+      <p className="text-zinc-400 text-sm">{desc}</p>
     </div>
   </div>
 );
 
 const KeywordLink = ({ icon, text, desc }: { icon: any, text: string, desc: string }) => (
-  <div className="bg-black/40 p-4 rounded-xl border border-zinc-800 hover:border-purple-500/50 transition-colors cursor-default group">
+  <div className="bg-white/5 p-4 rounded-xl border border-white/5 hover:border-purple-500/50 transition-colors cursor-default group hover:bg-white/10">
     <div className="flex items-center gap-3 mb-2 text-purple-400 group-hover:text-purple-300">
         {icon}
         <span className="font-bold text-white">{text}</span>
@@ -101,7 +104,7 @@ const KeywordLink = ({ icon, text, desc }: { icon: any, text: string, desc: stri
 );
 
 const FaqItem = ({ question, answer }: { question: string, answer: string }) => (
-    <div className="bg-zinc-900/30 p-6 rounded-2xl border border-zinc-800">
+    <div className="bg-white/5 p-6 rounded-2xl border border-white/5 hover:bg-white/10 transition-colors">
         <h4 className="flex items-center gap-3 text-lg font-bold text-white mb-2">
             <HelpCircle className="text-purple-500" size={20} />
             {question}

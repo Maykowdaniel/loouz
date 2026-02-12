@@ -9,15 +9,12 @@ const Index = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   
-  // ✅ ESTADO PARA O NÚMERO FAKE
   const [onlineCount, setOnlineCount] = useState(1500);
 
   useEffect(() => {
-    // Título da aba e idioma
     document.title = t('page_title'); 
     document.documentElement.lang = i18n.language;
 
-    // ✅ LÓGICA DO CONTADOR FAKE (1000 - 2000)
     const initial = Math.floor(Math.random() * (2000 - 1000 + 1)) + 1000;
     setOnlineCount(initial);
 
@@ -25,12 +22,11 @@ const Index = () => {
       setOnlineCount(prev => {
         const change = Math.floor(Math.random() * 7) - 3; 
         const next = prev + change;
-        
         if (next < 1000) return 1000;
         if (next > 2000) return 2000;
         return next;
       });
-    }, 4000); // Atualiza a cada 4 segundos
+    }, 4000);
 
     return () => clearInterval(interval);
   }, [t, i18n.language]);
@@ -50,16 +46,17 @@ const Index = () => {
       `}</style>
 
       {/* --- HERO SECTION --- */}
-      {/* ALTERAÇÃO 1: Mudei de justify-between para justify-start para controlar a altura manualmente */}
       <div className="relative flex min-h-[100dvh] w-full flex-col items-center justify-start px-4 py-6">
         
-        {/* Espaçamento do Header */}
-        <div className="flex-none h-16"></div>
+        {/* Espaço reservado para o Header */}
+        <div className="flex-none h-4"></div>
 
-        {/* ALTERAÇÃO 2: Adicionei mt-10 (mobile) e sm:mt-20 (desktop) para posicionar o logo mais acima */}
-        <div className="flex flex-col items-center justify-center w-full max-w-4xl z-10 mt-10 sm:mt-20">
-          <div className="animate-fade-in-up mb-6 scale-110 sm:scale-125">
-            <h1 className="text-glow-purple text-7xl font-black tracking-tighter sm:text-8xl md:text-9xl">
+        {/* Ajuste de distância do topo */}
+        <div className="flex flex-col items-center justify-center w-full max-w-4xl z-10 mt-8 sm:mt-16">
+          
+          {/* Logo Gigante */}
+          <div className="animate-fade-in-up mb-4 scale-125 sm:scale-150 origin-bottom">
+            <h1 className="text-glow-purple text-8xl font-black tracking-tighter sm:text-9xl md:text-[11rem] leading-none">
               lo<span className="text-accent">uu</span>z
             </h1>
           </div>
@@ -78,7 +75,7 @@ const Index = () => {
             {t('omegle')}
           </p>
 
-           {/* ✅ INDICADOR DE USUÁRIOS ONLINE */}
+           {/* INDICADOR DE USUÁRIOS ONLINE */}
           <div 
             className="animate-fade-in-up mb-6 flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-emerald-400 ring-1 ring-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
             style={{ animationDelay: "0.05s", opacity: 0 }}
@@ -90,29 +87,33 @@ const Index = () => {
             {onlineCount.toLocaleString()} {t('online_now')}
           </div>
 
+          {/* ✅ BOTÕES AUMENTADOS AQUI */}
           <div
             className="animate-fade-in-up flex flex-row items-center justify-center gap-4 w-full"
             style={{ animationDelay: "0.3s", opacity: 0 }}
           >
+            {/* Botão de Texto - Aumentado */}
             <Button
               onClick={() => navigate("/setup")}
-              className="h-12 w-36 sm:h-14 sm:w-44 rounded-full bg-zinc-200 text-zinc-900 hover:bg-white hover:scale-105 transition-all text-sm sm:text-base font-black uppercase tracking-wider shadow-lg border-0 z-20"
+              className="h-14 w-44 sm:h-16 sm:w-56 rounded-full bg-zinc-200 text-zinc-900 hover:bg-white hover:scale-105 transition-all text-base sm:text-lg font-black uppercase tracking-wider shadow-lg border-0 z-20"
             >
               {t('btn_enter')}
             </Button>
 
+            {/* Botão de Vídeo - Aumentado */}
             <Button
               onClick={() => navigate("/setup")}
-              className="relative z-10 h-12 w-36 sm:h-14 sm:w-44 rounded-full gradient-btn text-white hover:box-glow-purple hover:scale-105 transition-all text-sm sm:text-base font-black uppercase tracking-wider shadow-xl shadow-purple-900/30 border-0"
+              className="relative z-10 h-14 w-44 sm:h-16 sm:w-56 rounded-full gradient-btn text-white hover:box-glow-purple hover:scale-105 transition-all text-base sm:text-lg font-black uppercase tracking-wider shadow-xl shadow-purple-900/30 border-0"
             >
               <span className="absolute -z-10 inset-0 rounded-full animate-radar bg-white"></span>
-              <Video className="mr-2 h-5 w-5 sm:h-6 sm:w-6 relative z-20" />
+              {/* Ícone também levemente aumentado */}
+              <Video className="mr-2 h-6 w-6 sm:h-7 sm:w-7 relative z-20" />
               <span className="relative z-20">{t('btn_video')}</span>
             </Button>
           </div>
         </div>
 
-        {/* ALTERAÇÃO 3: Adicionei mt-auto para fixar o rodapé no fundo da tela */}
+        {/* Rodapé fixo embaixo */}
         <div className="flex flex-col items-center gap-3 mb-2 animate-fade-in-up z-10 mt-auto" style={{ animationDelay: "0.45s", opacity: 0 }}>
           <p className="text-center text-[10px] sm:text-xs text-muted-foreground/50 max-w-sm px-4">
             {t('age_warning_1')}
@@ -133,12 +134,6 @@ const Index = () => {
           </div>
         </div>
       </div>
-
-      {/* Seções de SEO */}
-      <div id="more-content" className="w-full bg-black/40 py-20 backdrop-blur-md border-t border-white/5">
-        {/* ... conteúdo dos ícones de SEO ... */}
-      </div>
-
       <SeoExpansion />
     </div>
   );

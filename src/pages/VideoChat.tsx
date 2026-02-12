@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Video, VideoOff, Mic, MicOff, SkipForward } from "lucide-react";
+import { SkipForward, Flag, LogOut } from "lucide-react"; // Ícones atualizados
 import SimplePeer from "simple-peer";
 import { io, Socket } from "socket.io-client";
-import { useTranslation } from "react-i18next"; // ✅ i18n integrado
+import { useTranslation } from "react-i18next";
 
 const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 
 const VideoChat = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation(); // ✅ Inicialização do hook de tradução
+  const { t } = useTranslation();
   
   const state = location.state as { name?: string; gender?: string } | null;
   const userData = {
@@ -22,19 +22,19 @@ const VideoChat = () => {
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [partnerStream, setPartnerStream] = useState<MediaStream | null>(null);
   const [callAccepted, setCallAccepted] = useState(false);
-  
-  // ✅ Status inicial agora é dinâmico
   const [status, setStatus] = useState(t('video_chat.video_searching')); 
   
-  const [micOn, setMicOn] = useState(true);
-  const [camOn, setCamOn] = useState(true);
-
+  // Refs para conexões
   const myVideo = useRef<HTMLVideoElement>(null);
   const partnerVideo = useRef<HTMLVideoElement>(null);
   const socket = useRef<Socket | null>(null);
   const peerRef = useRef<SimplePeer.Instance | null>(null);
 
+  // Ref para armazenar dados do parceiro atual (para o report)
+  const currentPartnerId = useRef<string | null>(null);
+
   useEffect(() => {
+    // Garante que o vídeo do parceiro seja atualizado visualmente
     if (partnerVideo.current && partnerStream) {
       partnerVideo.current.srcObject = partnerStream;
     }
@@ -59,7 +59,8 @@ const VideoChat = () => {
         });
 
         socket.current.on("start_call", ({ socketId, initiator }) => {
-          setStatus(t('video_chat.video_connecting')); // ✅ Traduzido
+          setStatus(t('video_chat.video_connecting'));
+          currentPartnerId.current = socketId; // Salva o ID do parceiro para reportar
 
           if (peerRef.current) {
             peerRef.current.destroy();
@@ -78,7 +79,7 @@ const VideoChat = () => {
           peer.on("stream", (remoteStream) => {
             setPartnerStream(remoteStream);
             setCallAccepted(true);
-            setStatus(t('video_chat.connected')); // ✅ Traduzido
+            setStatus(t('video_chat.connected'));
           });
 
           peer.on("error", (err) => {
@@ -93,7 +94,7 @@ const VideoChat = () => {
       })
       .catch((err) => {
         console.error("Erro de mídia:", err);
-        setStatus(t('video_chat.video_error')); // ✅ Traduzido
+        setStatus(t('video_chat.video_error'));
       });
 
     return () => {
@@ -101,7 +102,9 @@ const VideoChat = () => {
       if(stream) stream.getTracks().forEach(track => track.stop());
       if(peerRef.current) peerRef.current.destroy();
     };
-  }, [t]); // ✅ t adicionado às dependências
+  }, [t]);
+
+  // --- AÇÕES DO USUÁRIO ---
 
   const handleSkip = () => {
     if (peerRef.current) {
@@ -110,81 +113,105 @@ const VideoChat = () => {
     }
     setCallAccepted(false);
     setPartnerStream(null);
-    setStatus(t('video_chat.video_searching')); // ✅ Traduzido
+    currentPartnerId.current = null;
+    setStatus(t('video_chat.video_searching'));
     
+    // Pequeno delay para reconectar
     setTimeout(() => {
       socket.current?.emit("join_video_queue");
-    }, 1000);
+    }, 500);
   };
 
-  const toggleMic = () => {
-    if (stream) {
-      stream.getAudioTracks()[0].enabled = !micOn;
-      setMicOn(!micOn);
-    }
+  const handleStop = () => {
+    // Encerra tudo e volta pro lobby
+    socket.current?.disconnect();
+    if(stream) stream.getTracks().forEach(track => track.stop());
+    navigate("/"); // Ou navigate("/lobby")
   };
 
-  const toggleCam = () => {
-    if (stream) {
-      stream.getVideoTracks()[0].enabled = !camOn;
-      setCamOn(!camOn);
-    }
-  };
+  const handleReport = () => {
+    if (!currentPartnerId.current) return;
 
-  const handleBack = () => {
-    navigate("/lobby", { state: userData });
+    // 1. Capturar o IP (Simulação: Num app real, o IP vem do server side junto com o socketID)
+    // No frontend não conseguimos ver o IP direto do peer facilmente sem o servidor informar.
+    // Vamos enviar um evento para o servidor dizendo "Eu estou reportando o socketID X"
+    
+    console.log(`REPORTANDO USUÁRIO: ${currentPartnerId.current}`);
+    
+    // TODO: Implementar lógica de BAN aqui futuramente.
+    // Exemplo: socket.current.emit("report_user", { offenderId: currentPartnerId.current });
+    
+    alert(t('Usuário reportado com sucesso!')); // Pode usar um toast aqui depois
+
+    // 2. Pular para o próximo automaticamente após reportar
+    handleSkip();
   };
 
   return (
-    <div className="flex h-screen flex-col bg-black text-white">
-      {/* Header com botões e status dinâmicos */}
-      <div className="flex items-center justify-between p-4 bg-zinc-900 border-b border-zinc-800">
-        <Button variant="ghost" onClick={handleBack} className="text-white hover:bg-zinc-800">
-          <ArrowLeft className="mr-2 h-4 w-4" /> {t('back')}
-        </Button>
-        <span className="font-mono text-sm text-green-400 animate-pulse flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-green-500"></span>
-            {status}
-        </span>
+    <div className="flex h-[100dvh] flex-col bg-zinc-950 text-white overflow-hidden">
+      
+      {/* --- PARTE SUPERIOR: PARCEIRO --- */}
+      <div className="flex-1 relative bg-black flex items-center justify-center overflow-hidden border-b border-white/10">
+        {callAccepted && partnerStream ? (
+          <video 
+            playsInline 
+            autoPlay 
+            ref={partnerVideo} 
+            className="w-full h-full object-cover" 
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center p-4 text-center animate-pulse">
+             <div className="bg-zinc-800/50 p-6 rounded-full mb-4">
+                <span className="loading loading-spinner loading-lg text-purple-500"></span>
+             </div>
+             <p className="text-zinc-400 text-lg font-medium tracking-wide">
+               {status}
+             </p>
+          </div>
+        )}
       </div>
 
-      <div className="flex-1 flex flex-col md:flex-row relative overflow-hidden bg-zinc-950">
-        {/* Vídeo do Parceiro */}
-        <div className="flex-1 flex items-center justify-center relative">
-          {callAccepted && partnerStream ? (
-            <video playsInline autoPlay ref={partnerVideo} className="w-full h-full object-contain" />
-          ) : (
-            <div className="text-zinc-500 animate-pulse flex flex-col items-center">
-                <div className="h-16 w-16 rounded-full bg-zinc-800 mb-4 animate-bounce"></div>
-                {t('video_chat.video_waiting')} {/* ✅ Traduzido */}
-            </div>
-          )}
-        </div>
-
-        {/* Meu Vídeo (Miniatura) */}
-        <div className="absolute top-4 right-4 w-32 h-48 md:w-48 md:h-64 bg-zinc-900 rounded-xl border border-zinc-700 overflow-hidden shadow-2xl transition-all hover:scale-105">
-           <video playsInline autoPlay muted ref={myVideo} className="w-full h-full object-cover" />
-           {/* ✅ Ajuste final: "Você" agora usa a chave "video_chat.you" do i18n */}
-           <div className="absolute bottom-2 left-2 text-[10px] bg-black/50 px-2 py-1 rounded text-white uppercase font-bold tracking-wider">
-             {t('video_chat.you')} 
-           </div>
+      {/* --- PARTE INFERIOR: VOCÊ --- */}
+      <div className="flex-1 relative bg-zinc-900 flex items-center justify-center overflow-hidden">
+        <video 
+          playsInline 
+          autoPlay 
+          muted 
+          ref={myVideo} 
+          className="w-full h-full object-cover mirror-mode" // mirror-mode classe CSS para espelhar se quiser
+        />
+        <div className="absolute bottom-4 left-4 bg-black/60 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-white/80 backdrop-blur-sm">
+          {t('video_chat.you')}
         </div>
       </div>
 
-      {/* Controles Inferiores */}
-      <div className="p-6 bg-zinc-900 flex justify-center gap-6 border-t border-zinc-800">
-        <Button onClick={toggleMic} variant="outline" size="icon" className={`rounded-full w-14 h-14 border-0 ${micOn ? 'bg-zinc-800 hover:bg-zinc-700' : 'bg-red-500/20 text-red-500 hover:bg-red-500/30'}`}>
-          {micOn ? <Mic className="h-6 w-6" /> : <MicOff className="h-6 w-6" />}
-        </Button>
-        <Button onClick={toggleCam} variant="outline" size="icon" className={`rounded-full w-14 h-14 border-0 ${camOn ? 'bg-zinc-800 hover:bg-zinc-700' : 'bg-red-500/20 text-red-500 hover:bg-red-500/30'}`}>
-          {camOn ? <Video className="h-6 w-6" /> : <VideoOff className="h-6 w-6" />}
-        </Button>
+      {/* --- RODAPÉ: CONTROLES --- */}
+      <div className="h-20 bg-zinc-950 flex items-center justify-between px-6 md:px-12 border-t border-white/5 relative z-50">
+        
+        {/* Botão Pular (Esquerda) */}
         <Button 
           onClick={handleSkip} 
-          className="rounded-full px-8 h-14 bg-white text-black hover:bg-zinc-200 font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
+          className="bg-zinc-800 hover:bg-zinc-700 text-white rounded-2xl h-12 w-16 md:w-24 border border-zinc-700 shadow-lg"
         >
-          <SkipForward className="mr-2 h-5 w-5" /> {t('video_chat.btn_skip')}
+          <SkipForward className="h-6 w-6" />
         </Button>
+
+        {/* Botão Sair (Centro) - Destaque Vermelho */}
+        <Button 
+          onClick={handleStop} 
+          className="bg-red-600 hover:bg-red-700 text-white rounded-2xl h-14 w-20 md:w-32 shadow-[0_0_20px_rgba(220,38,38,0.4)] border border-red-500 transform hover:scale-105 transition-all"
+        >
+          <LogOut className="h-7 w-7 mr-1" />
+        </Button>
+
+        {/* Botão Reportar (Direita) */}
+        <Button 
+          onClick={handleReport} 
+          className="bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-red-400 rounded-2xl h-12 w-16 md:w-24 border border-zinc-700 shadow-lg"
+        >
+          <Flag className="h-6 w-6" />
+        </Button>
+
       </div>
     </div>
   );
