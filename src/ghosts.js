@@ -1,30 +1,14 @@
-// ghosts.js - Simulação de Tráfego Global (Versão 2.0 - 200 Bots)
+// ghosts.js - Simulação de Tráfego para SidePanel e Rooms
 import { io } from "socket.io-client";
 
 // --- CONFIGURAÇÃO ---
-const SERVER_URL = "https://loouz-oficial-final.onrender.com"; // Sua URL
+const SERVER_URL = "https://loouz-oficial-final.onrender.com";
 const TOTAL_BOTS = 200;
 
-// --- LISTA DE PAÍSES (Códigos ISO para as bandeiras) ---
-// O bot vai escolher um desses aleatoriamente
 const countries = [
-    "US", "US", "US", // Mais peso para EUA
-    "BR", "BR", // Brasil
-    "GB", // Reino Unido
-    "CA", // Canadá
-    "DE", // Alemanha
-    "FR", // França
-    "IT", // Itália
-    "ES", // Espanha
-    "MX", // México
-    "IN", // Índia
-    "KR", // Coreia do Sul
-    "JP", // Japão
-    "RU", // Rússia
-    "AU" // Austrália
+    "US", "BR", "GB", "CA", "DE", "FR", "IT", "ES", "MX", "IN", "KR", "JP", "RU", "AU"
 ];
 
-// --- NOMES (Mistura de culturas) ---
 const names = [
     "Sarah_US", "Mike88", "LonelyBoy", "Anna_K", "Pedro_BR", "CryptoKing", "SadGirl22",
     "JohnDoe", "Vivi_L", "GamerX", "Alex_Fr", "Maria_S", "Tored_Guy", "ChillVibes",
@@ -45,7 +29,7 @@ const names = [
     "Eli", "Aaron", "Ryan", "Angel", "Cooper", "Waylon", "Easton", "Kai"
 ];
 
-// --- VOCABULÁRIO EXPANDIDO (Multilíngue) ---
+// --- VOCABULÁRIO SINCRONIZADO COM AS NOVAS SALAS ---
 const vocabulario = {
     global: [
         "Hello everyone!", "Anyone from USA here?", "So bored right now...",
@@ -101,46 +85,40 @@ const vocabulario = {
     ]
 };
 
-// --- CONFIGURAÇÃO DE DISTRIBUIÇÃO (Total 200) ---
+// --- DISTRIBUIÇÃO PELAS SALAS DO SIDEPANEL ---
 const roomDistribution = [
-    { id: "global", count: 70 }, // Sala principal bombando
-    { id: "love", count: 50 }, // Sala de namoro sempre cheia
+    { id: "global", count: 70 },
+    { id: "love", count: 50 },
     { id: "nofilter", count: 30 },
     { id: "trending", count: 20 },
+    { id: "money", count: 10 },
     { id: "stories", count: 10 },
-    { id: "invest", count: 10 },
     { id: "area51", count: 10 },
 ];
 
-// --- FUNÇÃO PARA CRIAR UM BOT ---
 function createBot(botName, roomId, botIndex) {
-    // Delay inicial escalonado para não travar seu PC conectando 200 de uma vez
     setTimeout(() => {
         const socket = io(SERVER_URL, {
             reconnection: true,
-            reconnectionDelay: 5000,
             transports: ['websocket'],
-            forceNew: true // Força nova conexão para cada bot
+            forceNew: true
         });
 
-        const gender = Math.random() > 0.6 ? "male" : "female"; // Mais homens (realista para esses sites)
-        // Escolhe um país aleatório da lista
+        const gender = Math.random() > 0.5 ? "male" : "female";
         const country = countries[Math.floor(Math.random() * countries.length)];
 
         socket.on("connect", () => {
-            // Entrar na sala
+            // Entrar na sala usando a mesma estrutura do SidePanel.tsx
             socket.emit("join_room", {
                 room: roomId,
                 username: botName,
                 gender: gender,
-                country: country // Envia a bandeira correta
+                country: country
             });
         });
 
-        // Loop de conversa
         const loopFala = () => {
-            // Tempo aleatório entre 20s e 2 minutos (para não ficar spamando)
-            const delay = Math.floor(Math.random() * (120000 - 20000) + 20000);
+            const delay = Math.floor(Math.random() * (100000 - 30000) + 30000);
 
             setTimeout(() => {
                 if (socket.connected) {
@@ -151,40 +129,30 @@ function createBot(botName, roomId, botIndex) {
                         room: roomId,
                         senderName: botName,
                         sender: "user",
-                        senderCountry: country, // Garante que a mensagem vai com a bandeira
+                        senderCountry: country,
                         senderGender: gender,
                         text: msgTexto,
                         timestamp: Date.now(),
                         id: "ghost-" + Date.now() + Math.random()
                     });
 
-                    loopFala(); // Repete o ciclo
+                    loopFala();
                 }
             }, delay);
         };
 
         loopFala();
 
-    }, botIndex * 150); // Conecta um bot a cada 150ms para não sobrecarregar
+    }, botIndex * 150);
 }
 
-// --- INICIALIZAÇÃO ---
-console.log(`🚀 Iniciando EXÉRCITO DE BOTS (${TOTAL_BOTS} unidades)...`);
-console.log("Aguarde... conectando bots gradualmente...");
+console.log(`🚀 Iniciando bots para as salas oficiais...`);
 
 let botCounter = 0;
-
 roomDistribution.forEach(dist => {
     for (let i = 0; i < dist.count; i++) {
-        const name = names[Math.floor(Math.random() * names.length)];
-        // Cria nome único ex: Sarah_US_492
-        const uniqueName = `${name}_${Math.floor(Math.random() * 999)}`;
-
+        const uniqueName = `${names[Math.floor(Math.random() * names.length)]}_${Math.floor(Math.random() * 99)}`;
         createBot(uniqueName, dist.id, botCounter);
         botCounter++;
     }
 });
-
-setTimeout(() => {
-    console.log(`✅ Todos os ${botCounter} bots foram iniciados!`);
-}, botCounter * 150);

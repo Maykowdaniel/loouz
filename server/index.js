@@ -46,15 +46,20 @@ io.on("connection", (socket) => {
     console.log(`Socket conectado: ${socket.id}`);
 
     // --- 1. CHAT DE SALAS (QUARTOS/GRUPO) ---
+    // --- 1. CHAT DE SALAS (QUARTOS/GRUPO) ---
     socket.on("join_room", (data) => {
-        const { room, username, gender } = data;
+        // Agora pegamos o 'country' que vem dos dados enviados (como os bots fazem)
+        const { room, username, gender, country } = data;
         socket.join(room);
-        const country = getCountryByIp(socket);
+
+        // Se o país não vier no 'data' (usuário real), tentamos pelo IP
+        const finalCountry = country || getCountryByIp(socket);
 
         videoQueue = videoQueue.filter(id => id !== socket.id);
         textQueue = textQueue.filter(id => id !== socket.id);
 
-        activeUsers.set(socket.id, { username, room, country, gender });
+        // Salvamos o 'finalCountry' na memória do usuário
+        activeUsers.set(socket.id, { username, room, country: finalCountry, gender });
 
         socket.to(room).emit("receive_message", {
             id: "sys-" + Date.now(),
@@ -111,11 +116,13 @@ io.on("connection", (socket) => {
 
     // --- 3. LÓGICA DO CHAT DE TEXTO 1V1 ---
     socket.on("join_text_queue", (userData) => {
-        const { name, gender } = userData || { name: "Estranho", gender: "unspecified" };
-        const country = getCountryByIp(socket);
+        // Agora aceita o país vindo do userData
+        const { name, gender, country } = userData || { name: "Estranho", gender: "unspecified" };
 
-        textUsers.set(socket.id, { name, gender, country });
+        // Se não houver país definido, usa o IP
+        const finalCountry = country || getCountryByIp(socket);
 
+        textUsers.set(socket.id, { name, gender, country: finalCountry });
         const oldPair = textPairs.get(socket.id);
         if (oldPair) {
             io.to(oldPair.partnerId).emit("text_partner_disconnected");
