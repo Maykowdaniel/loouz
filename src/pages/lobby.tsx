@@ -13,16 +13,26 @@ const Lobby = () => {
   const userName = state?.name || "Visitante";
   const userGender = state?.gender;
 
-  const [onlineCount, setOnlineCount] = useState(Math.floor(Math.random() * (260 - 230 + 1)) + 230);
+  // ✅ 1. FAIXA AJUSTADA PARA 1000 - 2000 (IGUAL AO INDEX.TSX)
+  const [onlineCount, setOnlineCount] = useState(
+    Math.floor(Math.random() * (2000 - 1000 + 1)) + 1000
+  );
 
   useEffect(() => {
+    // ✅ 2. LÓGICA DE OSCILAÇÃO SINCRONIZADA
     const interval = setInterval(() => {
       setOnlineCount((prev) => {
-        const change = Math.floor(Math.random() * 9) - 4;
+        // Variação pequena entre -3 e +3 para parecer real (igual ao Index)
+        const change = Math.floor(Math.random() * 7) - 3;
         const newValue = prev + change;
-        return newValue < 200 ? 205 : newValue;
+        
+        // Garante que o número não saia da faixa de autoridade
+        if (newValue < 1000) return 1005;
+        if (newValue > 2000) return 1995;
+        return newValue;
       });
-    }, 4000);
+    }, 4000); // Atualiza a cada 4 segundos (igual ao Index)
+
     return () => clearInterval(interval);
   }, []);
 
@@ -51,7 +61,7 @@ const Lobby = () => {
       </header>
 
       <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6 animate-fade-in-up">
-        {/* Prova Social Dinâmica */}
+        {/* Prova Social Dinâmica - Agora com números consistentes */}
         <div className="flex items-center gap-2 bg-black/40 border border-green-500/30 px-4 py-2 rounded-full shadow-lg shadow-green-900/10 backdrop-blur-md mb-2">
             <div className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>

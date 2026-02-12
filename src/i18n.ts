@@ -14,6 +14,7 @@ i18n
     resources: {
       en: {
         translation: {
+          "your_name":"Your Name",
           //pessoas online
           "back:":"Back",
 // Em en -> translation
@@ -29,7 +30,7 @@ i18n
           "headline": "Chat with global people, the new Omegle.",
           "objective": "The best alternative to Omegle for random video and text chat with strangers.",
           "btn_text_chat": "Let's go",
-          "age_warning_1": "You must be 18+ to use loouz.",
+          "age_warning_1": "You must be 18+ to use louuz.",
           "age_warning_2": "Read terms",
           "age_warning_3": " before continuing.",
 
@@ -155,7 +156,7 @@ i18n
       pt: {
         translation: {
 
-
+          "your_name": "Seu Nome",
 // Em pt -> translation
 "online_now": "pessoas online agora",
 
@@ -169,7 +170,7 @@ i18n
           "btn_video": "Vídeo Chat",
           "headline": "Converse com pessoas globais, o novo Omegle.",
           "objective": "A melhor alternativa ao Omegle para bate-papo aleatório por vídeo e texto com estranhos.",
-          "age_warning_1": "Você precisa ter 18 anos ou mais para usar o loouz.",
+          "age_warning_1": "Você precisa ter 18 anos ou mais para usar o louuz.",
           "age_warning_2": "Leia os termos",
           "age_warning_3": " antes de continuar.",
 
