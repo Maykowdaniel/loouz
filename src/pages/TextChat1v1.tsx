@@ -1,211 +1,192 @@
-import { useEffect, useRef, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { SkipForward, Flag, LogOut } from "lucide-react"; 
-import SimplePeer from "simple-peer";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ArrowLeft, Send, SkipForward, User } from "lucide-react";
 import { io, Socket } from "socket.io-client";
+import ChatMessage from "@/components/ChatMessage"; 
 import { useTranslation } from "react-i18next";
+
+// Função para gerar o emoji da bandeira
+const getFlagEmoji = (countryCode: string) => {
+  if (!countryCode || countryCode === "UN") return "🌐";
+  return countryCode
+    .toUpperCase()
+    .replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
+};
 
 const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 
-const VideoChat = () => {
+const TextChat1v1 = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
   
-  const state = location.state as { name?: string; gender?: string } | null;
+  const [messages, setMessages] = useState<any[]>([]);
+  const [input, setInput] = useState("");
+  const [status, setStatus] = useState(t('text_chat.status_searching')); 
+  const [isPaired, setIsPaired] = useState(false);
   
-  // ✅ LÓGICA DE NOME: Garante um nome mesmo se recarregar a página
+  // Dados do Parceiro
+  const [partnerName, setPartnerName] = useState(t('text_chat.partner_default'));
+  const [partnerCountry, setPartnerCountry] = useState("UN");
+  const [partnerGender, setPartnerGender] = useState<"male" | "female" | "unspecified">("unspecified");
+  
+  // Lógica de dados do usuário
+  const state = location.state as { name?: string; gender?: "male" | "female" | "unspecified" } | null;
   const [userData] = useState({
       name: state?.name || `Guest${Math.floor(Math.random() * 90000) + 10000}`,
       gender: state?.gender || "unspecified"
   });
 
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const [partnerStream, setPartnerStream] = useState<MediaStream | null>(null);
-  const [callAccepted, setCallAccepted] = useState(false);
-  const [status, setStatus] = useState(t('video_chat.video_searching')); 
-  
-  const myVideo = useRef<HTMLVideoElement>(null);
-  const partnerVideo = useRef<HTMLVideoElement>(null);
-  const socket = useRef<Socket | null>(null);
-  const peerRef = useRef<SimplePeer.Instance | null>(null);
-  const currentPartnerId = useRef<string | null>(null);
+  const [myId, setMyId] = useState<string>("");
+
+  const socketRef = useRef<Socket | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (partnerVideo.current && partnerStream) {
-      partnerVideo.current.srcObject = partnerStream;
-    }
-  }, [partnerStream, callAccepted]);
+    socketRef.current = io(SOCKET_URL);
+
+    socketRef.current.on("connect", () => {
+        setMyId(socketRef.current?.id || "");
+    });
+
+    socketRef.current.on("text_paired", (data: any) => {
+      setStatus(t('text_chat.status_connected'));
+      setIsPaired(true);
+      setPartnerName(data.partnerName);
+      setPartnerCountry(data.partnerCountry);
+      if (data.partnerGender) setPartnerGender(data.partnerGender);
+      
+      setMessages([{ 
+        id: "sys-start", 
+        sender: "system", 
+        text: t('text_chat.welcome_msg', { name: data.partnerName }) 
+      }]);
+    });
+
+    socketRef.current.on("receive_1v1_message", (msg: any) => {
+      setMessages((prev) => [...prev, msg]);
+    });
+
+    socketRef.current.on("text_partner_disconnected", () => {
+      setMessages((prev) => [...prev, { 
+        id: "sys-disc", 
+        sender: "system", 
+        text: t('text_chat.partner_left', { name: partnerName }) 
+      }]);
+      setIsPaired(false);
+      setStatus(t('text_chat.status_disconnected'));
+    });
+
+    // Entra na fila de texto
+    socketRef.current.emit("join_text_queue", { 
+        name: userData.name, 
+        gender: userData.gender 
+    });
+
+    return () => { socketRef.current?.disconnect(); };
+  }, [t, partnerName, userData]);
 
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then((currentStream) => {
-        setStream(currentStream);
-        if (myVideo.current) myVideo.current.srcObject = currentStream;
-        
-        socket.current = io(SOCKET_URL);
-        
-        socket.current.on("receive_signal", ({ signal }) => {
-          if (peerRef.current && !peerRef.current.destroyed) {
-            peerRef.current.signal(signal);
-          }
-        });
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
-        socket.current.on("partner_disconnected", () => {
-          handleSkip(); 
-        });
-
-        socket.current.on("start_call", ({ socketId, initiator }) => {
-          setStatus(t('video_chat.video_connecting'));
-          currentPartnerId.current = socketId; 
-
-          if (peerRef.current) {
-            peerRef.current.destroy();
-          }
-
-          const peer = new SimplePeer({
-            initiator: initiator,
-            trickle: false,
-            stream: currentStream,
-          });
-
-          peer.on("signal", (data) => {
-            socket.current?.emit("send_signal", { userToCall: socketId, signalData: data });
-          });
-
-          peer.on("stream", (remoteStream) => {
-            setPartnerStream(remoteStream);
-            setCallAccepted(true);
-            setStatus(t('video_chat.connected'));
-          });
-
-          peer.on("error", (err) => {
-            console.error("Erro no Peer:", err);
-            handleSkip(); 
-          });
-
-          peerRef.current = peer;
-        });
-
-        socket.current.emit("join_video_queue");
-      })
-      .catch((err) => {
-        console.error("Erro de mídia:", err);
-        setStatus(t('video_chat.video_error'));
-      });
-
-    return () => {
-      socket.current?.disconnect();
-      if(stream) stream.getTracks().forEach(track => track.stop());
-      if(peerRef.current) peerRef.current.destroy();
-    };
-  }, [t]);
+  const handleSend = () => {
+    if (!input.trim() || !isPaired) return;
+    
+    socketRef.current?.emit("send_1v1_message", {
+      text: input,
+      senderId: socketRef.current.id, 
+      timestamp: Date.now(),
+      id: crypto.randomUUID()
+    });
+    setInput("");
+  };
 
   const handleSkip = () => {
-    if (peerRef.current) {
-      peerRef.current.destroy();
-      peerRef.current = null;
-    }
-    setCallAccepted(false);
-    setPartnerStream(null);
-    currentPartnerId.current = null;
-    setStatus(t('video_chat.video_searching'));
+    setMessages([]);
+    setIsPaired(false);
+    setStatus(t('text_chat.status_searching'));
+    setPartnerName(t('text_chat.partner_default'));
+    setPartnerCountry("UN");
+    setPartnerGender("unspecified");
     
-    setTimeout(() => {
-      socket.current?.emit("join_video_queue");
-    }, 500);
-  };
-
-  const handleStop = () => {
-    socket.current?.disconnect();
-    if(stream) stream.getTracks().forEach(track => track.stop());
-    // ✅ REDIRECIONA PARA A HOME
-    navigate("/"); 
-  };
-
-  const handleReport = () => {
-    if (!currentPartnerId.current) return;
-    console.log(`REPORTANDO USUÁRIO: ${currentPartnerId.current}`);
-    alert(t('Usuário reportado com sucesso!')); 
-    handleSkip();
+    socketRef.current?.emit("join_text_queue", { 
+        name: userData.name, 
+        gender: userData.gender 
+    });
   };
 
   return (
-    <div className="flex flex-col h-[100dvh] bg-zinc-950 text-white overflow-hidden">
+    <div className="gradient-bg flex h-screen flex-col pb-4">
       
-      <style>{`
-        .mirror-mode {
-          transform: scaleX(-1);
-        }
-      `}</style>
-
-      {/* --- ÁREA DOS VÍDEOS --- */}
-      <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
-        
-        {/* PARCEIRO (Cima no Mobile / Esquerda no PC) */}
-        <div className="relative bg-black flex items-center justify-center border-b md:border-b-0 md:border-r border-white/10 h-1/2 w-full md:h-full md:w-1/2 transition-all">
-          {callAccepted && partnerStream ? (
-            <video 
-              playsInline 
-              autoPlay 
-              ref={partnerVideo} 
-              className="w-full h-full object-cover" 
-            />
-          ) : (
-            <div className="flex flex-col items-center justify-center p-4 text-center animate-pulse w-full h-full">
-               <div className="bg-zinc-800/50 p-6 rounded-full mb-4">
-                  <span className="loading loading-spinner loading-lg text-purple-500"></span>
-               </div>
-               <p className="text-zinc-400 text-lg font-medium tracking-wide">
-                 {status}
-               </p>
+      {/* Header */}
+      <div className="flex items-center gap-3 p-4 border-b border-border bg-card/60 backdrop-blur-sm">
+        <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
+          <ArrowLeft size={20} className="text-muted-foreground" />
+        </Button>
+        <div className="flex items-center gap-3">
+          <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center ring-1 ring-primary/30">
+            <User size={20} className="text-primary" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 font-bold text-foreground">
+              {partnerName} <span className="text-lg">{getFlagEmoji(partnerCountry)}</span>
             </div>
-          )}
-        </div>
-
-        {/* VOCÊ (Baixo no Mobile / Direita no PC) */}
-        <div className="relative bg-zinc-900 flex items-center justify-center h-1/2 w-full md:h-full md:w-1/2 transition-all">
-          <video 
-            playsInline 
-            autoPlay 
-            muted 
-            ref={myVideo} 
-            className="w-full h-full object-cover mirror-mode" 
-          />
-          <div className="absolute bottom-4 left-4 bg-black/60 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-white/80 backdrop-blur-sm">
-            {t('video_chat.you')}
+            <div className="text-[10px] font-mono uppercase tracking-wider text-green-500 animate-pulse">
+              {status}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* --- RODAPÉ: CONTROLES --- */}
-      <div className="h-20 bg-zinc-950 flex items-center justify-between px-6 md:px-12 border-t border-white/5 relative z-50 flex-none">
-        
-        <Button 
-          onClick={handleSkip} 
-          className="bg-zinc-800 hover:bg-zinc-700 text-white rounded-2xl h-12 w-16 md:w-24 border border-zinc-700 shadow-lg"
-        >
-          <SkipForward className="h-6 w-6" />
-        </Button>
+      {/* Área de Mensagens */}
+      <ScrollArea className="flex-1 px-4 py-4">
+        <div className="mx-auto max-w-3xl space-y-3">
+          {messages.map((msg, i) => {
+            const isMe = msg.senderId === myId;
+            const visualSender = msg.sender === "system" ? "system" : (isMe ? "user" : "stranger");
+            const displayName = isMe ? userData.name : partnerName;
+            const displayGender = isMe ? userData.gender : partnerGender;
 
-        <Button 
-          onClick={handleStop} 
-          className="bg-red-600 hover:bg-red-700 text-white rounded-2xl h-14 w-20 md:w-32 shadow-[0_0_20px_rgba(220,38,38,0.4)] border border-red-500 transform hover:scale-105 transition-all"
-        >
-          <LogOut className="h-7 w-7 mr-1" />
-        </Button>
+            return (
+              <ChatMessage
+                key={i}
+                sender={visualSender}
+                text={msg.text}
+                senderName={displayName}
+                senderCountry={!isMe ? partnerCountry : undefined} 
+                senderGender={displayGender} 
+              />
+            );
+          })}
+          <div ref={scrollRef} />
+        </div>
+      </ScrollArea>
 
-        <Button 
-          onClick={handleReport} 
-          className="bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-red-400 rounded-2xl h-12 w-16 md:w-24 border border-zinc-700 shadow-lg"
-        >
-          <Flag className="h-6 w-6" />
-        </Button>
-
+      {/* Área de Input */}
+      <div className="border-t border-border bg-card/60 px-4 py-3 backdrop-blur-sm">
+        <div className="max-w-3xl mx-auto flex gap-2">
+          <Button onClick={handleSkip} variant="secondary" className="rounded-full px-4 border border-border">
+            <SkipForward size={18} className="mr-2" /> {t('text_chat.btn_skip')}
+          </Button>
+          <Input 
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            placeholder={t('text_chat.placeholder')}
+            className="flex-1 border-border bg-background/50 text-foreground rounded-full focus-visible:ring-primary"
+            disabled={!isPaired}
+          />
+          <Button onClick={handleSend} disabled={!isPaired} className="gradient-btn rounded-full w-12 h-10 p-0">
+            <Send size={18} />
+          </Button>
+        </div>
       </div>
     </div>
   );
 };
 
-export default VideoChat;
+export default TextChat1v1;
