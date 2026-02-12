@@ -14,10 +14,17 @@ i18n
     resources: {
       en: {
         translation: {
+          //pessoas online
+// Em en -> translation
+"online_now": "people online now",
+          //page title
+          // No i18n.ts -> en -> translation
+"page_title": "Louuz — Talk to Strangers | Free Omegle & OmeTV Alternative",
+
           // Index Hero
           "intro": "Chat with strangers, the new Omegle.",
           "omegle": "The best alternative to Omegle for random video and text chat with strangers.",
-          "btn_enter": "Text Chat",
+          "btn_enter": "Chat Texto",
           "btn_video": "Video Chat",
           "headline": "Chat with global people, the new Omegle.",
           "objective": "The best alternative to Omegle for random video and text chat with strangers.",
@@ -69,6 +76,14 @@ i18n
       },
       pt: {
         translation: {
+
+
+// Em pt -> translation
+"online_now": "pessoas online agora",
+
+          //page title
+          "page_title": "Louuz — Converse com estranhos | Alternativa gratuita ao Omegle e OmeTV",
+
           // Index Hero
           "intro": "Converse com estranhos, o novo Omegle.",
           "omegle": "A melhor alternativa ao Omegle para bate-papo aleatório por vídeo e texto com estranhos.",
