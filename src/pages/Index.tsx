@@ -80,6 +80,19 @@ const Index = () => {
             {t('omegle')}
           </p>
 
+           {/* ✅ NOVO: INDICADOR DE USUÁRIOS ONLINE */}
+          <div 
+            className="animate-fade-in-up mb-6 flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-emerald-400 ring-1 ring-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+            style={{ animationDelay: "0.05s", opacity: 0 }}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            {onlineCount.toLocaleString()} {t('online_now')}
+          </div>
+
+          
           <div
             className="animate-fade-in-up flex flex-row items-center justify-center gap-4 w-full"
             style={{ animationDelay: "0.3s", opacity: 0 }}
@@ -101,20 +114,6 @@ const Index = () => {
             </Button>
           </div>
         </div>
-
-
-
-        {/* ✅ NOVO: INDICADOR DE USUÁRIOS ONLINE */}
-          <div 
-            className="animate-fade-in-up mb-6 flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-emerald-400 ring-1 ring-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
-            style={{ animationDelay: "0.05s", opacity: 0 }}
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            {onlineCount.toLocaleString()} {t('online_now')}
-          </div>
 
  
         <div className="flex flex-col items-center gap-3 mb-2 animate-fade-in-up z-10" style={{ animationDelay: "0.45s", opacity: 0 }}>
