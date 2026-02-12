@@ -252,8 +252,9 @@ const TextChat1v1 = () => {
       </div>
 
      {/* === COLUNA DIREITA (SidePanel) === */}
-<div className="hidden md:flex w-96 h-full shadow-2xl z-30">
-    <SidePanel username={userData.name} /> {/* <--- USANDO O NOVO COMPONENTE */}
+{/* Aumentei para w-[450px] para ficar mais largo e confortável */}
+<div className="hidden md:flex w-[30%] h-full shadow-2xl z-30 border-l border-zinc-800">
+   <SidePanel username={userData.name} />
 </div>
 
     </div>
