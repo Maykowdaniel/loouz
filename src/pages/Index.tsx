@@ -9,12 +9,15 @@ const Index = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   
+  // ✅ ESTADO PARA O NÚMERO FAKE
   const [onlineCount, setOnlineCount] = useState(1500);
 
   useEffect(() => {
+    // Título da aba e idioma
     document.title = t('page_title'); 
     document.documentElement.lang = i18n.language;
 
+    // ✅ LÓGICA DO CONTADOR FAKE (1000 - 2000)
     const initial = Math.floor(Math.random() * (2000 - 1000 + 1)) + 1000;
     setOnlineCount(initial);
 
@@ -22,11 +25,12 @@ const Index = () => {
       setOnlineCount(prev => {
         const change = Math.floor(Math.random() * 7) - 3; 
         const next = prev + change;
+        
         if (next < 1000) return 1000;
         if (next > 2000) return 2000;
         return next;
       });
-    }, 4000);
+    }, 4000); // Atualiza a cada 4 segundos
 
     return () => clearInterval(interval);
   }, [t, i18n.language]);
@@ -46,14 +50,14 @@ const Index = () => {
       `}</style>
 
       {/* --- HERO SECTION --- */}
-      {/* 1. Mudei 'justify-between' para 'justify-start' para o conteúdo subir */}
+      {/* ALTERAÇÃO 1: Mudei de justify-between para justify-start para controlar a altura manualmente */}
       <div className="relative flex min-h-[100dvh] w-full flex-col items-center justify-start px-4 py-6">
         
-        {/* Espaço reservado para o Header (Menu) */}
+        {/* Espaçamento do Header */}
         <div className="flex-none h-16"></div>
 
-        {/* 2. Adicionei 'mt-4 sm:mt-10' para ajustar a distância do topo */}
-        <div className="flex flex-col items-center justify-center w-full max-w-4xl z-10 mt-4 sm:mt-10">
+        {/* ALTERAÇÃO 2: Adicionei mt-10 (mobile) e sm:mt-20 (desktop) para posicionar o logo mais acima */}
+        <div className="flex flex-col items-center justify-center w-full max-w-4xl z-10 mt-10 sm:mt-20">
           <div className="animate-fade-in-up mb-6 scale-110 sm:scale-125">
             <h1 className="text-glow-purple text-7xl font-black tracking-tighter sm:text-8xl md:text-9xl">
               lo<span className="text-accent">uu</span>z
@@ -74,7 +78,7 @@ const Index = () => {
             {t('omegle')}
           </p>
 
-           {/* INDICADOR DE USUÁRIOS ONLINE */}
+           {/* ✅ INDICADOR DE USUÁRIOS ONLINE */}
           <div 
             className="animate-fade-in-up mb-6 flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-emerald-400 ring-1 ring-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
             style={{ animationDelay: "0.05s", opacity: 0 }}
@@ -108,7 +112,7 @@ const Index = () => {
           </div>
         </div>
 
-        {/* 3. Adicionei 'mt-auto' para empurrar o rodapé para o final da tela */}
+        {/* ALTERAÇÃO 3: Adicionei mt-auto para fixar o rodapé no fundo da tela */}
         <div className="flex flex-col items-center gap-3 mb-2 animate-fade-in-up z-10 mt-auto" style={{ animationDelay: "0.45s", opacity: 0 }}>
           <p className="text-center text-[10px] sm:text-xs text-muted-foreground/50 max-w-sm px-4">
             {t('age_warning_1')}
@@ -130,8 +134,9 @@ const Index = () => {
         </div>
       </div>
 
+      {/* Seções de SEO */}
       <div id="more-content" className="w-full bg-black/40 py-20 backdrop-blur-md border-t border-white/5">
-        {/* ... conteúdo extra ... */}
+        {/* ... conteúdo dos ícones de SEO ... */}
       </div>
 
       <SeoExpansion />
