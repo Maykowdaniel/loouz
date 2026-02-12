@@ -254,8 +254,11 @@ const TextChat1v1 = () => {
  {/* === COLUNA DIREITA (SidePanel) === */}
       {/* Aumentei para w-[450px] para ficar mais largo e confortável. 
       {/* No final do arquivo TextChat1v1.tsx, substitua a div do SidePanel */}
-<div className="hidden md:flex w-[500px] h-full shadow-2xl z-30 border-l border-zinc-800 flex-none">
-   <SidePanel username={userData.name} />
+{/* No final do arquivo TextChat1v1.tsx, substitua o bloco da direita */}
+<div className="hidden md:flex w-[500px] h-full shadow-2xl z-30 border-l border-zinc-800 flex-none bg-zinc-950">
+   <div className="w-full h-full flex flex-col items-stretch">
+      <SidePanel username={userData.name} />
+   </div>
 </div>
 
     </div>

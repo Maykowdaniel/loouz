@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, Send, Globe, Flame, TrendingUp, Zap, BookOpen, Ghost, Heart, Users, LogOut } from "lucide-react";
+import { ArrowLeft, Send, Globe, Flame, TrendingUp, Zap, BookOpen, Ghost, Heart, Users } from "lucide-react";
 import { io, Socket } from "socket.io-client";
 import { useTranslation } from "react-i18next";
 import ChatMessage from "@/components/ChatMessage";
@@ -63,9 +63,8 @@ const RoomChatView = ({ roomId, roomName, username, onBack }: { roomId: string, 
     };
 
     return (
-        <div className="flex flex-col h-full bg-zinc-950/50">
-            {/* Header idêntico ao Chat.tsx */}
-            <header className="flex items-center justify-between border-b border-border bg-card/60 px-4 py-3 backdrop-blur-sm">
+        <div className="flex flex-col h-full bg-zinc-950/50 w-full">
+            <header className="flex items-center justify-between border-b border-border bg-card/60 px-4 py-3 backdrop-blur-sm w-full">
                 <div className="flex items-center gap-3">
                     <Button onClick={onBack} variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                         <ArrowLeft className="h-5 w-5" />
@@ -86,9 +85,9 @@ const RoomChatView = ({ roomId, roomName, username, onBack }: { roomId: string, 
                 </div>
             </header>
 
-            <ScrollArea className="flex-1 px-4 py-4">
-                {/* Removido o max-w-3xl para ocupar toda a largura da coluna */}
-                <div className="space-y-3 w-full">
+            <ScrollArea className="flex-1 px-4 py-4 w-full">
+                {/* Removido o mx-auto e o max-w-3xl para esticar 100% */}
+                <div className="space-y-3 w-full flex flex-col items-stretch">
                     {messages.map((msg) => (
                         <ChatMessage key={msg.id} sender={msg.sender} senderName={msg.senderName} senderCountry={msg.senderCountry} senderGender={msg.senderGender} text={msg.text} />
                     ))}
@@ -96,9 +95,8 @@ const RoomChatView = ({ roomId, roomName, username, onBack }: { roomId: string, 
                 </div>
             </ScrollArea>
 
-            {/* Input idêntico ao Chat.tsx */}
-            <div className="border-t border-border bg-card/60 px-4 py-3 backdrop-blur-sm">
-                <div className="flex w-full gap-2">
+            <div className="border-t border-border bg-card/60 px-4 py-3 backdrop-blur-sm w-full">
+                <div className="flex w-full gap-2 items-center">
                     <Input
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
@@ -107,7 +105,7 @@ const RoomChatView = ({ roomId, roomName, username, onBack }: { roomId: string, 
                         disabled={!isConnected}
                         className="flex-1 border-border bg-background/50 text-foreground focus-visible:ring-primary"
                     />
-                    <Button onClick={sendMessage} disabled={!inputValue.trim() || !isConnected} className="gradient-btn border-0 transition-all hover:scale-105">
+                    <Button onClick={sendMessage} disabled={!inputValue.trim() || !isConnected} className="gradient-btn border-0 transition-all hover:scale-105 shrink-0">
                         <Send className="h-4 w-4" />
                     </Button>
                 </div>
@@ -125,12 +123,13 @@ const SidePanel = ({ username }: { username: string }) => {
     }
 
     return (
-        <div className="flex flex-col h-full bg-zinc-950/50 border-l border-zinc-800">
-            <header className="flex items-center justify-between border-b border-border bg-card/60 px-6 py-4 backdrop-blur-sm">
+        <div className="flex flex-col h-full bg-zinc-950/50 border-l border-zinc-800 w-full">
+            <header className="flex items-center justify-between border-b border-border bg-card/60 px-6 py-4 backdrop-blur-sm w-full">
                 <h1 className="text-glow-purple text-xl font-black tracking-tighter uppercase">{t('rooms.title')}</h1>
             </header>
             
-            <ScrollArea className="flex-1 px-4 py-4">
+            <ScrollArea className="flex-1 px-4 py-4 w-full">
+                {/* Removido o mx-auto para as salas encostarem nas bordas da coluna */}
                 <div className="space-y-3 w-full">
                     {roomsData.map((room) => (
                         <div 
@@ -138,7 +137,7 @@ const SidePanel = ({ username }: { username: string }) => {
                             onClick={() => setActiveRoom({ id: room.id, name: t(room.nameKey) })}
                             className="group flex cursor-pointer items-center gap-4 rounded-xl border border-border bg-card/40 p-4 transition-all hover:scale-[1.01] hover:bg-card/80 hover:box-glow-purple hover:border-primary/50 w-full"
                         >
-                            <div className={`flex h-12 w-12 items-center justify-center rounded-full ${room.bg} ${room.color} ring-1 ring-white/5 group-hover:scale-110 transition-transform`}>
+                            <div className={`flex h-12 w-12 items-center justify-center rounded-full ${room.bg} ${room.color} ring-1 ring-white/5 group-hover:scale-110 transition-transform shrink-0`}>
                                 <room.icon className="h-6 w-6" />
                             </div>
                             <div className="flex-1 min-w-0">
