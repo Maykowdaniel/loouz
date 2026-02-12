@@ -124,12 +124,13 @@ i18n
 },
 "video_chat": {
   "you": "You",
-  "searching": "Searching for partner...",
+  "video_searching": "Searching for partner...",
   "connecting": "Connecting to stranger...",
   "connected": "Connected!",
-  "waiting": "Waiting for video...",
+  "video_waiting": "Waiting for video...",
   "error": "Error: Allow camera access.",
-  "btn_skip": "SKIP"
+  "btn_skip": "SKIP",
+  "video_connecting" : "connecting"
 },
 
 //salas
@@ -261,13 +262,14 @@ i18n
   "btn_skip": "Pular"
 },
 "video_chat": {
-  "you": "Vo ê",
+  "you": "Você",
   "video_searching": "Procurando Alguém...",
   "connecting": "A conectar com estranho...",
   "connected": "Conectado!",
   "video_waiting": "A aguardar vídeo...",
   "error": "Erro: Permite o acesso à câmara.",
-  "btn_skip": "PULAR"
+  "btn_skip": "PULAR",
+  "video_connecting" : "conectando"
 },
 
 //salas 
