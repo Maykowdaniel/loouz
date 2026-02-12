@@ -1,99 +1,75 @@
 import { CheckCircle, Shield, Zap, Globe, MessageCircle, Video, HelpCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const SeoExpansion = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="w-full bg-black text-zinc-300 py-16 px-6 md:px-12 lg:px-24 space-y-24 border-t border-zinc-900">
       
-      {/* SEÇÃO 1: O QUE É (Foco: Omegle Alternative) */}
+      {/* SEÇÃO 1: O QUE É */}
       <section className="max-w-4xl mx-auto text-center space-y-6">
         <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
-          What is <span className="text-purple-500">Louuz</span>?
+          {t('seo_exp.why_title')} <span className="text-purple-500">{t('seo_exp.louuz')}</span>
         </h2>
         
         <p className="text-lg md:text-xl leading-relaxed text-zinc-400">
-          Louuz has established itself as a number one alternative to Omegle in 2026,
-          but our existence goes far beyond filling a gap left by older platforms. 
-          We are a next-generation network, designed for those who understand that 
-          the true magic of the internet lies in the spontaneity of an unexpected encounter.
-          Our main mission is to redefine online social interactions, creating a direct bridge 
-          that brings people from all over the world closer together, breaking down geographical
-         and cultural barriers so that a stranger becomes a new friend in a matter of seconds.
-
-         Unlike services like OmeTV or Chatroulette, Louuz focuses on the purity of human connection through a modern, 
-         safe, and completely anonymous space. We believe that to meet people authentically, you don't need forms or
-         bureaucracy; therefore, our platform requires zero registration, no login, and remains completely ad-free. 
-         We want you to immerse yourself in a video chat experience that is, above all, fun and engaging, offering the most 
-         pleasant environment possible to expand your social circle.
+          {t('seo_exp.response')}
         </p>
-        
       </section>
 
-      {/* SEÇÃO 2: POR QUE É MELHOR (Comparativo) */}
+      {/* SEÇÃO 2: POR QUE É MELHOR */}
       <section className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
         <div>
           <h3 className="text-2xl md:text-4xl font-bold text-white mb-6">
-            Why is Louuz an alternative to <span className="text-pink-500 decoration-wavy underline">Omegle?</span>?
+            {t('seo_exp.alt_omegle')} <span className="text-pink-500 decoration-wavy underline">Omegle?</span>
           </h3>
           <div className="space-y-4">
-            <FeatureItem title="Instant Connection" desc="No loading screens. Click 'Start' and match instantly." />
-            <FeatureItem title="No Login Required" desc="We don't ask for email, phone number, or Facebook." />
-            <FeatureItem title="Next-Gen Design" desc="Modern Dark Mode interface optimized for Mobile and PC." />
-            <FeatureItem title="Global Reach" desc="Talk to strangers from USA, Brazil, Europe, and Asia." />
+            <FeatureItem title={t('seo_exp.features.f1_t')} desc={t('seo_exp.features.f1_d')} />
+            <FeatureItem title={t('seo_exp.features.f2_t')} desc={t('seo_exp.features.f2_d')} />
+            <FeatureItem title={t('seo_exp.features.f3_t')} desc={t('seo_exp.features.f3_d')} />
+            <FeatureItem title={t('seo_exp.features.f4_t')} desc={t('seo_exp.features.f4_d')} />
           </div>
         </div>
         
         {/* Bloco de Texto Rico para SEO */}
         <div className="bg-zinc-900/50 p-8 rounded-3xl border border-zinc-800 hover:border-purple-500/30 transition-all">
-          <h4 className="text-xl font-bold text-white mb-4">Safe Random Video Chat</h4>
+          <h4 className="text-xl font-bold text-white mb-4">{t('seo_exp.safe_title')}</h4>
           <p className="text-sm text-zinc-400 mb-4">
-            Many users search for "sites like Omegle" but find platforms full of bots or strict bans. 
-            At Louuz, we use advanced technology to connect real people. Our 
-            <strong> cam-to-cam chat</strong> allows you to meet new friends, 
-            practice languages, or just kill boredom anonymously.
+            {t('seo_exp.safe_p1')}
           </p>
           <p className="text-sm text-zinc-400">
-            If you miss the classic <strong>Omegle</strong> experience or want something faster than <strong>OmeTV</strong>, Louuz is the place to be.
-            We are the "Omegle unblocked" solution you were looking for.
+            {t('seo_exp.safe_p2')}
           </p>
         </div>
       </section>
 
-      {/* SEÇÃO 3: FAQ (A ARMA SECRETA DO VOOZ) - NOVO! */}
+      {/* SEÇÃO 3: FAQ */}
       <section className="max-w-4xl mx-auto space-y-8">
-        <h3 className="text-3xl font-bold text-white text-center mb-8">Frequently Asked Questions</h3>
+        <h3 className="text-3xl font-bold text-white text-center mb-8">{t('seo_exp.faq_title')}</h3>
         
         <div className="grid gap-6">
-            <FaqItem 
-                question="Is Louuz a good Omegle alternative?" 
-                answer="Yes! Since Omegle shut down, Louuz has become the fastest-growing alternative. We offer the same random video chat experience but with better design, mobile support, and faster connections."
-            />
-            <FaqItem 
-                question="How to get unbanned from OmeTV?" 
-                answer="If you are banned from OmeTV or other sites, you don't need a VPN. Just switch to Louuz! We are a fresh platform with fair moderation. Start chatting immediately without worrying about old bans."
-            />
-            <FaqItem 
-                question="Is this video chat app safe?" 
-                answer="Safety is our priority. Unlike the old Omegle, we have modern moderation systems. However, always remember to keep your personal information private when talking to strangers."
-            />
+            <FaqItem question={t('seo_exp.faq_q1')} answer={t('seo_exp.faq_a1')} />
+            <FaqItem question={t('seo_exp.faq_q2')} answer={t('seo_exp.faq_a2')} />
+            <FaqItem question={t('seo_exp.faq_q3')} answer={t('seo_exp.faq_a3')} />
         </div>
       </section>
 
-      {/* SEÇÃO 4: LISTA DE KEYWORDS (A Caixa) */}
+      {/* SEÇÃO 4: LISTA DE KEYWORDS */}
       <section className="max-w-5xl mx-auto bg-gradient-to-br from-purple-900/20 to-black p-8 rounded-3xl border border-purple-500/20 text-center">
-        <h3 className="text-2xl font-bold text-white mb-8">Louuz is for everyone - Choose your mode</h3>
+        <h3 className="text-2xl font-bold text-white mb-8">{t('seo_exp.footer_headline')}</h3>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left">
-            <KeywordLink icon={<Video />} text="Random Video Chat" desc="Face-to-face with strangers" />
-            <KeywordLink icon={<MessageCircle />} text="Text Chat Online" desc="Fast, lightweight & anonymous" />
-            <KeywordLink icon={<Shield />} text="Anonymous Chat" desc="Your identity is protected" />
-            <KeywordLink icon={<Zap />} text="Omegle Alternative" desc="The modern version of the classic" />
-            <KeywordLink icon={<Globe />} text="Talk to Strangers" desc="Connect globally instantly" />
-            <KeywordLink icon={<CheckCircle />} text="Sites like OmeTV" desc="Better moderation, no bans" />
+            <KeywordLink icon={<Video />} text={t('seo_exp.k1_t')} desc={t('seo_exp.k1_d')} />
+            <KeywordLink icon={<MessageCircle />} text={t('seo_exp.k2_t')} desc={t('seo_exp.k2_d')} />
+            <KeywordLink icon={<Shield />} text={t('seo_exp.k3_t')} desc={t('seo_exp.k3_d')} />
+            <KeywordLink icon={<Zap />} text={t('seo_exp.k4_t')} desc={t('seo_exp.k4_d')} />
+            <KeywordLink icon={<Globe />} text={t('seo_exp.k5_t')} desc={t('seo_exp.k5_d')} />
+            <KeywordLink icon={<CheckCircle />} text={t('seo_exp.k6_t')} desc={t('seo_exp.k6_d')} />
         </div>
 
         <p className="mt-8 text-xs text-zinc-500 max-w-2xl mx-auto">
-          Louuz is a premium online chat platform for users 18+. 
-          We promote safe and respectful interactions. The best free random chat of 2026.
+          {t('seo_exp.disclaimer')}
         </p>
       </section>
 
@@ -101,7 +77,7 @@ const SeoExpansion = () => {
   );
 };
 
-// Componentes auxiliares
+// Componentes auxiliares (mantidos para estrutura)
 const FeatureItem = ({ title, desc }: { title: string, desc: string }) => (
   <div className="flex gap-4">
     <div className="mt-1 bg-green-500/10 p-2 rounded-lg h-fit text-green-500">
