@@ -1,14 +1,13 @@
+import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button"; 
-import { useTranslation } from "react-i18next"; // ✅ Importado
-import BottomNav from "@/components/BottomNav";
+import { useTranslation } from "react-i18next"; 
 import { 
   Globe, Ghost, Heart, LogOut, 
   Flame, TrendingUp, Zap, BookOpen 
 } from "lucide-react";
 
-// ✅ Chaves atualizadas para bater com o i18n.ts
 const roomsData = [
   {
     id: "global",
@@ -71,17 +70,21 @@ const roomsData = [
 const Rooms = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation(); // ✅ Hook iniciado
+  const { t } = useTranslation(); 
   
   const state = location.state as { name?: string; gender?: string } | null;
-  const userName = state?.name || "Visitante";
-  const userGender = state?.gender;
+  
+  // ✅ LÓGICA DE NOME: Se vier do Index sem nome, cria um Guest na hora.
+  const [userData] = useState({
+      name: state?.name || `Guest${Math.floor(Math.random() * 90000) + 10000}`,
+      gender: state?.gender || "unspecified"
+  });
 
   const handleJoinRoom = (room: typeof roomsData[0]) => {
     navigate("/chat", { 
       state: { 
-        name: userName, 
-        gender: userGender,
+        name: userData.name, 
+        gender: userData.gender,
         roomName: t(room.nameKey),
         roomId: room.id 
       } 
@@ -89,7 +92,8 @@ const Rooms = () => {
   };
 
   return (
-    <div className="gradient-bg flex h-screen flex-col pb-16">
+    // ✅ Removido 'pb-16' pois não temos mais BottomNav
+    <div className="gradient-bg flex h-screen flex-col">
       
       {/* 1. APP BAR */}
       <header className="flex items-center justify-between border-b border-border bg-card/60 px-6 py-4 backdrop-blur-sm">
@@ -97,9 +101,8 @@ const Rooms = () => {
           <h1 className="text-glow-purple text-3xl font-black tracking-tighter sm:text-4xl md:text-5xl">
             lo<span className="text-accent">uu</span>z
           </h1>
-          {/* ✅ Nome dinâmico com tradução */}
           <p className="text-xs text-muted-foreground">
-            {t('rooms.header_hello', { name: userName })}
+            {t('rooms.header_hello', { name: userData.name })}
           </p>
         </div>
         <Button
@@ -137,11 +140,9 @@ const Rooms = () => {
               </div>
 
               <div className="flex-1">
-                {/* ✅ Nome da Sala Traduzido */}
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                   {t(room.nameKey)} 
                 </h3>
-                {/* ✅ Descrição da Sala Traduzida */}
                 <p className="text-sm text-muted-foreground line-clamp-1">
                   {t(room.descKey)}
                 </p>
@@ -155,7 +156,7 @@ const Rooms = () => {
         </div>
       </ScrollArea>
 
-      <BottomNav />
+      {/* ✅ BOTTOM NAV REMOVIDA DAQUI */}
     </div>
   );
 };
