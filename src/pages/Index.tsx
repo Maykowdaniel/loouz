@@ -87,15 +87,16 @@ const Index = () => {
             {onlineCount.toLocaleString()} {t('online_now')}
           </div>
 
-          {/* ✅ MUDANÇA AQUI: flex-col (mobile) -> sm:flex-row (desktop) */}
+          {/* ✅ BOTÕES MAIORES (XL) */}
           <div
-            className="animate-fade-in-up flex flex-col sm:flex-row items-center justify-center gap-4 w-full"
+            className="animate-fade-in-up flex flex-col sm:flex-row items-center justify-center gap-6 w-full"
             style={{ animationDelay: "0.3s", opacity: 0 }}
           >
             {/* Botão de Texto */}
             <Button
               onClick={() => navigate("/setup")}
-              className="h-14 w-44 sm:h-16 sm:w-56 rounded-full bg-zinc-200 text-zinc-900 hover:bg-white hover:scale-105 transition-all text-base sm:text-lg font-black uppercase tracking-wider shadow-lg border-0 z-20"
+              // Aumentei: h-16/w-64 (mobile) e h-20/w-80 (desktop). Texto: xl/2xl
+              className="h-16 w-64 sm:h-20 sm:w-80 rounded-full bg-zinc-200 text-zinc-900 hover:bg-white hover:scale-105 transition-all text-xl sm:text-2xl font-black uppercase tracking-wider shadow-lg border-0 z-20"
             >
               {t('btn_enter')}
             </Button>
@@ -103,10 +104,12 @@ const Index = () => {
             {/* Botão de Vídeo */}
             <Button
               onClick={() => navigate("/setup")}
-              className="relative z-10 h-14 w-44 sm:h-16 sm:w-56 rounded-full gradient-btn text-white hover:box-glow-purple hover:scale-105 transition-all text-base sm:text-lg font-black uppercase tracking-wider shadow-xl shadow-purple-900/30 border-0"
+              // Aumentei: h-16/w-64 (mobile) e h-20/w-80 (desktop). Texto: xl/2xl
+              className="relative z-10 h-16 w-64 sm:h-20 sm:w-80 rounded-full gradient-btn text-white hover:box-glow-purple hover:scale-105 transition-all text-xl sm:text-2xl font-black uppercase tracking-wider shadow-xl shadow-purple-900/30 border-0"
             >
               <span className="absolute -z-10 inset-0 rounded-full animate-radar bg-white"></span>
-              <Video className="mr-2 h-6 w-6 sm:h-7 sm:w-7 relative z-20" />
+              {/* Ícone aumentado para h-8 w-8 / h-9 w-9 */}
+              <Video className="mr-3 h-8 w-8 sm:h-9 sm:w-9 relative z-20" />
               <span className="relative z-20">{t('btn_video')}</span>
             </Button>
           </div>
