@@ -87,12 +87,12 @@ const Index = () => {
             {onlineCount.toLocaleString()} {t('online_now')}
           </div>
 
-          {/* ✅ BOTÕES AUMENTADOS AQUI */}
+          {/* ✅ MUDANÇA AQUI: flex-col (mobile) -> sm:flex-row (desktop) */}
           <div
-            className="animate-fade-in-up flex flex-row items-center justify-center gap-4 w-full"
+            className="animate-fade-in-up flex flex-col sm:flex-row items-center justify-center gap-4 w-full"
             style={{ animationDelay: "0.3s", opacity: 0 }}
           >
-            {/* Botão de Texto - Aumentado */}
+            {/* Botão de Texto */}
             <Button
               onClick={() => navigate("/setup")}
               className="h-14 w-44 sm:h-16 sm:w-56 rounded-full bg-zinc-200 text-zinc-900 hover:bg-white hover:scale-105 transition-all text-base sm:text-lg font-black uppercase tracking-wider shadow-lg border-0 z-20"
@@ -100,13 +100,12 @@ const Index = () => {
               {t('btn_enter')}
             </Button>
 
-            {/* Botão de Vídeo - Aumentado */}
+            {/* Botão de Vídeo */}
             <Button
               onClick={() => navigate("/setup")}
               className="relative z-10 h-14 w-44 sm:h-16 sm:w-56 rounded-full gradient-btn text-white hover:box-glow-purple hover:scale-105 transition-all text-base sm:text-lg font-black uppercase tracking-wider shadow-xl shadow-purple-900/30 border-0"
             >
               <span className="absolute -z-10 inset-0 rounded-full animate-radar bg-white"></span>
-              {/* Ícone também levemente aumentado */}
               <Video className="mr-2 h-6 w-6 sm:h-7 sm:w-7 relative z-20" />
               <span className="relative z-20">{t('btn_video')}</span>
             </Button>
@@ -134,6 +133,10 @@ const Index = () => {
           </div>
         </div>
       </div>
+      
+      {/* Âncora para rolagem */}
+      <div id="more-content"></div>
+
       <SeoExpansion />
     </div>
   );
