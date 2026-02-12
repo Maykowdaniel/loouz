@@ -164,7 +164,7 @@ i18n
           "page_title": "Louuz — Converse com estranhos | Alternativa gratuita ao Omegle e OmeTV",
 
           // Index Hero
-          "intro": "Converse com estranhos.",
+          "intro": "Converse com estranhos",
           "omegle": "A melhor alternativa ao Omegle para bate-papo aleatório por vídeo e texto com estranhos.",
           "btn_enter": "Chat Texto",
           "btn_video": "Vídeo Chat",
