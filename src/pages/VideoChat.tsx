@@ -78,7 +78,7 @@ const VideoChat = () => {
           peer.on("stream", (remoteStream) => {
             setPartnerStream(remoteStream);
             setCallAccepted(true);
-            setStatus(t('video_chat.connect')); // ✅ Traduzido
+            setStatus(t('video_chat.connected')); // ✅ Traduzido
           });
 
           peer.on("error", (err) => {

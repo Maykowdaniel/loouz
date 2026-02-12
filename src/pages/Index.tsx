@@ -76,12 +76,13 @@ const Index = () => {
             </h1>
           </div>
 
-          <h2 
-            className="animate-fade-in-up mb-4 max-w-3xl text-center text-3xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-br from-white via-purple-50 to-purple-400 bg-clip-text text-transparent drop-shadow-sm leading-tight pb-2"
-            style={{ animationDelay: "0.1s", opacity: 0 }}
-          >
-            {t('intro')}
-          </h2>
+          {/* Título Principal Ajustado */}
+<h2 
+  className="animate-fade-in-up mb-4 max-w-none whitespace-nowrap text-center text-3xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-br from-white via-purple-50 to-purple-400 bg-clip-text text-transparent drop-shadow-sm leading-tight pb-2"
+  style={{ animationDelay: "0.1s", opacity: 0 }}
+>
+  {t('intro')}
+</h2>
 
           <p
             className="animate-fade-in-up mb-8 max-w-md text-center text-base text-zinc-400 sm:text-lg font-medium"
