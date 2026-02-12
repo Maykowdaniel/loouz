@@ -131,7 +131,6 @@ const VideoChat = () => {
   return (
     <div className="flex flex-col h-[100dvh] bg-zinc-950 text-white overflow-hidden">
       
-      {/* Estilo inline para espelhar o vídeo local */}
       <style>{`
         .mirror-mode {
           transform: scaleX(-1);
@@ -139,12 +138,14 @@ const VideoChat = () => {
       `}</style>
 
       {/* --- ÁREA DOS VÍDEOS --- */}
-      {/* Mudei de 'flex-col' para 'flex-col md:flex-row' */}
-      {/* No mobile: Um em cima do outro. No PC: Lado a lado. */}
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
         
         {/* PARCEIRO (Cima no Mobile / Esquerda no PC) */}
-        <div className="flex-1 relative bg-black flex items-center justify-center border-b md:border-b-0 md:border-r border-white/10 md:w-1/2">
+        {/* CORREÇÃO AQUI: 
+            Mobile: h-1/2 w-full (Metade exata da altura)
+            PC: md:h-full md:w-1/2 (Altura total, metade da largura) 
+        */}
+        <div className="relative bg-black flex items-center justify-center border-b md:border-b-0 md:border-r border-white/10 h-1/2 w-full md:h-full md:w-1/2 transition-all">
           {callAccepted && partnerStream ? (
             <video 
               playsInline 
@@ -153,7 +154,7 @@ const VideoChat = () => {
               className="w-full h-full object-cover" 
             />
           ) : (
-            <div className="flex flex-col items-center justify-center p-4 text-center animate-pulse">
+            <div className="flex flex-col items-center justify-center p-4 text-center animate-pulse w-full h-full">
                <div className="bg-zinc-800/50 p-6 rounded-full mb-4">
                   <span className="loading loading-spinner loading-lg text-purple-500"></span>
                </div>
@@ -165,7 +166,8 @@ const VideoChat = () => {
         </div>
 
         {/* VOCÊ (Baixo no Mobile / Direita no PC) */}
-        <div className="flex-1 relative bg-zinc-900 flex items-center justify-center md:w-1/2">
+        {/* CORREÇÃO AQUI: Mesma lógica de 50% forçada */}
+        <div className="relative bg-zinc-900 flex items-center justify-center h-1/2 w-full md:h-full md:w-1/2 transition-all">
           <video 
             playsInline 
             autoPlay 
@@ -182,7 +184,6 @@ const VideoChat = () => {
       {/* --- RODAPÉ: CONTROLES --- */}
       <div className="h-20 bg-zinc-950 flex items-center justify-between px-6 md:px-12 border-t border-white/5 relative z-50 flex-none">
         
-        {/* Botão Pular (Esquerda) */}
         <Button 
           onClick={handleSkip} 
           className="bg-zinc-800 hover:bg-zinc-700 text-white rounded-2xl h-12 w-16 md:w-24 border border-zinc-700 shadow-lg"
@@ -190,7 +191,6 @@ const VideoChat = () => {
           <SkipForward className="h-6 w-6" />
         </Button>
 
-        {/* Botão Sair (Centro) */}
         <Button 
           onClick={handleStop} 
           className="bg-red-600 hover:bg-red-700 text-white rounded-2xl h-14 w-20 md:w-32 shadow-[0_0_20px_rgba(220,38,38,0.4)] border border-red-500 transform hover:scale-105 transition-all"
@@ -198,7 +198,6 @@ const VideoChat = () => {
           <LogOut className="h-7 w-7 mr-1" />
         </Button>
 
-        {/* Botão Reportar (Direita) */}
         <Button 
           onClick={handleReport} 
           className="bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-red-400 rounded-2xl h-12 w-16 md:w-24 border border-zinc-700 shadow-lg"
