@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { SkipForward, Flag, LogOut } from "lucide-react"; // Ícones atualizados
+import { SkipForward, Flag, LogOut } from "lucide-react"; 
 import SimplePeer from "simple-peer";
 import { io, Socket } from "socket.io-client";
 import { useTranslation } from "react-i18next";
@@ -24,17 +24,13 @@ const VideoChat = () => {
   const [callAccepted, setCallAccepted] = useState(false);
   const [status, setStatus] = useState(t('video_chat.video_searching')); 
   
-  // Refs para conexões
   const myVideo = useRef<HTMLVideoElement>(null);
   const partnerVideo = useRef<HTMLVideoElement>(null);
   const socket = useRef<Socket | null>(null);
   const peerRef = useRef<SimplePeer.Instance | null>(null);
-
-  // Ref para armazenar dados do parceiro atual (para o report)
   const currentPartnerId = useRef<string | null>(null);
 
   useEffect(() => {
-    // Garante que o vídeo do parceiro seja atualizado visualmente
     if (partnerVideo.current && partnerStream) {
       partnerVideo.current.srcObject = partnerStream;
     }
@@ -60,7 +56,7 @@ const VideoChat = () => {
 
         socket.current.on("start_call", ({ socketId, initiator }) => {
           setStatus(t('video_chat.video_connecting'));
-          currentPartnerId.current = socketId; // Salva o ID do parceiro para reportar
+          currentPartnerId.current = socketId; 
 
           if (peerRef.current) {
             peerRef.current.destroy();
@@ -104,8 +100,6 @@ const VideoChat = () => {
     };
   }, [t]);
 
-  // --- AÇÕES DO USUÁRIO ---
-
   const handleSkip = () => {
     if (peerRef.current) {
       peerRef.current.destroy();
@@ -116,77 +110,77 @@ const VideoChat = () => {
     currentPartnerId.current = null;
     setStatus(t('video_chat.video_searching'));
     
-    // Pequeno delay para reconectar
     setTimeout(() => {
       socket.current?.emit("join_video_queue");
     }, 500);
   };
 
   const handleStop = () => {
-    // Encerra tudo e volta pro lobby
     socket.current?.disconnect();
     if(stream) stream.getTracks().forEach(track => track.stop());
-    navigate("/"); // Ou navigate("/lobby")
+    navigate("/"); 
   };
 
   const handleReport = () => {
     if (!currentPartnerId.current) return;
-
-    // 1. Capturar o IP (Simulação: Num app real, o IP vem do server side junto com o socketID)
-    // No frontend não conseguimos ver o IP direto do peer facilmente sem o servidor informar.
-    // Vamos enviar um evento para o servidor dizendo "Eu estou reportando o socketID X"
-    
     console.log(`REPORTANDO USUÁRIO: ${currentPartnerId.current}`);
-    
-    // TODO: Implementar lógica de BAN aqui futuramente.
-    // Exemplo: socket.current.emit("report_user", { offenderId: currentPartnerId.current });
-    
-    alert(t('Usuário reportado com sucesso!')); // Pode usar um toast aqui depois
-
-    // 2. Pular para o próximo automaticamente após reportar
+    alert(t('Usuário reportado com sucesso!')); 
     handleSkip();
   };
 
   return (
-    <div className="flex h-[100dvh] flex-col bg-zinc-950 text-white overflow-hidden">
+    <div className="flex flex-col h-[100dvh] bg-zinc-950 text-white overflow-hidden">
       
-      {/* --- PARTE SUPERIOR: PARCEIRO --- */}
-      <div className="flex-1 relative bg-black flex items-center justify-center overflow-hidden border-b border-white/10">
-        {callAccepted && partnerStream ? (
+      {/* Estilo inline para espelhar o vídeo local */}
+      <style>{`
+        .mirror-mode {
+          transform: scaleX(-1);
+        }
+      `}</style>
+
+      {/* --- ÁREA DOS VÍDEOS --- */}
+      {/* Mudei de 'flex-col' para 'flex-col md:flex-row' */}
+      {/* No mobile: Um em cima do outro. No PC: Lado a lado. */}
+      <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
+        
+        {/* PARCEIRO (Cima no Mobile / Esquerda no PC) */}
+        <div className="flex-1 relative bg-black flex items-center justify-center border-b md:border-b-0 md:border-r border-white/10 md:w-1/2">
+          {callAccepted && partnerStream ? (
+            <video 
+              playsInline 
+              autoPlay 
+              ref={partnerVideo} 
+              className="w-full h-full object-cover" 
+            />
+          ) : (
+            <div className="flex flex-col items-center justify-center p-4 text-center animate-pulse">
+               <div className="bg-zinc-800/50 p-6 rounded-full mb-4">
+                  <span className="loading loading-spinner loading-lg text-purple-500"></span>
+               </div>
+               <p className="text-zinc-400 text-lg font-medium tracking-wide">
+                 {status}
+               </p>
+            </div>
+          )}
+        </div>
+
+        {/* VOCÊ (Baixo no Mobile / Direita no PC) */}
+        <div className="flex-1 relative bg-zinc-900 flex items-center justify-center md:w-1/2">
           <video 
             playsInline 
             autoPlay 
-            ref={partnerVideo} 
-            className="w-full h-full object-cover" 
+            muted 
+            ref={myVideo} 
+            className="w-full h-full object-cover mirror-mode" 
           />
-        ) : (
-          <div className="flex flex-col items-center justify-center p-4 text-center animate-pulse">
-             <div className="bg-zinc-800/50 p-6 rounded-full mb-4">
-                <span className="loading loading-spinner loading-lg text-purple-500"></span>
-             </div>
-             <p className="text-zinc-400 text-lg font-medium tracking-wide">
-               {status}
-             </p>
+          <div className="absolute bottom-4 left-4 bg-black/60 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-white/80 backdrop-blur-sm">
+            {t('video_chat.you')}
           </div>
-        )}
-      </div>
-
-      {/* --- PARTE INFERIOR: VOCÊ --- */}
-      <div className="flex-1 relative bg-zinc-900 flex items-center justify-center overflow-hidden">
-        <video 
-          playsInline 
-          autoPlay 
-          muted 
-          ref={myVideo} 
-          className="w-full h-full object-cover mirror-mode" // mirror-mode classe CSS para espelhar se quiser
-        />
-        <div className="absolute bottom-4 left-4 bg-black/60 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-white/80 backdrop-blur-sm">
-          {t('video_chat.you')}
         </div>
       </div>
 
       {/* --- RODAPÉ: CONTROLES --- */}
-      <div className="h-20 bg-zinc-950 flex items-center justify-between px-6 md:px-12 border-t border-white/5 relative z-50">
+      <div className="h-20 bg-zinc-950 flex items-center justify-between px-6 md:px-12 border-t border-white/5 relative z-50 flex-none">
         
         {/* Botão Pular (Esquerda) */}
         <Button 
@@ -196,7 +190,7 @@ const VideoChat = () => {
           <SkipForward className="h-6 w-6" />
         </Button>
 
-        {/* Botão Sair (Centro) - Destaque Vermelho */}
+        {/* Botão Sair (Centro) */}
         <Button 
           onClick={handleStop} 
           className="bg-red-600 hover:bg-red-700 text-white rounded-2xl h-14 w-20 md:w-32 shadow-[0_0_20px_rgba(220,38,38,0.4)] border border-red-500 transform hover:scale-105 transition-all"
