@@ -5,15 +5,17 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowLeft, Send, SkipForward, User, Loader2 } from "lucide-react";
 import { io, Socket } from "socket.io-client";
-import ChatMessage from "@/components/ChatMessage"; 
-import SidePanel from "@/components/SidePanel"; // <--- NOVO
+import ChatMessage from "@/components/ChatMessage";
+import SidePanel from "@/components/SidePanel";
 import { useTranslation } from "react-i18next";
 
 const getFlagEmoji = (countryCode: string) => {
   if (!countryCode || countryCode === "UN") return "🌐";
   return countryCode
     .toUpperCase()
-    .replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
+    .replace(/./g, (char) =>
+      String.fromCodePoint(127397 + char.charCodeAt(0))
+    );
 };
 
 const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
@@ -22,97 +24,115 @@ const TextChat1v1 = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  
-  // --- ESTADOS DE CHAT ---
+
+  // ================= ESTADOS =================
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
-  const [status, setStatus] = useState(t('text_chat.status_searching')); 
+  const [status, setStatus] = useState(t("text_chat.status_searching"));
   const [isPaired, setIsPaired] = useState(false);
-  
-  // --- ESTADOS DO PARCEIRO ---
-  const [partnerName, setPartnerName] = useState(t('text_chat.partner_default'));
+
+  const [partnerName, setPartnerName] = useState(
+    t("text_chat.partner_default")
+  );
   const [partnerCountry, setPartnerCountry] = useState("UN");
-  const [partnerGender, setPartnerGender] = useState<"male" | "female" | "unspecified">("unspecified");
-  
-  // --- ESTADOS DO USUÁRIO ---
-  const state = location.state as { name?: string; gender?: "male" | "female" | "unspecified" } | null;
+  const [partnerGender, setPartnerGender] = useState<
+    "male" | "female" | "unspecified"
+  >("unspecified");
+
+  const state = location.state as
+    | { name?: string; gender?: "male" | "female" | "unspecified" }
+    | null;
+
   const [userData] = useState({
-      name: state?.name || `Guest${Math.floor(Math.random() * 90000) + 10000}`,
-      gender: state?.gender || "unspecified"
+    name:
+      state?.name ||
+      `Guest${Math.floor(Math.random() * 90000) + 10000}`,
+    gender: state?.gender || "unspecified",
   });
 
   const [myId, setMyId] = useState<string>("");
 
-  // --- LOGICA MOBILE (TIMER & BOT) ---
-  const [timer, setTimer] = useState(10); // Cronômetro de 10 segundos
+  // ================= TIMER =================
+  const [timer, setTimer] = useState(10);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   const socketRef = useRef<Socket | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // --- EFEITO DO CRONÔMETRO (Apenas Mobile/Não Pareado) ---
-  useEffect(() => {
-    // Se não está pareado, inicia contagem
-    if (!isPaired) {
-        setTimer(10); // Reseta para 10
-        timerRef.current = setInterval(() => {
-            setTimer((prev) => {
-                if (prev <= 1) {
-                    // Chegou a 0: Disparar Bot
-                    handleBotFallback();
-                    return 0;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-    } else {
-        // Se pareou, limpa o timer
-        if (timerRef.current) clearInterval(timerRef.current);
-    }
-
-    return () => {
-        if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [isPaired]); // Roda quando o status de pareamento muda
-
-  // --- FUNÇÃO DO BOT (Placeholder) ---
- const handleBotFallback = () => {
+  const startTimer = () => {
     if (timerRef.current) clearInterval(timerRef.current);
-    console.log("⏰ Tempo esgotado! Reiniciando busca...");
-    
-    // Reinicia o Timer para 10
+
     setTimer(10);
-    
-    // Reemite o evento de busca no servidor para garantir que o usuário continue na fila
-    socketRef.current?.emit("join_text_queue", { 
-        name: userData.name, 
-        gender: userData.gender 
-    });
+
+    timerRef.current = setInterval(() => {
+      setTimer((prev) => {
+        if (prev <= 1) {
+          handleBotFallback();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
   };
 
+  const stopTimer = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
+  };
+
+  const handleBotFallback = () => {
+    console.log("⏰ Tempo esgotado! Reiniciando busca...");
+
+    socketRef.current?.emit("join_text_queue", {
+      name: userData.name,
+      gender: userData.gender,
+    });
+
+    startTimer(); // reinicia corretamente
+  };
+
+  // ================= CONTROLE DO TIMER =================
+  useEffect(() => {
+    if (!isPaired) {
+      startTimer();
+    } else {
+      stopTimer();
+    }
+
+    return () => stopTimer();
+  }, [isPaired]);
+
+  // ================= SOCKET =================
   useEffect(() => {
     socketRef.current = io(SOCKET_URL);
 
     socketRef.current.on("connect", () => {
-        setMyId(socketRef.current?.id || "");
+      setMyId(socketRef.current?.id || "");
     });
 
     socketRef.current.on("text_paired", (data: any) => {
-      // Tocar som de notificação (opcional)
-      const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
+      const audio = new Audio(
+        "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
+      );
       audio.play().catch(() => {});
 
-      setStatus(t('text_chat.status_connected'));
-      setIsPaired(true); // Isso vai parar o cronômetro automaticamente pelo useEffect acima
+      setStatus(t("text_chat.status_connected"));
+      setIsPaired(true);
+
       setPartnerName(data.partnerName);
       setPartnerCountry(data.partnerCountry);
-      if (data.partnerGender) setPartnerGender(data.partnerGender);
-      
-      setMessages([{ 
-        id: "sys-start", 
-        sender: "system", 
-        text: t('text_chat.welcome_msg', { name: data.partnerName }) 
-      }]);
+
+      if (data.partnerGender)
+        setPartnerGender(data.partnerGender);
+
+      setMessages([
+        {
+          id: "sys-start",
+          sender: "system",
+          text: t("text_chat.welcome_msg", {
+            name: data.partnerName,
+          }),
+        },
+      ]);
     });
 
     socketRef.current.on("receive_1v1_message", (msg: any) => {
@@ -120,153 +140,170 @@ const TextChat1v1 = () => {
     });
 
     socketRef.current.on("text_partner_disconnected", () => {
-      setMessages((prev) => [...prev, { 
-        id: "sys-disc", 
-        sender: "system", 
-        text: t('text_chat.partner_left', { name: partnerName }) 
-      }]);
-      setIsPaired(false); // Reinicia o timer para procurar novo
-      setStatus(t('text_chat.status_disconnected'));
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: "sys-disc",
+          sender: "system",
+          text: t("text_chat.partner_left", {
+            name: partnerName,
+          }),
+        },
+      ]);
+
+      setIsPaired(false);
+      setStatus(t("text_chat.status_disconnected"));
     });
 
-    socketRef.current.emit("join_text_queue", { 
-        name: userData.name, 
-        gender: userData.gender 
+    socketRef.current.emit("join_text_queue", {
+      name: userData.name,
+      gender: userData.gender,
     });
 
-    return () => { socketRef.current?.disconnect(); };
-  }, [t, partnerName, userData]);
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, []); // 👈 IMPORTANTE: vazio
 
+  // ================= AUTO SCROLL =================
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+    scrollRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   }, [messages]);
 
+  // ================= AÇÕES =================
   const handleSend = () => {
     if (!input.trim() || !isPaired) return;
-    
+
     socketRef.current?.emit("send_1v1_message", {
       text: input,
-      senderId: socketRef.current.id, 
+      senderId: socketRef.current?.id,
       timestamp: Date.now(),
-      id: crypto.randomUUID()
+      id: crypto.randomUUID(),
     });
+
     setInput("");
   };
 
   const handleSkip = () => {
     setMessages([]);
-    setIsPaired(false); // Reseta o timer
-    setStatus(t('text_chat.status_searching'));
-    setPartnerName(t('text_chat.partner_default'));
+    setIsPaired(false);
+    setStatus(t("text_chat.status_searching"));
+    setPartnerName(t("text_chat.partner_default"));
     setPartnerCountry("UN");
     setPartnerGender("unspecified");
-    
-    socketRef.current?.emit("join_text_queue", { 
-        name: userData.name, 
-        gender: userData.gender 
+
+    socketRef.current?.emit("join_text_queue", {
+      name: userData.name,
+      gender: userData.gender,
     });
   };
 
+  // ================= UI =================
   return (
     <div className="gradient-bg flex h-screen overflow-hidden">
-      
-      {/* === COLUNA ESQUERDA (Chat 1v1) - Ocupa tudo no Mobile, Parte no Desktop === */}
       <div className="flex flex-col flex-1 h-full relative">
-        
-        {/* Header 1v1 */}
+        {/* HEADER */}
         <div className="flex items-center gap-3 p-4 border-b border-border bg-card/60 backdrop-blur-sm z-10">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
-            <ArrowLeft size={20} className="text-muted-foreground" />
-            </Button>
-            <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center ring-1 ring-primary/30">
-                <User size={20} className="text-primary" />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/")}
+          >
+            <ArrowLeft size={20} />
+          </Button>
+
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center">
+              <User size={20} />
             </div>
+
             <div>
-                <div className="flex items-center gap-2 font-bold text-foreground">
-                {isPaired ? partnerName : "Procurando..."} 
-                <span className="text-lg">{getFlagEmoji(partnerCountry)}</span>
-                </div>
-                <div className="text-[10px] font-mono uppercase tracking-wider text-green-500 flex items-center gap-2">
-                 {status}
-                </div>
+              <div className="flex items-center gap-2 font-bold">
+                {isPaired ? partnerName : "Procurando..."}
+                <span>{getFlagEmoji(partnerCountry)}</span>
+              </div>
+              <div className="text-[10px] uppercase tracking-wider text-green-500">
+                {status}
+              </div>
             </div>
-            </div>
+          </div>
         </div>
 
-        {/* MENSAGENS 1v1 */}
+        {/* MENSAGENS */}
         <ScrollArea className="flex-1 px-4 py-4 relative">
-             {/* OVERLAY DE PROCURA (Apenas Mobile quando não pareado) */}
-             {!isPaired && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm z-20 text-center px-6">
-                    <Loader2 className="w-12 h-12 text-purple-500 animate-spin mb-4" />
-                    <h3 className="text-xl font-bold text-white mb-2">Procurando alguém...</h3>
-                    
-                    {/* CRONÔMETRO (Visível apenas no mobile ou se quiser em ambos) */}
-                    {/* ✅ CRONÔMETRO EM VERMELHO */}
-                    <div className="text-5xl font-black text-red-600 font-mono mt-2 drop-shadow-[0_0_10px_rgba(220,38,38,0.5)]">
-                        00:{timer < 10 ? `0${timer}` : timer}
-                    </div>
-                    <p className="text-xs text-zinc-500 mt-4 max-w-xs">
-                        Aguarde enquanto conectamos você com o mundo.
-                    </p>
-                </div>
-            )}
+          {!isPaired && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 z-20 text-center px-6">
+              <Loader2 className="w-12 h-12 animate-spin mb-4" />
+              <h3 className="text-xl font-bold text-white mb-2">
+                Procurando alguém...
+              </h3>
+              <div className="text-5xl font-black text-red-600 font-mono mt-2">
+                00:{timer < 10 ? `0${timer}` : timer}
+              </div>
+            </div>
+          )}
 
-            <div className="mx-auto max-w-3xl space-y-3">
+          <div className="mx-auto max-w-3xl space-y-3">
             {messages.map((msg, i) => {
-                const isMe = msg.senderId === myId;
-                const visualSender = msg.sender === "system" ? "system" : (isMe ? "user" : "stranger");
-                const displayName = isMe ? userData.name : partnerName;
-                const displayGender = isMe ? userData.gender : partnerGender;
+              const isMe = msg.senderId === myId;
+              const visualSender =
+                msg.sender === "system"
+                  ? "system"
+                  : isMe
+                  ? "user"
+                  : "stranger";
 
-                return (
+              return (
                 <ChatMessage
-                    key={i}
-                    sender={visualSender}
-                    text={msg.text}
-                    senderName={displayName}
-                    senderCountry={!isMe ? partnerCountry : undefined} 
-                    senderGender={displayGender} 
+                  key={i}
+                  sender={visualSender}
+                  text={msg.text}
+                  senderName={isMe ? userData.name : partnerName}
+                  senderCountry={!isMe ? partnerCountry : undefined}
+                  senderGender={
+                    isMe ? userData.gender : partnerGender
+                  }
                 />
-                );
+              );
             })}
             <div ref={scrollRef} />
-            </div>
+          </div>
         </ScrollArea>
 
-        {/* INPUT 1v1 */}
-        <div className="border-t border-border bg-card/60 px-4 py-3 backdrop-blur-sm">
-            <div className="max-w-3xl mx-auto flex gap-2">
-            <Button onClick={handleSkip} variant="secondary" className="rounded-full px-4 border border-border">
-                <SkipForward size={18} className="mr-2" /> {t('text_chat.btn_skip')}
+        {/* INPUT */}
+        <div className="border-t px-4 py-3">
+          <div className="max-w-3xl mx-auto flex gap-2">
+            <Button onClick={handleSkip} variant="secondary">
+              <SkipForward size={18} className="mr-2" />
+              {t("text_chat.btn_skip")}
             </Button>
-            <Input 
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                placeholder={t('text_chat.placeholder')}
-                className="flex-1 border-border bg-background/50 text-foreground rounded-full focus-visible:ring-primary"
-                disabled={!isPaired}
-            />
-            <Button onClick={handleSend} disabled={!isPaired} className="gradient-btn rounded-full w-12 h-10 p-0">
-                <Send size={18} />
-            </Button>
-            </div>
-        </div>
 
+            <Input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) =>
+                e.key === "Enter" && handleSend()
+              }
+              placeholder={t("text_chat.placeholder")}
+              disabled={!isPaired}
+            />
+
+            <Button
+              onClick={handleSend}
+              disabled={!isPaired}
+            >
+              <Send size={18} />
+            </Button>
+          </div>
+        </div>
       </div>
 
- {/* === COLUNA DIREITA (SidePanel) === */}
-      {/* Aumentei para w-[450px] para ficar mais largo e confortável. 
-      {/* No final do arquivo TextChat1v1.tsx, substitua a div do SidePanel */}
-{/* No final do arquivo TextChat1v1.tsx, substitua o bloco da direita */}
-<div className="hidden md:flex w-[500px] h-full shadow-2xl z-30 border-l border-zinc-800 flex-none bg-zinc-950">
-   <div className="w-full h-full flex flex-col items-stretch">
-      <SidePanel username={userData.name} />
-   </div>
-</div>
-
+      {/* SIDEPANEL DESKTOP */}
+      <div className="hidden md:flex w-[500px] h-full border-l bg-zinc-950">
+        <SidePanel username={userData.name} />
+      </div>
     </div>
   );
 };
