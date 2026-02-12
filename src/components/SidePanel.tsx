@@ -116,20 +116,30 @@ const RoomChatView = ({ roomId, roomName, username, onBack }: { roomId: string, 
 
 const SidePanel = ({ username }: { username: string }) => {
     const { t } = useTranslation();
-    const [activeRoom, setActiveRoom] = useState<{ id: string, name: string } | null>(null);
+    const [activeRoom, setActiveRoom] = useState<{ id: string, name: string } | null>({
+        id: "global",
+        name: "Chat Global" // Ou t('rooms.list.global.name') se preferir traduzido imediatamente
+    });
 
     if (activeRoom) {
-        return <RoomChatView roomId={activeRoom.id} roomName={activeRoom.name} username={username} onBack={() => setActiveRoom(null)} />;
+        return (
+            <RoomChatView 
+                roomId={activeRoom.id} 
+                roomName={activeRoom.name} 
+                username={username} 
+                onBack={() => setActiveRoom(null)} 
+            />
+        );
     }
 
     return (
         <div className="flex flex-col h-full bg-zinc-950/50 border-l border-zinc-800 w-full">
+            {/* O restante do código da lista de salas permanece igual */}
             <header className="flex items-center justify-between border-b border-border bg-card/60 px-6 py-4 backdrop-blur-sm w-full">
                 <h1 className="text-glow-purple text-xl font-black tracking-tighter uppercase">{t('rooms.title')}</h1>
             </header>
             
             <ScrollArea className="flex-1 px-4 py-4 w-full">
-                {/* Removido o mx-auto para as salas encostarem nas bordas da coluna */}
                 <div className="space-y-3 w-full">
                     {roomsData.map((room) => (
                         <div 
