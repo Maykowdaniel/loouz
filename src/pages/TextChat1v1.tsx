@@ -76,13 +76,18 @@ const TextChat1v1 = () => {
   }, [isPaired]); // Roda quando o status de pareamento muda
 
   // --- FUNÇÃO DO BOT (Placeholder) ---
-  const handleBotFallback = () => {
+ const handleBotFallback = () => {
     if (timerRef.current) clearInterval(timerRef.current);
-    console.log("⏰ Tempo esgotado! Iniciando Bot...");
+    console.log("⏰ Tempo esgotado! Reiniciando busca...");
     
-    // AQUI VOCÊ VAI IMPLEMENTAR A LÓGICA DO BOT DEPOIS
-    // Por enquanto, apenas para teste visual, vamos manter procurando
-    // ou mudar o texto para "Quase lá..."
+    // Reinicia o Timer para 10
+    setTimer(10);
+    
+    // Reemite o evento de busca no servidor para garantir que o usuário continue na fila
+    socketRef.current?.emit("join_text_queue", { 
+        name: userData.name, 
+        gender: userData.gender 
+    });
   };
 
   useEffect(() => {
@@ -198,7 +203,8 @@ const TextChat1v1 = () => {
                     <h3 className="text-xl font-bold text-white mb-2">Procurando alguém...</h3>
                     
                     {/* CRONÔMETRO (Visível apenas no mobile ou se quiser em ambos) */}
-                    <div className="text-4xl font-black text-zinc-700 font-mono mt-2">
+                    {/* ✅ CRONÔMETRO EM VERMELHO */}
+                    <div className="text-5xl font-black text-red-600 font-mono mt-2 drop-shadow-[0_0_10px_rgba(220,38,38,0.5)]">
                         00:{timer < 10 ? `0${timer}` : timer}
                     </div>
                     <p className="text-xs text-zinc-500 mt-4 max-w-xs">
