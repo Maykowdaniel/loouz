@@ -1,9 +1,9 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, Video, LogOut, Users } from "lucide-react"; // Adicionei Users
+import { MessageCircle, Video, LogOut } from "lucide-react";
 import BottomNav from "@/components/BottomNav"; 
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react"; // Adicionei useState e useEffect
+import { useState, useEffect } from "react";
 
 const Lobby = () => {
   const navigate = useNavigate();
@@ -13,68 +13,58 @@ const Lobby = () => {
   const userName = state?.name || "Visitante";
   const userGender = state?.gender;
 
-  // --- LÓGICA DO CONTADOR FAKE ---
-  // Começa entre 230 e 260 usuários (simulando seus bots + orgânicos)
   const [onlineCount, setOnlineCount] = useState(Math.floor(Math.random() * (260 - 230 + 1)) + 230);
 
   useEffect(() => {
-    // Atualiza o número a cada 3 a 6 segundos para parecer vivo
     const interval = setInterval(() => {
       setOnlineCount((prev) => {
-        // Oscila entre -4 e +4 pessoas
         const change = Math.floor(Math.random() * 9) - 4;
         const newValue = prev + change;
-        // Garante que nunca caia abaixo de 200 (para manter a autoridade)
         return newValue < 200 ? 205 : newValue;
       });
     }, 4000);
-
     return () => clearInterval(interval);
   }, []);
-  // -------------------------------
 
   return (
     <div className="gradient-bg flex h-screen flex-col pb-16">
-      {/* Header */}
       <header className="flex items-center justify-between border-b border-border bg-card/60 px-6 py-4 backdrop-blur-sm">
         <div>
           <h1 className="text-glow-purple text-3xl font-black tracking-tighter sm:text-4xl md:text-5xl">
-          lo<span className="text-accent">uu</span>z
-        </h1>
+            lo<span className="text-accent">uu</span>z
+          </h1>
           <p className="text-xs text-muted-foreground">
-            hello, <span className="text-foreground font-medium">{userName}</span>
+            {t('lobby.welcome', { name: userName })}
           </p>
         </div>
         
-        {/* CONTADOR DE USUÁRIOS NO HEADER (Versão Mobile/Compacta) */}
-        <div className="flex flex-col items-end gap-1">
+        <div className="flex items-center gap-2">
             <Button
-            onClick={() => navigate("/")}
-            variant="ghost"
-            size="sm"
-            className="text-destructive hover:bg-destructive/10 hover:text-destructive h-8 px-2"
+              onClick={() => navigate("/")}
+              variant="ghost"
+              size="sm"
+              className="text-destructive hover:bg-destructive/10 hover:text-destructive h-8 px-2"
             >
-            <LogOut className="h-4 w-4" />
+              <LogOut className="h-4 w-4" />
             </Button>
         </div>
       </header>
 
-      {/* Conteúdo Principal: Escolha do Modo */}
       <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6 animate-fade-in-up">
-        {/* CONTADOR DESTAQUE (Prova Social) */}
+        {/* Prova Social Dinâmica */}
         <div className="flex items-center gap-2 bg-black/40 border border-green-500/30 px-4 py-2 rounded-full shadow-lg shadow-green-900/10 backdrop-blur-md mb-2">
             <div className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
             </div>
             <span className="text-green-400 font-bold text-sm tracking-wide">
-                {onlineCount} {t('connected') || "Online"}
+                {onlineCount.toLocaleString()} {t('connected')}
             </span>
         </div>
 
         <div className="text-center mb-2">
-          <h2 className="text-2xl font-bold text-white mb-2">Meet someone new</h2>
-          <p className="text-zinc-400 text-sm">Choose how you want to connect.</p>
+          <h2 className="text-2xl font-bold text-white mb-2">{t('lobby.title')}</h2>
+          <p className="text-zinc-400 text-sm">{t('lobby.subtitle')}</p>
         </div>
 
         {/* Botão Texto 1v1 */}
@@ -86,8 +76,8 @@ const Lobby = () => {
             <MessageCircle size={28} />
           </div>
           <div className="text-left">
-            <h3 className="text-lg font-bold text-white">Text chat</h3>
-            <p className="text-xs text-purple-200/70">Random • 1v1</p>
+            <h3 className="text-lg font-bold text-white">{t('lobby.text_chat.title')}</h3>
+            <p className="text-xs text-purple-200/70">{t('lobby.text_chat.subtitle')}</p>
           </div>
         </button>
 
@@ -100,14 +90,12 @@ const Lobby = () => {
             <Video size={28} />
           </div>
           <div className="text-left">
-            <h3 className="text-lg font-bold text-white">Video Chat</h3>
-            <p className="text-xs text-pink-200/70">Camera On • 1v1</p>
+            <h3 className="text-lg font-bold text-white">{t('lobby.video_chat.title')}</h3>
+            <p className="text-xs text-pink-200/70">{t('lobby.video_chat.subtitle')}</p>
           </div>
         </button>
-
       </div>
 
-      {/* Barra de Navegação */}
       <BottomNav />
     </div>
   );

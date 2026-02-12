@@ -1,67 +1,67 @@
-import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button"; 
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next"; // ✅ Importado
 import BottomNav from "@/components/BottomNav";
 import { 
   Globe, Ghost, Heart, LogOut, 
-  Flame, TrendingUp, Zap, BookOpen // <--- NOVOS ÍCONES
+  Flame, TrendingUp, Zap, BookOpen 
 } from "lucide-react";
 
-const rooms = [
+// ✅ Chaves atualizadas para bater com o i18n.ts
+const roomsData = [
   {
     id: "global",
-    nameKey: "Global Chat",
-    descKey: "Talk to everyone.",
+    nameKey: "rooms.list.global.name",
+    descKey: "rooms.list.global.desc",
     icon: Globe,
     color: "text-blue-400",
     bg: "bg-blue-400/10",
   },
   {
     id: "trending",
-    nameKey: "Trending Topics",
-    descKey: "What's viral right now. 🔥",
+    nameKey: "rooms.list.trending.name",
+    descKey: "rooms.list.trending.desc",
     icon: Flame, 
     color: "text-orange-500",
     bg: "bg-orange-500/10",
   },
   {
     id: "money",
-    nameKey: "Investiments",
-    descKey: "Crypto, stocks, and business talk. 💸",
+    nameKey: "rooms.list.money.name",
+    descKey: "rooms.list.money.desc",
     icon: TrendingUp,
     color: "text-emerald-400",
     bg: "bg-emerald-400/10", 
   },
   {
     id: "nofilter",
-    nameKey: "No Filter",
-    descKey: "Free speech and hot takes. ⚡",
+    nameKey: "rooms.list.nofilter.name",
+    descKey: "rooms.list.nofilter.desc",
     icon: Zap,
     color: "text-yellow-400",
     bg: "bg-yellow-400/10", 
   },
   {
     id: "stories",
-    nameKey: "Real Stories",
-    descKey: "Confessions and life experiences. 📖",
+    nameKey: "rooms.list.stories.name",
+    descKey: "rooms.list.stories.desc",
     icon: BookOpen,
     color: "text-violet-400",
     bg: "bg-violet-400/10", 
   },
   {
     id: "area51",
-    nameKey: "Area 51",
-    descKey: "Top secret discussions",
+    nameKey: "rooms.list.area51.name",
+    descKey: "rooms.list.area51.desc",
     icon: Ghost, 
-    color: "text-zinc-400", // Mudei para cinza para ficar "misterioso"
+    color: "text-zinc-400",
     bg: "bg-zinc-400/10",
   },
   {
     id: "love",
-    nameKey: "love",
-    descKey: "Dating, flirting and connections. ❤️",
+    nameKey: "rooms.list.love.name",
+    descKey: "rooms.list.love.desc",
     icon: Heart,
     color: "text-pink-500",
     bg: "bg-pink-500/10", 
@@ -71,13 +71,13 @@ const rooms = [
 const Rooms = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation();
+  const { t } = useTranslation(); // ✅ Hook iniciado
   
   const state = location.state as { name?: string; gender?: string } | null;
   const userName = state?.name || "Visitante";
   const userGender = state?.gender;
 
-  const handleJoinRoom = (room: typeof rooms[0]) => {
+  const handleJoinRoom = (room: typeof roomsData[0]) => {
     navigate("/chat", { 
       state: { 
         name: userName, 
@@ -95,10 +95,11 @@ const Rooms = () => {
       <header className="flex items-center justify-between border-b border-border bg-card/60 px-6 py-4 backdrop-blur-sm">
         <div>
           <h1 className="text-glow-purple text-3xl font-black tracking-tighter sm:text-4xl md:text-5xl">
-          lo<span className="text-accent">uu</span>z
-        </h1>
+            lo<span className="text-accent">uu</span>z
+          </h1>
+          {/* ✅ Nome dinâmico com tradução */}
           <p className="text-xs text-muted-foreground">
-            Hello, <span className="text-foreground font-medium">{userName}</span>
+            {t('rooms.header_hello', { name: userName })}
           </p>
         </div>
         <Button
@@ -107,24 +108,24 @@ const Rooms = () => {
           size="sm"
           className="text-destructive hover:bg-destructive/10 hover:text-destructive"
         >
-          <LogOut className="mr-2 h-4 w-4" />
+          <LogOut className="h-4 w-4" />
         </Button>
       </header>
 
-      {/* 2. TÍTULO */}
+      {/* 2. TÍTULO TRADUZIDO */}
       <div className="px-6 pt-6 pb-2">
-        <h2 className="text-xl font-bold text-white">
-          public rooms
+        <h2 className="text-xl font-bold text-white uppercase tracking-tight">
+          {t('rooms.title')}
         </h2>
         <p className="text-xs text-zinc-400">
-          Choose a topic and join the conversation
+          {t('rooms.subtitle')}
         </p>
       </div>
 
       {/* Lista de Salas */}
       <ScrollArea className="flex-1 px-4 py-4 sm:px-6">
         <div className="mx-auto max-w-3xl space-y-3 pb-8">
-          {rooms.map((room, index) => (
+          {roomsData.map((room, index) => (
             <div
               key={room.id}
               onClick={() => handleJoinRoom(room)}
@@ -136,9 +137,11 @@ const Rooms = () => {
               </div>
 
               <div className="flex-1">
+                {/* ✅ Nome da Sala Traduzido */}
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                   {t(room.nameKey)} 
                 </h3>
+                {/* ✅ Descrição da Sala Traduzida */}
                 <p className="text-sm text-muted-foreground line-clamp-1">
                   {t(room.descKey)}
                 </p>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, User, LogIn } from "lucide-react"; // LogIn para o botão entrar
+import { ArrowLeft, User, LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 type Gender = "male" | "female" | "unspecified";
@@ -16,24 +16,24 @@ const Setup = () => {
   const [gender, setGender] = useState<Gender>("unspecified");
   const [error, setError] = useState("");
 
-  const genderOptions: { value: Gender; label: string; icon: string }[] = [
-    { value: "male", label: "Male", icon: "♂" },
-  { value: "female", label: "Female", icon: "♀" },
-    { value: "unspecified", label: "Unspecified", icon: "—" },
+  // Usamos labelKey para buscar a tradução correta no i18n
+  const genderOptions: { value: Gender; labelKey: string; icon: string }[] = [
+    { value: "male", labelKey: "setup.gender.male", icon: "♂" },
+    { value: "female", labelKey: "setup.gender.female", icon: "♀" },
+    { value: "unspecified", labelKey: "setup.gender.unspecified", icon: "—" },
   ];
 
   const handleContinue = () => {
     const trimmed = name.trim();
     if (!trimmed) {
-      setError("Please choose a name."); 
+      setError(t("errors.name_required")); // Tradução de erro
       return;
     }
     if (trimmed.length > 30) {
-      setError("Name must be max 30 chars.");
+      setError(t("errors.name_too_long")); // Tradução de erro
       return;
     }
 
-    // Leva para o "Lar" (Lobby) com os dados do usuário
     navigate("/lobby", { state: { name: trimmed, gender } });
   };
 
@@ -45,17 +45,17 @@ const Setup = () => {
         className="animate-fade-in absolute left-4 top-4 flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground sm:left-6 sm:top-6"
       >
         <ArrowLeft className="h-4 w-4" />
-        Back
+        {t("setup.back")}
       </button>
 
       <div className="animate-fade-in-up w-full max-w-sm">
         {/* Header */}
         <div className="mb-8 text-center">
           <h1 className="text-glow-purple mb-2 text-3xl font-bold tracking-tight">
-            Enter the louuz
+            {t("setup.title")}
           </h1>
           <p className="text-sm text-muted-foreground">
-            Choose a name and start chatting.
+            {t("setup.description")}
           </p>
         </div>
 
@@ -66,11 +66,11 @@ const Setup = () => {
           <div className="space-y-2">
             <Label htmlFor="username" className="text-sm text-foreground">
               <User className="mr-1 inline h-3.5 w-3.5" />
-              Your name
+              {t("your_name")}
             </Label>
             <Input
               id="username"
-              placeholder="Guest123"
+              placeholder={t("setup.placeholder")}
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
@@ -89,7 +89,7 @@ const Setup = () => {
 
           {/* Seleção de Gênero */}
           <div className="space-y-2">
-            <Label className="text-sm text-foreground">Gender</Label>
+            <Label className="text-sm text-foreground">{t("setup.gender_label")}</Label>
             <div className="grid grid-cols-3 gap-2">
               {genderOptions.map((opt) => (
                 <button
@@ -102,20 +102,20 @@ const Setup = () => {
                   }`}
                 >
                   <span className="mb-1 block text-base">{opt.icon}</span>
-                  {opt.label}
+                  {t(opt.labelKey)} {/* Aqui a tradução acontece no loop */}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* ÚNICO BOTÃO DE CONTINUAR */}
+          {/* Botão de Continuar */}
           <div className="pt-2">
             <Button
               onClick={handleContinue}
               className="gradient-btn w-full border-0 py-6 font-semibold text-primary-foreground transition-all duration-300 hover:scale-[1.02] hover:box-glow-purple"
             >
               <LogIn className="mr-2 h-4 w-4" />
-              Continue {/* Pode usar t('continue') se tiver tradução */}
+              {t("setup.continue_btn")}
             </Button>
           </div>
 

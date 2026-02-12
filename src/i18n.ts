@@ -16,11 +16,10 @@ i18n
         translation: {
           //pessoas online
 // Em en -> translation
-"online_now": "people online now",
+          "online_now": "people online now",
           //page title
           // No i18n.ts -> en -> translation
-"page_title": "Louuz — Talk to Strangers | Free Omegle & OmeTV Alternative",
-
+          "page_title": "Louuz — Talk to Strangers | Free Omegle & OmeTV Alternative",
           // Index Hero
           "intro": "Chat with strangers, the new Omegle.",
           "omegle": "The best alternative to Omegle for random video and text chat with strangers.",
@@ -40,6 +39,26 @@ i18n
           "seo_desc_2": "Unlike the old platforms, Louuz is designed for 2026. We have moderation, dark mode, and topic-based rooms (like Dating, Crypto, and Stories). It's the safest way to have random video chats and make new friends instantly.",
           "seo_title_3": "100% Free & Anonymous",
           "seo_desc_3": "No registration required. No credit cards. Just pick a nickname and start talking. Whether you want a deep conversation or just to kill boredom, Louuz connects you in seconds with real people.",
+
+          //setup
+          // --- NOVAS CHAVES SETUP EN ---
+          "setup": {
+            "title": "Enter the Louuz",
+            "description": "Choose a name and start chatting.",
+            "placeholder": "Guest123",
+            "continue_btn": "Continue",
+            "back": "Back",
+            "gender_label": "Gender",
+            "gender": {
+              "male": "Male",
+              "female": "Female",
+              "unspecified": "Unspecified"
+            }
+          },
+          "errors": {
+            "name_required": "Please choose a name.",
+            "name_too_long": "Name must be max 30 chars."
+          },
 
           // SEO EXPANSION SECTION
           "seo_exp": {
@@ -71,8 +90,65 @@ i18n
             "k5_t": "Talk to Strangers", "k5_d": "Connect globally instantly",
             "k6_t": "Sites like OmeTV", "k6_d": "Better moderation, no bans",
             "disclaimer": "Louuz is a premium online chat platform for users 18+. We promote safe and respectful interactions. The best free random chat of 2026."
-          }
-        }
+          },
+
+          //lobby
+
+          // No i18n.ts -> resources -> en -> translation:
+"lobby": {
+  "welcome": "hello, {{name}}",
+  "title": "Meet someone new",
+  "subtitle": "Choose how you want to connect.",
+  "text_chat": {
+    "title": "Text chat",
+    "subtitle": "Random • 1v1"
+  },
+  "video_chat": {
+    "title": "Video Chat",
+    "subtitle": "Camera On • 1v1"
+  }
+},
+"connected": "Online",
+
+            //text chat
+           
+"text_chat": {
+  "status_searching": "Looking for a stranger...",
+  "status_connected": "Connected",
+  "status_disconnected": "Partner logged out. Click skip.",
+  "partner_default": "Stranger",
+  "welcome_msg": "You are talking to {{name}}. Say hi!",
+  "partner_left": "{{name}} has disconnected.",
+  "placeholder": "Type your message...",
+  "btn_skip": "Skip"
+},
+"video_chat": {
+  "you": "You",
+  "searching": "Searching for partner...",
+  "connecting": "Connecting to stranger...",
+  "connected": "Connected!",
+  "waiting": "Waiting for video...",
+  "error": "Error: Allow camera access.",
+  "btn_skip": "SKIP"
+},
+
+//salas
+// --- VERSÃO EN ---
+"rooms": {
+  "header_hello": "Hello, {{name}}",
+  "title": "public rooms",
+  "subtitle": "Choose a topic and join the conversation",
+  "list": {
+    "global": { "name": "Global Chat", "desc": "Talk to everyone." },
+    "trending": { "name": "Trending Topics", "desc": "What's viral right now. 🔥" },
+    "money": { "name": "Investments", "desc": "Crypto, stocks, and business talk. 💸" },
+    "nofilter": { "name": "No Filter", "desc": "Free speech and hot takes. ⚡" },
+    "stories": { "name": "Real Stories", "desc": "Confessions and life experiences. 📖" },
+    "area51": { "name": "Area 51", "desc": "Top secret discussions." },
+    "love": { "name": "Love", "desc": "Dating, flirting and connections. ❤️" }
+  }
+},
+        },
       },
       pt: {
         translation: {
@@ -133,10 +209,88 @@ i18n
             "k5_t": "Falar com Estranhos", "k5_d": "Conecte-se globalmente instantaneamente",
             "k6_t": "Sites como OmeTV", "k6_d": "Melhor moderação, sem banimentos",
             "disclaimer": "O Louuz é uma plataforma premium para maiores de 18 anos. Promovemos interações respeitosas. O melhor chat gratuito de 2026."
-          }
+          },
+
+          //setup
+          // --- NOVAS CHAVES SETUP PT ---
+          "setup": {
+            "title": "Entrar no Louuz",
+            "description": "Escolha um nome e comece a conversar.",
+            "placeholder": "Visitante123",
+            "continue_btn": "Continuar",
+            "back": "Voltar",
+            "gender_label": "Gênero",
+            "gender": {
+              "male": "Masculino",
+              "female": "Feminino",
+              "unspecified": "Não especificado"
+            }
+          },
+          "errors": {
+            "name_required": "Por favor, escolha um nome.",
+            "name_too_long": "O nome deve ter no máximo 30 caracteres."
+          },
+
+          //lobby
+          // No i18n.ts -> resources -> pt -> translation:
+"lobby": {
+  "welcome": "olá, {{name}}",
+  "title": "Conheça alguém novo",
+  "subtitle": "Escolha como se quer conectar.",
+  "text_chat": {
+    "title": "Chat de Texto",
+    "subtitle": "Aleatório • 1v1"
+  },
+  "video_chat": {
+    "title": "Chat de Vídeo",
+    "subtitle": "Câmara Ligada • 1v1"
+  }
+},
+"connected": "Online",
+
+// --- VERSÃO PT ---
+"text_chat": {
+  "status_searching": "À procura de um estranho...",
+  "status_connected": "Conectado",
+  "status_disconnected": "O parceiro saiu. Clique em pular.",
+  "partner_default": "Estranho",
+  "welcome_msg": "Estás a falar com {{name}}. Diz olá!",
+  "partner_left": "{{name}} desconectou-se.",
+  "placeholder": "Digita a tua mensagem...",
+  "btn_skip": "Pular"
+},
+"video_chat": {
+  "you": "Tu",
+  "searching": "A procurar parceiro...",
+  "connecting": "A conectar com estranho...",
+  "connected": "Conectado!",
+  "waiting": "A aguardar vídeo...",
+  "error": "Erro: Permite o acesso à câmara.",
+  "btn_skip": "PULAR"
+},
+
+//salas 
+// --- VERSÃO PT ---
+"rooms": {
+  "header_hello": "Olá, {{name}}",
+  "title": "salas públicas",
+  "subtitle": "Escolha um tópico e entre na conversa",
+  "list": {
+    "global": { "name": "Chat Global", "desc": "Fala com toda a gente." },
+    "trending": { "name": "Assuntos do Momento", "desc": "O que está a viralizar agora. 🔥" },
+    "money": { "name": "Investimentos", "desc": "Crypto, ações e papo de negócios. 💸" },
+    "nofilter": { "name": "Sem Filtro", "desc": "Liberdade de expressão e debates quentes. ⚡" },
+    "stories": { "name": "Relatos Reais", "desc": "Confissões e experiências de vida. 📖" },
+    "area51": { "name": "Área 51", "desc": "Discussões ultrassecretas." },
+    "love": { "name": "Amor", "desc": "Encontros, paquera e conexões. ❤️" }
+  }
+}
+
+
         }
       }
     }
   });
+  
 
 export default i18n;
