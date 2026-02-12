@@ -247,7 +247,8 @@ i18n
   }
 },
 "connected": "Online",
-
+"back":"Voltar",
+"btn_skip":"Pular",
 // --- VERSÃO PT ---
 "text_chat": {
   "status_searching": "À procura de um estranho...",
@@ -260,11 +261,11 @@ i18n
   "btn_skip": "Pular"
 },
 "video_chat": {
-  "you": "Tu",
-  "searching": "A procurar parceiro...",
+  "you": "Vo ê",
+  "video_searching": "Procurando Alguém...",
   "connecting": "A conectar com estranho...",
   "connected": "Conectado!",
-  "waiting": "A aguardar vídeo...",
+  "video_waiting": "A aguardar vídeo...",
   "error": "Erro: Permite o acesso à câmara.",
   "btn_skip": "PULAR"
 },
