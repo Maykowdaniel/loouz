@@ -15,6 +15,7 @@ i18n
       en: {
         translation: {
           //pessoas online
+          "back:":"Back",
 // Em en -> translation
           "online_now": "people online now",
           //page title

@@ -24,7 +24,7 @@ const VideoChat = () => {
   const [callAccepted, setCallAccepted] = useState(false);
   
   // ✅ Status inicial agora é dinâmico
-  const [status, setStatus] = useState(t('video_searching')); 
+  const [status, setStatus] = useState(t('video_chat.video_searching')); 
   
   const [micOn, setMicOn] = useState(true);
   const [camOn, setCamOn] = useState(true);
@@ -59,7 +59,7 @@ const VideoChat = () => {
         });
 
         socket.current.on("start_call", ({ socketId, initiator }) => {
-          setStatus(t('video_connecting')); // ✅ Traduzido
+          setStatus(t('video_chat.video_connecting')); // ✅ Traduzido
 
           if (peerRef.current) {
             peerRef.current.destroy();
@@ -78,7 +78,7 @@ const VideoChat = () => {
           peer.on("stream", (remoteStream) => {
             setPartnerStream(remoteStream);
             setCallAccepted(true);
-            setStatus(t('video_connected')); // ✅ Traduzido
+            setStatus(t('video_chat.connect')); // ✅ Traduzido
           });
 
           peer.on("error", (err) => {
@@ -93,7 +93,7 @@ const VideoChat = () => {
       })
       .catch((err) => {
         console.error("Erro de mídia:", err);
-        setStatus(t('video_error')); // ✅ Traduzido
+        setStatus(t('video_chat.video_error')); // ✅ Traduzido
       });
 
     return () => {
@@ -110,7 +110,7 @@ const VideoChat = () => {
     }
     setCallAccepted(false);
     setPartnerStream(null);
-    setStatus(t('video_searching')); // ✅ Traduzido
+    setStatus(t('video_chat.video_searching')); // ✅ Traduzido
     
     setTimeout(() => {
       socket.current?.emit("join_video_queue");
@@ -156,7 +156,7 @@ const VideoChat = () => {
           ) : (
             <div className="text-zinc-500 animate-pulse flex flex-col items-center">
                 <div className="h-16 w-16 rounded-full bg-zinc-800 mb-4 animate-bounce"></div>
-                {t('video_waiting')} {/* ✅ Traduzido */}
+                {t('video_chat.video_waiting')} {/* ✅ Traduzido */}
             </div>
           )}
         </div>
@@ -183,7 +183,7 @@ const VideoChat = () => {
           onClick={handleSkip} 
           className="rounded-full px-8 h-14 bg-white text-black hover:bg-zinc-200 font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:scale-105"
         >
-          <SkipForward className="mr-2 h-5 w-5" /> {t('btn_skip')}
+          <SkipForward className="mr-2 h-5 w-5" /> {t('video_chat.btn_skip')}
         </Button>
       </div>
     </div>
