@@ -166,8 +166,8 @@ i18n
           // Index Hero
           "intro": "Converse com estranhos",
           "omegle": "A melhor alternativa ao Omegle para bate-papo aleatório por vídeo e texto com estranhos.",
-          "btn_enter": "Chat Texto",
-          "btn_video": "Vídeo Chat",
+          "btn_enter": "INICIAR CHAT DE TEXTO",
+          "btn_video": "INICIAR CHAT DE VIDEO",
           "headline": "Converse com pessoas globais, o novo Omegle.",
           "objective": "A melhor alternativa ao Omegle para bate-papo aleatório por vídeo e texto com estranhos.",
           "age_warning_1": "Você precisa ter 18 anos ou mais para usar o louuz.",
