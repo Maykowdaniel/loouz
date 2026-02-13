@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
@@ -6,22 +6,14 @@ import {
   Keyboard, 
   Layers, 
   Home, 
-  Coins, 
-  ShoppingBag, 
-  Bell, 
-  Settings, 
-  Info,
-  X 
+  Info 
 } from "lucide-react"; 
 import { useTranslation } from "react-i18next";
 import SeoExpansion from "@/components/SeoExpansion";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
-  
-  // Estado para o contador fake
-  const [onlineCount, setOnlineCount] = useState(1385);
+  const { i18n } = useTranslation();
   
   // Estado para controlar o menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,21 +27,11 @@ const Index = () => {
     }
   }, [isMenuOpen]);
 
-  // Lógica do contador
+  // Título e Idioma
   useEffect(() => {
     document.title = "Louuz - Converse com Estranhos"; 
     document.documentElement.lang = i18n.language;
-
-    const interval = setInterval(() => {
-      setOnlineCount(prev => {
-        const change = Math.floor(Math.random() * 9) - 4; 
-        const next = prev + change;
-        return next < 500 ? 500 : next;
-      });
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [t, i18n.language]);
+  }, [i18n.language]);
 
   const handleEnterChat = (mode: 'text' | 'video') => {
     const randomNum = Math.floor(Math.random() * 90000) + 10000;
@@ -110,6 +92,7 @@ const Index = () => {
               <div className="h-px bg-zinc-800 my-1 mx-4" />
               <MenuItem icon={<Layers size={20} />} label="Salas (Rooms)" onClick={() => navigate("/rooms")} />
               <div className="h-px bg-zinc-800 my-1 mx-4" />
+              <MenuItem icon={<Info size={20} />} label="Sobre" onClick={() => navigate("/about")} />
             </div>
             <div className="h-6" />
           </div>
@@ -136,27 +119,34 @@ const Index = () => {
           </h2>
         </div>
 
-        {/* --- CONTADOR MODIFICADO (MAIS CHAMATIVO) --- */}
+        {/* --- DISCORD BUTTON (SUBSTITUIU O CONTADOR) --- */}
         <div className="flex flex-col items-center justify-center mb-12 animate-in fade-in zoom-in duration-700 delay-200">
-            {/* Container com fundo sutil para destacar */}
-            <div className="bg-zinc-900/50 backdrop-blur-md border border-zinc-800/50 px-8 py-4 rounded-2xl flex flex-col items-center shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+            <a 
+              href="https://discord.gg/YJCctkH5" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="group relative bg-[#5865F2]/10 backdrop-blur-md border border-[#5865F2]/50 px-10 py-6 rounded-3xl flex flex-col items-center shadow-[0_0_40px_rgba(88,101,242,0.3)] hover:shadow-[0_0_60px_rgba(88,101,242,0.6)] hover:bg-[#5865F2]/20 hover:scale-105 transition-all duration-300 cursor-pointer"
+            >
+                {/* Efeito de Ping no Fundo (Atenção) */}
+                <div className="absolute inset-0 bg-[#5865F2] rounded-3xl animate-pulse opacity-10 blur-xl group-hover:opacity-20 transition-opacity"></div>
                 
-                {/* Ícone Pulsante (Maior) */}
-                <div className="relative flex items-center justify-center mb-3">
-                    <div className="w-4 h-4 sm:w-5 sm:h-5 bg-emerald-500 rounded-full shadow-[0_0_20px_rgba(16,185,129,1)] z-10 animate-pulse"></div>
-                    <div className="absolute w-full h-full bg-emerald-400 rounded-full animate-ping opacity-75 scale-150"></div>
+                {/* Ícone Discord Gigante */}
+                <div className="relative z-10 mb-2 drop-shadow-[0_0_15px_rgba(88,101,242,0.8)]">
+                  <svg width="60" height="60" viewBox="0 0 127 96" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16 sm:w-20 sm:h-20 text-white fill-white">
+                    <path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2.03a75.4 75.4 0 0 0 62.18 0c.87.69 1.76 1.37 2.65 2.03a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.15c2.6-25.6-5.98-48.16-16.7-72.15ZM42.45 65.69C36.18 65.69 31 60.08 31 53.23c0-6.85 5.1-12.46 11.45-12.46 6.34 0 11.54 5.61 11.45 12.46 0 6.85-5.1 12.46-11.45 12.46Zm42.51 0c-6.27 0-11.46-5.61-11.46-12.46 0-6.85 5.1-12.46 11.46-12.46 6.35 0 11.55 5.61 11.45 12.46 0 6.85-5.1 12.46-11.45 12.46Z"/>
+                  </svg>
                 </div>
                 
-                {/* Número Gigante */}
-                <span className="text-5xl sm:text-6xl font-black text-white tracking-tighter drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
-                    {onlineCount.toLocaleString()}
+                {/* Texto Chamada */}
+                <span className="text-3xl sm:text-4xl font-black text-white tracking-tighter drop-shadow-lg group-hover:text-[#5865F2] transition-colors">
+                    Entrar no Discord
                 </span>
                 
-                {/* Texto Descritivo */}
-                <span className="text-emerald-400 font-bold text-sm sm:text-base uppercase tracking-[0.2em] mt-1">
-                    Pessoas Online
+                {/* Subtexto */}
+                <span className="text-[#5865F2] font-bold text-xs sm:text-sm uppercase tracking-[0.2em] mt-2 bg-white/10 px-3 py-1 rounded-full">
+                    Comunidade Oficial
                 </span>
-            </div>
+            </a>
         </div>
 
         {/* BOTÕES */}
