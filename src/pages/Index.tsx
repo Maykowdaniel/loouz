@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-// Adicionei os novos ícones necessários para o menu
 import { 
   Video, 
   Keyboard, 
@@ -27,8 +26,6 @@ const Index = () => {
   // Estado para controlar o menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Não precisamos mais do menuRef para clicar fora, pois o Overlay fará isso
-  
   // Bloquear o scroll da página quando o menu estiver aberto
   useEffect(() => {
     if (isMenuOpen) {
@@ -82,7 +79,6 @@ const Index = () => {
           className="hover:bg-white/5 rounded-full h-14 w-14 transition-all relative z-50 group"
           onClick={() => setIsMenuOpen(true)}
         >
-          {/* Ícone Personalizado SVG (Estilo Barras Roxas) */}
           <svg 
             width="36" 
             height="36" 
@@ -98,42 +94,23 @@ const Index = () => {
         </Button>
       </div>
 
-      {/* --- MENU MODAL / BOTTOM SHEET (NOVO) --- */}
+      {/* --- MENU MODAL / BOTTOM SHEET --- */}
       {isMenuOpen && (
         <div className="fixed inset-0 z-[100] flex flex-col justify-end sm:justify-center items-center">
-          
-          {/* 1. Backdrop Escuro (Clica para fechar) */}
           <div 
             className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-300"
             onClick={() => setIsMenuOpen(false)}
           />
-
-          {/* 2. O Menu em si (Estilo da Imagem) */}
           <div className="relative w-full max-w-md bg-[#18181b] border-t border-white/10 sm:border sm:rounded-[30px] rounded-t-[30px] shadow-2xl animate-in slide-in-from-bottom duration-300 overflow-hidden">
-            
-            {/* Handle (A barrinha cinza no topo) */}
             <div className="flex justify-center pt-3 pb-1" onClick={() => setIsMenuOpen(false)}>
               <div className="w-12 h-1.5 bg-zinc-700 rounded-full cursor-pointer" />
             </div>
-
-            {/* Lista de Opções */}
             <div className="p-4 flex flex-col gap-1">
-              
               <MenuItem icon={<Home size={20} />} label="Home" onClick={() => setIsMenuOpen(false)} />
-              
-              <div className="h-px bg-zinc-800 my-1 mx-4" /> {/* Divisor */}
-              
-              <MenuItem 
-                icon={<Layers size={20} />} 
-                label="Salas (Rooms)" 
-                onClick={() => navigate("/rooms")}
-              />
-              
               <div className="h-px bg-zinc-800 my-1 mx-4" />
-
+              <MenuItem icon={<Layers size={20} />} label="Salas (Rooms)" onClick={() => navigate("/rooms")} />
+              <div className="h-px bg-zinc-800 my-1 mx-4" />
             </div>
-            
-            {/* Espaço extra no final para celulares */}
             <div className="h-6" />
           </div>
         </div>
@@ -159,17 +136,27 @@ const Index = () => {
           </h2>
         </div>
 
-        {/* CONTADOR */}
+        {/* --- CONTADOR MODIFICADO (MAIS CHAMATIVO) --- */}
         <div className="flex flex-col items-center justify-center mb-12 animate-in fade-in zoom-in duration-700 delay-200">
-          <div className="relative flex items-center justify-center mb-2">
-            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-emerald-500 rounded-full shadow-[0_0_25px_rgba(16,185,129,0.8)] z-10 animate-pulse"></div>
-            <div className="absolute w-6 h-6 sm:w-8 sm:h-8 bg-emerald-400 rounded-full animate-ping opacity-75"></div>
-          </div>
-          
-          <p className="text-emerald-400 font-bold text-xl sm:text-2xl uppercase tracking-wider text-center drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]">
-            {onlineCount.toLocaleString()} Pessoas <br/>
-            <span className="text-emerald-500/80 text-sm sm:text-base">Online Agora</span>
-          </p>
+            {/* Container com fundo sutil para destacar */}
+            <div className="bg-zinc-900/50 backdrop-blur-md border border-zinc-800/50 px-8 py-4 rounded-2xl flex flex-col items-center shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+                
+                {/* Ícone Pulsante (Maior) */}
+                <div className="relative flex items-center justify-center mb-3">
+                    <div className="w-4 h-4 sm:w-5 sm:h-5 bg-emerald-500 rounded-full shadow-[0_0_20px_rgba(16,185,129,1)] z-10 animate-pulse"></div>
+                    <div className="absolute w-full h-full bg-emerald-400 rounded-full animate-ping opacity-75 scale-150"></div>
+                </div>
+                
+                {/* Número Gigante */}
+                <span className="text-5xl sm:text-6xl font-black text-white tracking-tighter drop-shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                    {onlineCount.toLocaleString()}
+                </span>
+                
+                {/* Texto Descritivo */}
+                <span className="text-emerald-400 font-bold text-sm sm:text-base uppercase tracking-[0.2em] mt-1">
+                    Pessoas Online
+                </span>
+            </div>
         </div>
 
         {/* BOTÕES */}
@@ -218,7 +205,6 @@ const Index = () => {
   );
 };
 
-// Componente auxiliar para os itens do menu (para evitar repetição de código)
 const MenuItem = ({ icon, label, onClick }: { icon: React.ReactNode, label: string, onClick?: () => void }) => (
   <button 
     onClick={onClick}
