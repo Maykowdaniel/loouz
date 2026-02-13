@@ -119,31 +119,31 @@ const Index = () => {
           </h2>
         </div>
 
-        {/* --- DISCORD BUTTON (SUBSTITUIU O CONTADOR) --- */}
+        {/* --- DISCORD BUTTON (MODIFICADO: ÍCONE MENOR) --- */}
         <div className="flex flex-col items-center justify-center mb-12 animate-in fade-in zoom-in duration-700 delay-200">
             <a 
               href="https://discord.gg/YJCctkH5" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="group relative bg-[#5865F2]/10 backdrop-blur-md border border-[#5865F2]/50 px-10 py-6 rounded-3xl flex flex-col items-center shadow-[0_0_40px_rgba(88,101,242,0.3)] hover:shadow-[0_0_60px_rgba(88,101,242,0.6)] hover:bg-[#5865F2]/20 hover:scale-105 transition-all duration-300 cursor-pointer"
+              className="group relative bg-[#5865F2]/10 backdrop-blur-md border border-[#5865F2]/50 px-8 py-5 rounded-3xl flex flex-col items-center shadow-[0_0_40px_rgba(88,101,242,0.3)] hover:shadow-[0_0_60px_rgba(88,101,242,0.6)] hover:bg-[#5865F2]/20 hover:scale-105 transition-all duration-300 cursor-pointer"
             >
-                {/* Efeito de Ping no Fundo (Atenção) */}
+                {/* Efeito de Ping no Fundo */}
                 <div className="absolute inset-0 bg-[#5865F2] rounded-3xl animate-pulse opacity-10 blur-xl group-hover:opacity-20 transition-opacity"></div>
                 
-                {/* Ícone Discord Gigante */}
+                {/* Ícone Discord (TAMANHO REDUZIDO PARA w-10/w-12) */}
                 <div className="relative z-10 mb-2 drop-shadow-[0_0_15px_rgba(88,101,242,0.8)]">
-                  <svg width="60" height="60" viewBox="0 0 127 96" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-16 h-16 sm:w-20 sm:h-20 text-white fill-white">
+                  <svg width="48" height="36" viewBox="0 0 127 96" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 sm:w-12 sm:h-12 text-white fill-white">
                     <path d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0a105.89 105.89 0 0 0-26.25 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2.03a75.4 75.4 0 0 0 62.18 0c.87.69 1.76 1.37 2.65 2.03a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.15c2.6-25.6-5.98-48.16-16.7-72.15ZM42.45 65.69C36.18 65.69 31 60.08 31 53.23c0-6.85 5.1-12.46 11.45-12.46 6.34 0 11.54 5.61 11.45 12.46 0 6.85-5.1 12.46-11.45 12.46Zm42.51 0c-6.27 0-11.46-5.61-11.46-12.46 0-6.85 5.1-12.46 11.46-12.46 6.35 0 11.55 5.61 11.45 12.46 0 6.85-5.1 12.46-11.45 12.46Z"/>
                   </svg>
                 </div>
                 
                 {/* Texto Chamada */}
-                <span className="text-3xl sm:text-4xl font-black text-white tracking-tighter drop-shadow-lg group-hover:text-[#5865F2] transition-colors">
+                <span className="text-2xl sm:text-3xl font-black text-white tracking-tighter drop-shadow-lg group-hover:text-[#5865F2] transition-colors">
                     Entrar no Discord
                 </span>
                 
                 {/* Subtexto */}
-                <span className="text-[#5865F2] font-bold text-xs sm:text-sm uppercase tracking-[0.2em] mt-2 bg-white/10 px-3 py-1 rounded-full">
+                <span className="text-[#5865F2] font-bold text-[10px] sm:text-xs uppercase tracking-[0.2em] mt-2 bg-white/10 px-3 py-1 rounded-full">
                     Comunidade Oficial
                 </span>
             </a>
