@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Video, ChevronDown, MoreVertical, Layers } from "lucide-react"; // Adicionei MoreVertical e Layers
+import { Video, Keyboard, MoreVertical, Layers } from "lucide-react"; // Adicionei Keyboard
 import { useTranslation } from "react-i18next";
 import SeoExpansion from "@/components/SeoExpansion";
 
@@ -10,7 +10,7 @@ const Index = () => {
   const { t, i18n } = useTranslation();
   
   // Estado para o contador fake
-  const [onlineCount, setOnlineCount] = useState(1500);
+  const [onlineCount, setOnlineCount] = useState(1382); // Começa próximo ao print
   
   // Estado para controlar o menu (3 pontinhos)
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,41 +27,28 @@ const Index = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Lógica do contador (mantida)
+  // Lógica do contador
   useEffect(() => {
-    document.title = t('page_title'); 
+    document.title = "Louuz - Converse com Estranhos"; 
     document.documentElement.lang = i18n.language;
-
-    const initial = Math.floor(Math.random() * (2000 - 1000 + 1)) + 1000;
-    setOnlineCount(initial);
 
     const interval = setInterval(() => {
       setOnlineCount(prev => {
-        const change = Math.floor(Math.random() * 7) - 3; 
+        const change = Math.floor(Math.random() * 9) - 4; 
         const next = prev + change;
-        if (next < 1000) return 1000;
-        if (next > 2000) return 2000;
-        return next;
+        return next < 500 ? 500 : next;
       });
-    }, 4000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [t, i18n.language]);
 
-  const scrollToContent = () => {
-    document.getElementById('more-content')?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  // --- NOVA FUNÇÃO: ENTRAR DIRETO (Bypass Setup) ---
+  // Função para entrar direto
   const handleEnterChat = (mode: 'text' | 'video') => {
-    // 1. Gerar nome aleatório
-    const randomNum = Math.floor(Math.random() * 90000) + 10000; // Ex: 10000 a 99999
+    const randomNum = Math.floor(Math.random() * 90000) + 10000;
     const guestName = `Guest${randomNum}`;
-
-    // 2. Definir destino
     const targetPath = mode === 'video' ? "/video" : "/text-chat";
 
-    // 3. Navegar passando o estado (Gênero padrão: unspecified)
     navigate(targetPath, { 
       state: { 
         name: guestName, 
@@ -71,35 +58,32 @@ const Index = () => {
   };
 
   return (
-    <div className="gradient-bg flex flex-col min-h-screen">
-      <style>{`
-        @keyframes radar {
-          0% { transform: scale(1); opacity: 0.3; }
-          100% { transform: scale(1.35); opacity: 0; }
-        }
-        .animate-radar { animation: radar 3s infinite ease-out; }
-      `}</style>
+    // Fundo escuro com gradientes ambientais para dar o clima "Noturno/App"
+    <div className="relative flex flex-col min-h-screen bg-black overflow-hidden font-sans selection:bg-cyan-500 selection:text-white">
+      
+      {/* Efeitos de Fundo (Blobs de cor) */}
+      <div className="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none" />
+      <div className="fixed bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* --- HEADER COM MENU --- */}
+      {/* --- HEADER COM MENU (MANTIDO) --- */}
       <div className="absolute top-0 right-0 p-6 z-50">
         <div className="relative" ref={menuRef}>
           <Button 
             variant="ghost" 
             size="icon" 
-            className="text-white hover:bg-white/10 rounded-full h-12 w-12"
+            className="text-white hover:bg-white/10 rounded-full h-12 w-12 transition-all"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             <MoreVertical size={28} />
           </Button>
 
-          {/* Menu Dropdown Simples */}
           {isMenuOpen && (
-            <div className="absolute right-0 mt-2 w-48 bg-zinc-900 border border-zinc-800 rounded-xl shadow-xl overflow-hidden animate-fade-in-up z-50">
+            <div className="absolute right-0 mt-2 w-48 bg-zinc-900 border border-zinc-800 rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 z-50">
               <button 
                 onClick={() => navigate("/rooms")}
                 className="w-full text-left px-4 py-3 text-white hover:bg-zinc-800 flex items-center gap-3 transition-colors"
               >
-                <Layers size={18} className="text-purple-400" />
+                <Layers size={18} className="text-cyan-400" />
                 <span className="font-medium">Salas (Rooms)</span>
               </button>
             </div>
@@ -107,97 +91,83 @@ const Index = () => {
         </div>
       </div>
 
-      {/* --- HERO SECTION --- */}
-      <div className="relative flex min-h-[100dvh] w-full flex-col items-center justify-start px-4 py-6">
+      {/* --- HERO SECTION CENTRALIZADA --- */}
+      <div className="relative flex flex-grow flex-col items-center justify-center px-4 w-full max-w-lg mx-auto z-10">
         
-        {/* Espaço reservado para o Header */}
-        <div className="flex-none h-4"></div>
+        {/* 1. LOGO */}
+        <div className="mb-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <h1 className="text-6xl sm:text-7xl font-black tracking-tighter text-white drop-shadow-2xl">
+            lo<span className="text-cyan-400">uu</span>z
+          </h1>
+        </div>
 
-        {/* Conteúdo Central */}
-        <div className="flex flex-col items-center justify-center w-full max-w-4xl z-10 mt-8 sm:mt-16">
-          
-          {/* Logo Gigante */}
-          <div className="animate-fade-in-up mb-4 scale-125 sm:scale-150 origin-bottom">
-            <h1 className="text-glow-purple text-8xl font-black tracking-tighter sm:text-9xl md:text-[11rem] leading-none">
-              lo<span className="text-accent">uu</span>z
-            </h1>
-          </div>
-
-          <h2 
-            className="animate-fade-in-up mb-4 max-w-3xl text-center text-3xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-br from-white via-purple-50 to-purple-400 bg-clip-text text-transparent drop-shadow-sm leading-tight pb-2"
-            style={{ animationDelay: "0.1s", opacity: 0 }}
-          >
-            {t('intro')}
-          </h2>
-{/* 
-          <p
-            className="animate-fade-in-up mb-8 max-w-md text-center text-base text-zinc-400 sm:text-lg font-medium"
-            style={{ animationDelay: "0.2s", opacity: 0 }}
-          >
-            {t('omegle')}
-          </p>
-*/}
-           {/* INDICADOR DE USUÁRIOS ONLINE */}
-          <div 
-            className="animate-fade-in-up mb-6 flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-emerald-400 ring-1 ring-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
-            style={{ animationDelay: "0.05s", opacity: 0 }}
-          >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        {/* 2. HEADLINE "CONVERSE COM ESTRANHOS" */}
+        <div className="text-center mb-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100">
+          <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-white uppercase leading-[0.9] tracking-tighter drop-shadow-lg">
+            Converse <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">
+              Com Estranhos
             </span>
-            {onlineCount.toLocaleString()} {t('online_now')}
-          </div>
-
-          {/* ✅ BOTÕES COM AÇÃO DIRETA (XL) */}
-          <div
-            className="animate-fade-in-up flex flex-col sm:flex-row items-center justify-center gap-6 w-full"
-            style={{ animationDelay: "0.3s", opacity: 0 }}
-          >
-            {/* Botão de Texto - AGORA VAI DIRETO */}
-            <Button
-              onClick={() => handleEnterChat('text')}
-              className="h-16 w-64 sm:h-20 sm:w-80 rounded-full bg-zinc-200 text-zinc-900 hover:bg-white hover:scale-105 transition-all text-xl sm:text-2xl font-black uppercase tracking-wider shadow-lg border-0 z-20"
-            >
-              {t('btn_enter')}
-            </Button>
-
-            {/* Botão de Vídeo - AGORA VAI DIRETO */}
-            <Button
-              onClick={() => handleEnterChat('video')}
-              className="relative z-10 h-16 w-64 sm:h-20 sm:w-80 rounded-full gradient-btn text-white hover:box-glow-purple hover:scale-105 transition-all text-xl sm:text-2xl font-black uppercase tracking-wider shadow-xl shadow-purple-900/30 border-0"
-            >
-              <span className="absolute -z-10 inset-0 rounded-full animate-radar bg-white"></span>
-              <Video className="mr-3 h-8 w-8 sm:h-9 sm:w-9 relative z-20" />
-              <span className="relative z-20">{t('btn_video')}</span>
-            </Button>
-          </div>
+          </h2>
         </div>
 
-        {/* Rodapé fixo embaixo */}
-        <div className="flex flex-col items-center gap-3 mb-2 animate-fade-in-up z-10 mt-auto" style={{ animationDelay: "0.45s", opacity: 0 }}>
-          <p className="text-center text-[10px] sm:text-xs text-muted-foreground/50 max-w-sm px-4">
-            {t('age_warning_1')}
-            <button
-              onClick={() => navigate("/terms")}
-              className="text-white/40 underline underline-offset-2 transition-colors hover:text-accent ml-1"
-            >
-              {t('age_warning_2')}
-            </button>{" "}
-            {t('age_warning_3')}
+        {/* 3. CONTADOR DE PESSOAS ONLINE (ESTILO LED) */}
+        <div className="flex flex-col items-center justify-center mb-12 animate-in fade-in zoom-in duration-700 delay-200">
+          {/* Bola verde brilhante */}
+          <div className="relative flex items-center justify-center mb-2">
+            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-emerald-500 rounded-full shadow-[0_0_25px_rgba(16,185,129,0.8)] z-10 animate-pulse"></div>
+            <div className="absolute w-6 h-6 sm:w-8 sm:h-8 bg-emerald-400 rounded-full animate-ping opacity-75"></div>
+          </div>
+          
+          {/* Texto do contador */}
+          <p className="text-emerald-400 font-bold text-xl sm:text-2xl uppercase tracking-wider text-center drop-shadow-[0_0_10px_rgba(16,185,129,0.4)]">
+            {onlineCount.toLocaleString()} Pessoas <br/>
+            <span className="text-emerald-500/80 text-sm sm:text-base">Online Agora</span>
           </p>
-
-          <div 
-            onClick={scrollToContent}
-            className="animate-bounce cursor-pointer text-white/20 hover:text-white transition-colors"
-          >
-            <ChevronDown size={24} />
-          </div>
         </div>
+
+        {/* 4. BOTÕES DE AÇÃO (FULL WIDTH MOBILE) */}
+        <div className="w-full space-y-4 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300">
+          
+          {/* Botão TEXTO: Branco, Ícone Preto */}
+          <Button
+            onClick={() => handleEnterChat('text')}
+            className="w-full h-16 sm:h-20 rounded-full bg-white text-black hover:bg-gray-100 hover:scale-[1.02] active:scale-95 transition-all duration-200 border-0 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+          >
+            <div className="flex items-center gap-3">
+              <Keyboard size={28} className="text-black" strokeWidth={2.5} />
+              <div className="flex flex-col items-start leading-none">
+                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Modo Rápido</span>
+                <span className="text-xl sm:text-2xl font-black uppercase tracking-tight">Iniciar Chat de Texto</span>
+              </div>
+            </div>
+          </Button>
+
+          {/* Botão VÍDEO: Gradiente Azul/Ciano */}
+          <Button
+            onClick={() => handleEnterChat('video')}
+            className="w-full h-16 sm:h-20 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:scale-[1.02] active:scale-95 transition-all duration-200 border-0"
+          >
+            <div className="flex items-center gap-3">
+              <Video size={28} className="text-white" strokeWidth={2.5} />
+              <div className="flex flex-col items-start leading-none">
+                <span className="text-[10px] uppercase font-bold text-cyan-100 tracking-wider">Câmera Ligada</span>
+                <span className="text-xl sm:text-2xl font-black uppercase tracking-tight">Iniciar Vídeo Chat</span>
+              </div>
+            </div>
+          </Button>
+
+        </div>
+
+        {/* Rodapé Legal */}
+        <div className="mt-8 text-center animate-in fade-in duration-1000 delay-500">
+          <p className="text-[10px] text-zinc-600 max-w-xs mx-auto">
+            Você precisa ter 18 anos ou mais para usar o Louuz. <br />
+            <button onClick={() => navigate("/terms")} className="underline hover:text-zinc-400">Leia os termos</button> antes de continuar.
+          </p>
+        </div>
+
       </div>
-      
-      {/* Âncora para rolagem */}
-      <div id="more-content"></div>
 
       <SeoExpansion />
     </div>
