@@ -129,14 +129,14 @@ const Index = () => {
           >
             {t('intro')}
           </h2>
-
+{/* 
           <p
             className="animate-fade-in-up mb-8 max-w-md text-center text-base text-zinc-400 sm:text-lg font-medium"
             style={{ animationDelay: "0.2s", opacity: 0 }}
           >
             {t('omegle')}
           </p>
-
+*/}
            {/* INDICADOR DE USUÁRIOS ONLINE */}
           <div 
             className="animate-fade-in-up mb-6 flex items-center gap-2 rounded-full bg-emerald-500/10 px-4 py-1.5 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-emerald-400 ring-1 ring-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.1)]"

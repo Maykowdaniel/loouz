@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 
 // --- CONFIGURAÇÃO ---
 const SERVER_URL = "https://loouz-oficial-final.onrender.com";
-const TOTAL_BOTS = 300;
+const TOTAL_BOTS = 40;
 
 const countries = [
     "US", "BR", "GB", "CA", "DE", "FR", "IT", "ES", "MX", "IN", "KR", "JP", "RU", "AU"
