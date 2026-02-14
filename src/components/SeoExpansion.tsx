@@ -7,6 +7,7 @@ const NAV_LINKS = [
   { to: "/text-chat", label: "Text Chat", desc: "Simple, fast, and private messaging" },
   { to: "/anonymous-video-chat", label: "Anonymous Chat", desc: "Talk without revealing your identity" },
   { to: "/omegle-alternative", label: "Omegle Alternative", desc: "The modern version of classic Omegle chatting" },
+  { to: "/random-video-chat", label: "Random Video Chat", desc: "Connect live with strangers by video" },
   { to: "/talk-to-strangers", label: "Talk to Strangers", desc: "Discover people and cultures from around the world" },
 ];
 

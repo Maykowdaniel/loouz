@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Home, Layers, Info, HelpCircle } from "lucide-react";
 import { seoPages, type SeoPageData } from "@/data/seoPages";
 
+const SITE_URL = "https://www.louuz.com";
+
 const SeoLandingPage = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -26,8 +28,16 @@ const SeoLandingPage = () => {
       if (metaDesc) {
         metaDesc.setAttribute("content", pageData.description);
       }
+      // Canonical: evita conteúdo duplicado em SEO
+      let linkCanonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+      if (!linkCanonical) {
+        linkCanonical = document.createElement("link");
+        linkCanonical.setAttribute("rel", "canonical");
+        document.head.appendChild(linkCanonical);
+      }
+      linkCanonical.setAttribute("href", `${SITE_URL}${pathname}`);
     }
-  }, [pageData]);
+  }, [pageData, pathname]);
 
   if (!pageData) {
     navigate("/", { replace: true });
@@ -134,19 +144,20 @@ const SeoLandingPage = () => {
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === "Enter" && navigate("/")}
+          aria-label="Louuz - Voltar ao início"
         >
-          <h1 className="text-5xl sm:text-6xl font-black tracking-tighter text-white drop-shadow-2xl">
+          <span className="text-5xl sm:text-6xl font-black tracking-tighter text-white drop-shadow-2xl">
             lo<span className="text-cyan-400">uu</span>z
-          </h1>
+          </span>
         </div>
 
-        {/* H1 e Intro */}
+        {/* H1 e Intro - Estrutura semântica: H1 = título principal da página */}
         <header className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase leading-tight tracking-tighter drop-shadow-lg mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white uppercase leading-tight tracking-tighter drop-shadow-lg mb-6">
             <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">
               {pageData.h1}
             </span>
-          </h2>
+          </h1>
           <p className="text-lg sm:text-xl text-zinc-400 max-w-2xl mx-auto leading-relaxed">
             {pageData.intro}
           </p>
@@ -159,9 +170,9 @@ const SeoLandingPage = () => {
               key={idx}
               className="animate-in fade-in slide-in-from-bottom-4 duration-700"
             >
-              <h3 className="text-2xl sm:text-3xl font-bold text-white mb-6">
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">
                 {section.title}
-              </h3>
+              </h2>
               <div className="text-zinc-400 leading-relaxed space-y-4">
                 {section.content.split("\n\n").map((para, pIdx) => (
                   <p key={pIdx} className="text-base sm:text-lg">
@@ -175,22 +186,22 @@ const SeoLandingPage = () => {
 
         {/* FAQ */}
         <section className="mt-20 space-y-6">
-          <h3 className="text-2xl sm:text-3xl font-bold text-white text-center mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-8">
             Frequently Asked Questions
-          </h3>
+          </h2>
           <div className="grid gap-6">
             {pageData.faq.map((item, idx) => (
               <div
                 key={idx}
                 className="bg-white/5 p-6 rounded-2xl border border-white/5 hover:bg-white/10 transition-colors"
               >
-                <h4 className="flex items-center gap-3 text-lg font-bold text-white mb-2">
+                <h3 className="flex items-center gap-3 text-lg font-bold text-white mb-2">
                   <HelpCircle
                     className="text-purple-500 shrink-0"
                     size={20}
                   />
                   {item.question}
-                </h4>
+                </h3>
                 <p className="text-zinc-400 text-sm leading-relaxed pl-8">
                   {item.answer}
                 </p>

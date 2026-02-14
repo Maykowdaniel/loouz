@@ -27,10 +27,12 @@ const Index = () => {
     }
   }, [isMenuOpen]);
 
-  // Título e Idioma
+  // Título, Canonical e Idioma
   useEffect(() => {
-    document.title = "Louuz - Converse com Estranhos"; 
+    document.title = "Louuz - Converse com Estranhos";
     document.documentElement.lang = i18n.language;
+    const link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (link) link.setAttribute("href", "https://www.louuz.com/");
   }, [i18n.language]);
 
   const handleEnterChat = (mode: 'text' | 'video') => {
