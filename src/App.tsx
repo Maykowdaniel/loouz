@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Setup from "./pages/Setup";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
+import SeoLandingPage from "./pages/SeoLandingPage";
 
 import Lobby from "./pages/lobby"; // Agora é o "Lar"
 import Rooms from "./pages/Rooms"; // <--- IMPORTAR NOVO ARQUIVO "Quartos"
@@ -28,6 +29,12 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/setup" element={<Setup />} />
           <Route path="/terms" element={<Terms />} />
+
+          {/* SEO Landing Pages */}
+          <Route path="/omegle-alternative" element={<SeoLandingPage />} />
+          <Route path="/random-video-chat" element={<SeoLandingPage />} />
+          <Route path="/anonymous-video-chat" element={<SeoLandingPage />} />
+          <Route path="/talk-to-strangers" element={<SeoLandingPage />} />
 
           {/* Lar (Botões 1v1) */}
           <Route path="/lobby" element={<Lobby />} />
