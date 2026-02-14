@@ -70,11 +70,11 @@ const Index = () => {
             viewBox="0 0 24 24" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"
-            className="drop-shadow-[0_0_5px_rgba(192,132,252,0.6)] group-hover:drop-shadow-[0_0_10px_rgba(192,132,252,1)] transition-all duration-300"
+            className="drop-shadow-[0_0_8px_rgba(192,132,252,0.8)] group-hover:drop-shadow-[0_0_16px_rgba(192,132,252,1)] group-hover:scale-110 transition-all duration-300"
           >
             <path d="M4 7H20" stroke="#C084FC" strokeWidth="3" strokeLinecap="round"/>
             <path d="M4 12H20" stroke="#C084FC" strokeWidth="3" strokeLinecap="round"/>
-            <path d="M12 17H20" stroke="#C084FC" strokeWidth="3" strokeLinecap="round"/>
+            <path d="M4 17H20" stroke="#C084FC" strokeWidth="3" strokeLinecap="round"/>
           </svg>
         </Button>
       </div>
