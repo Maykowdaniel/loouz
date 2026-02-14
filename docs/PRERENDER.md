@@ -2,6 +2,8 @@
 
 O projeto usa **@prerenderer/rollup-plugin** + **Puppeteer** para gerar HTML estático das rotas principais no build.
 
+**Importante:** O prerender é **desativado automaticamente na Vercel** (Puppeteer precisa de libnspr4/Chrome, que não existe no ambiente de build). O build na Vercel usa apenas o SPA. Para obter HTML pré-renderizado, rode `npm run build` localmente e faça deploy dos arquivos `dist/` manualmente, ou use um CI com suporte a Chrome.
+
 ## Rotas pré-renderizadas
 
 - `/` (Home)

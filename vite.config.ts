@@ -13,6 +13,10 @@ const ROUTES_TO_PRERENDER = [
   '/talk-to-strangers',
 ]
 
+// Puppeteer não funciona na Vercel (falta libnspr4, Chrome não inicia).
+// Pre-render só em build local/CI; na Vercel o SPA é servido normalmente.
+const isVercel = process.env.VERCEL === '1'
+
 export default defineConfig({
   plugins: [
     react(),
@@ -24,23 +28,22 @@ export default defineConfig({
         process: true,
       },
     }),
-    // Pre-render para SEO: Google, Bing e redes sociais leem HTML estático
-    prerender({
+    // Pre-render: desativado na Vercel; ativo em build local
+    ...(isVercel ? [] : [prerender({
       routes: ROUTES_TO_PRERENDER,
       renderer,
       rendererOptions: {
-        renderAfterTime: 2500, // Aguarda React mount + useEffect (title, meta, canonical)
+        renderAfterTime: 2500,
         headless: true,
       },
       postProcess(renderedRoute) {
-        // Converte URLs locais para produção
         if (renderedRoute.html) {
           renderedRoute.html = renderedRoute.html
             .replace(/http:\/\//gi, 'https://')
             .replace(/(https:\/\/)?(localhost|127\.0\.0\.1):\d*/gi, 'https://www.louuz.com')
         }
       },
-    }),
+    })]),
   ],
   resolve: {
     alias: {
