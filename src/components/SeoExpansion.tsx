@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CheckCircle, Shield, Zap, Globe, MessageCircle, Video, HelpCircle, UserX } from "lucide-react";
+import { CheckCircle, Zap, Globe, MessageCircle, Video, HelpCircle, UserX } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const NAV_LINKS = [
@@ -132,25 +132,6 @@ const SeoExpansion = () => {
         </div>
       </section>
 
-      {/* SEÇÃO 4: LISTA DE KEYWORDS */}
-      {/* Ajustei o gradiente deste card para combinar melhor com o fundo roxo global */}
-      <section className="max-w-5xl mx-auto bg-gradient-to-br from-purple-900/40 to-black/40 p-8 rounded-3xl border border-purple-500/20 text-center backdrop-blur-md">
-        <h3 className="text-2xl font-bold text-white mb-8">{t('seo_exp.footer_headline')}</h3>
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-left">
-            <KeywordLink icon={<Video />} text={t('seo_exp.k1_t')} desc={t('seo_exp.k1_d')} />
-            <KeywordLink icon={<MessageCircle />} text={t('seo_exp.k2_t')} desc={t('seo_exp.k2_d')} />
-            <KeywordLink icon={<Shield />} text={t('seo_exp.k3_t')} desc={t('seo_exp.k3_d')} />
-            <KeywordLink icon={<Zap />} text={t('seo_exp.k4_t')} desc={t('seo_exp.k4_d')} />
-            <KeywordLink icon={<Globe />} text={t('seo_exp.k5_t')} desc={t('seo_exp.k5_d')} />
-            <KeywordLink icon={<CheckCircle />} text={t('seo_exp.k6_t')} desc={t('seo_exp.k6_d')} />
-        </div>
-
-        <p className="mt-8 text-xs text-zinc-500 max-w-2xl mx-auto">
-          {t('seo_exp.disclaimer')}
-        </p>
-      </section>
-
     </div>
   );
 };
@@ -165,16 +146,6 @@ const FeatureItem = ({ title, desc }: { title: string, desc: string }) => (
       <h4 className="text-white font-bold text-lg">{title}</h4>
       <p className="text-zinc-400 text-sm">{desc}</p>
     </div>
-  </div>
-);
-
-const KeywordLink = ({ icon, text, desc }: { icon: any, text: string, desc: string }) => (
-  <div className="bg-white/5 p-4 rounded-xl border border-white/5 hover:border-purple-500/50 transition-colors cursor-default group hover:bg-white/10">
-    <div className="flex items-center gap-3 mb-2 text-purple-400 group-hover:text-purple-300">
-        {icon}
-        <span className="font-bold text-white">{text}</span>
-    </div>
-    <p className="text-xs text-zinc-500">{desc}</p>
   </div>
 );
 
