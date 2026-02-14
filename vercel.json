@@ -1,6 +1,9 @@
 {
-    "rewrites": [{
-        "source": "/(.*)",
-        "destination": "/index.html"
-    }]
+  "rewrites": [
+    { "source": "/omegle-alternative", "destination": "/omegle-alternative/index.html" },
+    { "source": "/random-video-chat", "destination": "/random-video-chat/index.html" },
+    { "source": "/anonymous-video-chat", "destination": "/anonymous-video-chat/index.html" },
+    { "source": "/talk-to-strangers", "destination": "/talk-to-strangers/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }

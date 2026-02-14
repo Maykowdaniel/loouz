@@ -8,8 +8,15 @@ i18n
   .init({
     debug: false,
     fallbackLng: 'en',
+    supportedLngs: ['en', 'pt'],
+    // pt-BR, pt-PT -> pt | en-US, en-GB -> en
+    load: 'languageOnly',
+    detection: {
+      order: ['localStorage', 'navigator', 'htmlTag'],
+      caches: ['localStorage'],
+    },
     interpolation: {
-      escapeValue: false, 
+      escapeValue: false,
     },
     resources: {
       en: {
@@ -23,6 +30,19 @@ i18n
           // No i18n.ts -> en -> translation
           "page_title": "Louuz — Talk to Strangers | Free Omegle & OmeTV Alternative",
           // Index Hero
+          "index": {
+            "headline_1": "Chat with",
+            "headline_2": "Strangers",
+            "value_prop": "No Login • Free",
+            "btn_text_label": "Quick Mode",
+            "btn_text": "Start Text Chat",
+            "btn_video_label": "Camera On",
+            "btn_video": "Start Video Chat",
+            "menu_home": "Home",
+            "menu_rooms": "Rooms",
+            "menu_about": "About",
+            "menu_lang": "Language",
+          },
           "intro": "Chat with strangers now.",
           "omegle": "The best alternative to Omegle for random video and text chat with strangers.",
           "btn_enter": "START TEXT CHAT",
@@ -30,6 +50,7 @@ i18n
           "headline": "Chat with global people, the new Omegle.",
           "objective": "The best alternative to Omegle for random video and text chat with strangers.",
           "btn_text_chat": "Let's go",
+          "back_to_home": "Back to Home",
           "age_warning_1": "You must be 18+ to use louuz.",
           "age_warning_2": "Read terms",
           "age_warning_3": " before continuing.",
@@ -165,12 +186,26 @@ i18n
           "page_title": "Louuz — Converse com estranhos | Alternativa gratuita ao Omegle e OmeTV",
 
           // Index Hero
+          "index": {
+            "headline_1": "Converse com",
+            "headline_2": "Estranhos",
+            "value_prop": "Sem Login • Grátis",
+            "btn_text_label": "Modo Rápido",
+            "btn_text": "Iniciar Chat de Texto",
+            "btn_video_label": "Câmera Ligada",
+            "btn_video": "Iniciar Vídeo Chat",
+            "menu_home": "Início",
+            "menu_rooms": "Salas",
+            "menu_about": "Sobre",
+            "menu_lang": "Idioma",
+          },
           "intro": "Converse com estranhos agora",
           "omegle": "A melhor alternativa ao Omegle para bate-papo aleatório por vídeo e texto com estranhos.",
           "btn_enter": "INICIAR CHAT DE TEXTO",
           "btn_video": "INICIAR CHAT DE VIDEO",
           "headline": "Converse com pessoas globais, o novo Omegle.",
           "objective": "A melhor alternativa ao Omegle para bate-papo aleatório por vídeo e texto com estranhos.",
+          "back_to_home": "Voltar ao Início",
           "age_warning_1": "Você precisa ter 18 anos ou mais para usar o louuz.",
           "age_warning_2": "Leia os termos",
           "age_warning_3": " antes de continuar.",

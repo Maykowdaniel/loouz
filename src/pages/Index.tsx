@@ -14,7 +14,7 @@ import SeoExpansion from "@/components/SeoExpansion";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   
   // Estado para controlar o menu
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,9 +28,9 @@ const Index = () => {
     }
   }, [isMenuOpen]);
 
-  // Título, Canonical e Idioma
+  // Título, Canonical e Idioma (adapta ao idioma detectado)
   useEffect(() => {
-    document.title = "Louuz - Converse com Estranhos";
+    document.title = t('page_title');
     document.documentElement.lang = i18n.language;
     const link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
     if (link) link.setAttribute("href", "https://www.louuz.com/");
@@ -91,11 +91,27 @@ const Index = () => {
               <div className="w-12 h-1.5 bg-zinc-700 rounded-full cursor-pointer" />
             </div>
             <div className="p-4 flex flex-col gap-1">
-              <MenuItem icon={<Home size={20} />} label="Home" onClick={() => setIsMenuOpen(false)} />
+              <MenuItem icon={<Home size={20} />} label={t('index.menu_home')} onClick={() => setIsMenuOpen(false)} />
               <div className="h-px bg-zinc-800 my-1 mx-4" />
-              <MenuItem icon={<Layers size={20} />} label="Salas (Rooms)" onClick={() => navigate("/rooms")} />
+              <MenuItem icon={<Layers size={20} />} label={t('index.menu_rooms')} onClick={() => navigate("/rooms")} />
               <div className="h-px bg-zinc-800 my-1 mx-4" />
-              <MenuItem icon={<Info size={20} />} label="Sobre" onClick={() => navigate("/about")} />
+              <MenuItem icon={<Info size={20} />} label={t('index.menu_about')} onClick={() => navigate("/about")} />
+              <div className="h-px bg-zinc-800 my-1 mx-4" />
+              <div className="px-4 py-2 flex items-center gap-2">
+                <span className="text-xs text-zinc-500 uppercase tracking-wider">{t('index.menu_lang')}</span>
+                <button
+                  onClick={() => { i18n.changeLanguage('pt'); setIsMenuOpen(false); }}
+                  className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${i18n.language === 'pt' ? 'bg-purple-500/30 text-purple-300' : 'text-zinc-400 hover:bg-white/5'}`}
+                >
+                  PT
+                </button>
+                <button
+                  onClick={() => { i18n.changeLanguage('en'); setIsMenuOpen(false); }}
+                  className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${i18n.language === 'en' ? 'bg-purple-500/30 text-purple-300' : 'text-zinc-400 hover:bg-white/5'}`}
+                >
+                  EN
+                </button>
+              </div>
             </div>
             <div className="h-6" />
           </div>
@@ -115,9 +131,9 @@ const Index = () => {
         {/* HEADLINE */}
         <div className="text-center mb-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100">
           <h2 className="text-5xl sm:text-6xl md:text-7xl font-black text-white uppercase leading-[0.9] tracking-tighter drop-shadow-lg">
-            <span className="whitespace-nowrap">Converse com</span> <br />
+            <span className="whitespace-nowrap">{t('index.headline_1')}</span> <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400">
-              Estranhos
+              {t('index.headline_2')}
             </span>
           </h2>
         </div>
@@ -127,7 +143,7 @@ const Index = () => {
           <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2.5 rounded-full hover:border-cyan-500/40 hover:bg-white/15 transition-all duration-300 group/badge">
             <Zap className="w-4 h-4 text-amber-400 shrink-0 group-hover/badge:text-cyan-400 transition-colors" strokeWidth={2.5} />
             <span className="text-sm sm:text-base font-bold text-white">
-              Sem Login • Grátis
+              {t('index.value_prop')}
             </span>
           </div>
         </div>
@@ -142,8 +158,8 @@ const Index = () => {
             <div className="flex items-center gap-3">
               <Keyboard size={28} className="text-black" strokeWidth={2.5} />
               <div className="flex flex-col items-start leading-none">
-                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Modo Rápido</span>
-                <span className="text-xl sm:text-2xl font-black uppercase tracking-tight">Iniciar Chat de Texto</span>
+                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">{t('index.btn_text_label')}</span>
+                <span className="text-xl sm:text-2xl font-black uppercase tracking-tight">{t('index.btn_text')}</span>
               </div>
             </div>
           </Button>
@@ -155,8 +171,8 @@ const Index = () => {
             <div className="flex items-center gap-3">
               <Video size={28} className="text-white" strokeWidth={2.5} />
               <div className="flex flex-col items-start leading-none">
-                <span className="text-[10px] uppercase font-bold text-cyan-100 tracking-wider">Câmera Ligada</span>
-                <span className="text-xl sm:text-2xl font-black uppercase tracking-tight">Iniciar Vídeo Chat</span>
+                <span className="text-[10px] uppercase font-bold text-cyan-100 tracking-wider">{t('index.btn_video_label')}</span>
+                <span className="text-xl sm:text-2xl font-black uppercase tracking-tight">{t('index.btn_video')}</span>
               </div>
             </div>
           </Button>
@@ -166,8 +182,8 @@ const Index = () => {
         {/* Rodapé Legal */}
         <div className="mt-auto mb-6 text-center animate-in fade-in duration-1000 delay-500">
           <p className="text-[10px] text-zinc-600 max-w-xs mx-auto">
-            Você precisa ter 18 anos ou mais para usar o Louuz. <br />
-            <button onClick={() => navigate("/terms")} className="underline hover:text-zinc-400">Leia os termos</button> antes de continuar.
+            {t('age_warning_1')} <br />
+            <button onClick={() => navigate("/terms")} className="underline hover:text-zinc-400">{t('age_warning_2')}</button>{t('age_warning_3')}
           </p>
         </div>
 
