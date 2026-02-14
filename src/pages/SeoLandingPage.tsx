@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Video, Keyboard, Home, Layers, Info, HelpCircle } from "lucide-react";
+import { Home, Layers, Info, HelpCircle } from "lucide-react";
 import { seoPages, type SeoPageData } from "@/data/seoPages";
 
 const SeoLandingPage = () => {
@@ -28,15 +28,6 @@ const SeoLandingPage = () => {
       }
     }
   }, [pageData]);
-
-  const handleEnterChat = (mode: "text" | "video") => {
-    const randomNum = Math.floor(Math.random() * 90000) + 10000;
-    const guestName = `Guest${randomNum}`;
-    const targetPath = mode === "video" ? "/video" : "/text-chat";
-    navigate(targetPath, {
-      state: { name: guestName, gender: "unspecified" },
-    });
-  };
 
   if (!pageData) {
     navigate("/", { replace: true });
@@ -160,42 +151,6 @@ const SeoLandingPage = () => {
             {pageData.intro}
           </p>
         </header>
-
-        {/* CTAs - Botões Shadcn */}
-        <div className="w-full max-w-lg mx-auto space-y-4 mb-16 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
-          <Button
-            onClick={() => handleEnterChat("text")}
-            className="w-full h-16 sm:h-20 rounded-full bg-white text-black hover:bg-gray-100 hover:scale-[1.02] active:scale-95 transition-all duration-200 border-0 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
-          >
-            <div className="flex items-center gap-3">
-              <Keyboard size={28} className="text-black" strokeWidth={2.5} />
-              <div className="flex flex-col items-start leading-none">
-                <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
-                  Quick Mode
-                </span>
-                <span className="text-xl sm:text-2xl font-black uppercase tracking-tight">
-                  Start Text Chat
-                </span>
-              </div>
-            </div>
-          </Button>
-          <Button
-            onClick={() => handleEnterChat("video")}
-            className="w-full h-16 sm:h-20 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:scale-[1.02] active:scale-95 transition-all duration-200 border-0"
-          >
-            <div className="flex items-center gap-3">
-              <Video size={28} className="text-white" strokeWidth={2.5} />
-              <div className="flex flex-col items-start leading-none">
-                <span className="text-[10px] uppercase font-bold text-cyan-100 tracking-wider">
-                  Camera On
-                </span>
-                <span className="text-xl sm:text-2xl font-black uppercase tracking-tight">
-                  Start Video Chat
-                </span>
-              </div>
-            </div>
-          </Button>
-        </div>
 
         {/* Artigos */}
         <article className="space-y-16 border-t border-white/10 pt-16">

@@ -17,6 +17,8 @@ import VideoChat from "./pages/VideoChat";
 import TextChat1v1 from "./pages/TextChat1v1";
 import Chat from "./pages/Chat"; // Chat de sala específica
 
+import ScrollToTop from "./components/ScrollToTop";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -25,6 +27,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/setup" element={<Setup />} />
