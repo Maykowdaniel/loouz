@@ -1,53 +1,13 @@
 import { Link } from "react-router-dom";
-import { CheckCircle, Zap, Globe, MessageCircle, Video, HelpCircle, UserX } from "lucide-react";
+import { CheckCircle, HelpCircle } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const NAV_LINKS = [
-  {
-    to: "/video",
-    icon: Video,
-    label: "Video Chat",
-    desc: "Face-to-face conversations in real time",
-    color: "text-cyan-400",
-    hoverBg: "hover:bg-cyan-500/10",
-    borderHover: "hover:border-cyan-500/30",
-  },
-  {
-    to: "/text-chat",
-    icon: MessageCircle,
-    label: "Text Chat",
-    desc: "Simple, fast, and private messaging",
-    color: "text-emerald-400",
-    hoverBg: "hover:bg-emerald-500/10",
-    borderHover: "hover:border-emerald-500/30",
-  },
-  {
-    to: "/anonymous-video-chat",
-    icon: UserX,
-    label: "Anonymous Chat",
-    desc: "Talk without revealing your identity",
-    color: "text-purple-400",
-    hoverBg: "hover:bg-purple-500/10",
-    borderHover: "hover:border-purple-500/30",
-  },
-  {
-    to: "/omegle-alternative",
-    icon: Zap,
-    label: "Omegle Alternative",
-    desc: "The modern version of classic Omegle chatting",
-    color: "text-amber-400",
-    hoverBg: "hover:bg-amber-500/10",
-    borderHover: "hover:border-amber-500/30",
-  },
-  {
-    to: "/talk-to-strangers",
-    icon: Globe,
-    label: "Talk to Strangers",
-    desc: "Discover people and cultures from around the world",
-    color: "text-pink-400",
-    hoverBg: "hover:bg-pink-500/10",
-    borderHover: "hover:border-pink-500/30",
-  },
+  { to: "/video", label: "Video Chat", desc: "Face-to-face conversations in real time" },
+  { to: "/text-chat", label: "Text Chat", desc: "Simple, fast, and private messaging" },
+  { to: "/anonymous-video-chat", label: "Anonymous Chat", desc: "Talk without revealing your identity" },
+  { to: "/omegle-alternative", label: "Omegle Alternative", desc: "The modern version of classic Omegle chatting" },
+  { to: "/talk-to-strangers", label: "Talk to Strangers", desc: "Discover people and cultures from around the world" },
 ];
 
 const SeoExpansion = () => {
@@ -58,32 +18,6 @@ const SeoExpansion = () => {
     // 2. Mudei a borda para 'border-white/10' para ficar mais sutil
     <div className="w-full bg-transparent text-zinc-300 py-16 px-6 md:px-12 lg:px-24 space-y-24 border-t border-white/10">
       
-      {/* Bloco de Navegação: Choose How You Connect */}
-      <section className="max-w-4xl mx-auto">
-        <div className="bg-[#18181b] rounded-2xl border border-white/10 p-6 md:p-8 overflow-hidden">
-          <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-8">
-            Choose How You Connect on <span className="text-purple-500">Louuz</span>
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {NAV_LINKS.map((item) => (
-              <Link
-                key={item.to}
-                to={item.to}
-                className={`flex items-center gap-4 p-4 rounded-xl border border-white/5 transition-all duration-200 ${item.hoverBg} ${item.borderHover} group`}
-              >
-                <div className={`shrink-0 p-2.5 rounded-lg bg-white/5 ${item.color} group-hover:scale-105 transition-transform`}>
-                  <item.icon size={22} strokeWidth={2} />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <span className="font-bold text-white block truncate">{item.label}</span>
-                  <span className="text-sm text-zinc-500 block truncate">{item.desc}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* SEÇÃO 1: O QUE É */}
       <section className="max-w-4xl mx-auto text-center space-y-6">
         <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
@@ -129,6 +63,30 @@ const SeoExpansion = () => {
             <FaqItem question={t('seo_exp.faq_q1')} answer={t('seo_exp.faq_a1')} />
             <FaqItem question={t('seo_exp.faq_q2')} answer={t('seo_exp.faq_a2')} />
             <FaqItem question={t('seo_exp.faq_q3')} answer={t('seo_exp.faq_a3')} />
+        </div>
+      </section>
+
+      {/* Bloco de Navegação - Choose How You Connect (estilo lista, ao final) */}
+      <section className="max-w-4xl mx-auto">
+        <div className="bg-[#18181b] rounded-2xl border border-white/10 p-6 md:p-8 overflow-hidden text-left">
+          <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-6">
+            Choose How You Connect on <span className="text-purple-500">Louuz</span>
+          </h2>
+          <p className="text-[#d1d5db] text-base leading-relaxed mb-6">
+            {t('seo_exp.connect_intro')}
+          </p>
+          <div className="space-y-4">
+            {NAV_LINKS.map((item) => (
+              <Link
+                key={item.to}
+                to={item.to}
+                className="block hover:opacity-90 transition-opacity"
+              >
+                <span className="font-bold text-[#b764b7]">{item.label}</span>
+                <span className="text-[#d1d5db]">: {item.desc}</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
