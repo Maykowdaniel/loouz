@@ -171,10 +171,10 @@ const SeoLandingPage = () => {
               <Keyboard size={28} className="text-black" strokeWidth={2.5} />
               <div className="flex flex-col items-start leading-none">
                 <span className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">
-                  Modo Rápido
+                  Quick Mode
                 </span>
                 <span className="text-xl sm:text-2xl font-black uppercase tracking-tight">
-                  Iniciar Chat de Texto
+                  Start Text Chat
                 </span>
               </div>
             </div>
@@ -187,10 +187,10 @@ const SeoLandingPage = () => {
               <Video size={28} className="text-white" strokeWidth={2.5} />
               <div className="flex flex-col items-start leading-none">
                 <span className="text-[10px] uppercase font-bold text-cyan-100 tracking-wider">
-                  Câmera Ligada
+                  Camera On
                 </span>
                 <span className="text-xl sm:text-2xl font-black uppercase tracking-tight">
-                  Iniciar Vídeo Chat
+                  Start Video Chat
                 </span>
               </div>
             </div>
@@ -221,7 +221,7 @@ const SeoLandingPage = () => {
         {/* FAQ */}
         <section className="mt-20 space-y-6">
           <h3 className="text-2xl sm:text-3xl font-bold text-white text-center mb-8">
-            Perguntas Frequentes
+            Frequently Asked Questions
           </h3>
           <div className="grid gap-6">
             {pageData.faq.map((item, idx) => (
@@ -251,7 +251,7 @@ const SeoLandingPage = () => {
             variant="outline"
             className="rounded-full border-white/20 text-white hover:bg-white/10"
           >
-            Voltar ao Início
+            Back to Home
           </Button>
         </div>
       </main>

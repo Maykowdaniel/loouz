@@ -21,232 +21,232 @@ export interface SeoPageData {
 export const seoPages: Record<string, SeoPageData> = {
   "/omegle-alternative": {
     path: "/omegle-alternative",
-    title: "Melhor Alternativa ao Omegle em 2025 | Chat Aleatório Seguro e Grátis",
+    title: "Best Omegle Alternative in 2025 | Safe & Free Random Chat",
     description:
-      "Descubra a melhor alternativa ao Omegle para conversar com estranhos. Vídeo chat e chat de texto anônimo, seguro e 100% gratuito. Conecte-se instantaneamente.",
-    h1: "A Melhor Alternativa ao Omegle em 2025",
+      "Discover the best Omegle alternative to talk to strangers. Anonymous video chat and text chat — safe, 100% free, and instant. Connect now.",
+    h1: "The Best Omegle Alternative in 2025",
     intro:
-      "Com o fim do Omegle, milhões de pessoas em todo o mundo buscam uma plataforma confiável para conversas aleatórias. O Louuz oferece a experiência que você procura: conexões instantâneas, anonimato real e uma comunidade ativa.",
+      "With Omegle gone, millions worldwide are searching for a trusted platform for random conversations. Louuz delivers exactly what you need: instant connections, true anonymity, and a thriving community.",
     article: [
       {
-        title: "Por que o Omegle foi encerrado e o que isso significa para você",
-        content: `O Omegle, fundado em 2009, era uma das plataformas de chat aleatório mais populares do mundo. Em novembro de 2023, após mais de uma década de operação, o fundador anunciou o encerramento definitivo do site. As razões incluem desafios legais, preocupações com segurança e o custo crescente de moderação. Para os milhões de usuários que dependiam da plataforma para fazer novas amizades, praticar idiomas ou simplesmente bater um papo casual, essa notícia representou um grande vazio.
+        title: "Why Omegle Shut Down and What It Means for You",
+        content: `Omegle, founded in 2009, was one of the world's most popular random chat platforms. In November 2023, after over a decade of operation, the founder announced the site's permanent closure. The reasons included legal challenges, safety concerns, and the soaring cost of moderation. For the millions of users who relied on the platform to make new friends, practice languages, or simply have a casual chat, the news left a major void.
 
-A boa notícia é que a tecnologia evoluiu e novas plataformas surgiram para preencher esse espaço com recursos ainda melhores. Uma verdadeira alternativa ao Omegle deve oferecer não apenas a mesma funcionalidade básica, mas melhorias significativas em segurança, privacidade e experiência do usuário. O Louuz foi desenvolvido exatamente com esse propósito: honrar o espírito de conexão humana aleatória, mas com as proteções e o design moderno que os usuários merecem no século XXI.
+The good news is that technology has evolved, and new platforms have emerged to fill that space with even better features. A true Omegle alternative must offer not just the same basic functionality but significant improvements in security, privacy, and user experience. Louuz was built for exactly that purpose: to honor the spirit of random human connection while delivering the protections and modern design users deserve in the 21st century.
 
-A transição pode parecer intimidante, mas a maioria dos usuários descobre que adaptar-se a uma nova plataforma leva apenas alguns minutos. O conceito permanece o mesmo: um clique e você está conectado a alguém do outro lado do mundo. A diferença está nos detalhes que tornam cada conversa mais segura, fluida e prazerosa.`,
+The transition may seem daunting, but most users find that adapting to a new platform takes only a few minutes. The concept remains the same: one click and you're connected to someone on the other side of the world. The difference lies in the details that make every conversation safer, smoother, and more enjoyable.`,
       },
       {
-        title: "O que torna uma alternativa ao Omegle verdadeiramente boa",
-        content: `Uma excelente alternativa ao Omegle precisa atender a vários critérios essenciais. Em primeiro lugar, a velocidade de conexão é fundamental. Ninguém quer esperar minutos para ser pareado com alguém. O matching deve ser instantâneo ou próximo disso, permitindo que você teste várias conexões rapidamente até encontrar a pessoa certa.
+        title: "What Makes an Omegle Alternative Truly Great",
+        content: `An excellent Omegle alternative must meet several essential criteria. First and foremost, connection speed is critical. Nobody wants to wait minutes to be matched with someone. Matching should be instant or close to it, letting you try multiple connections quickly until you find the right person.
 
-A privacidade é outro pilar. Você deve poder usar o serviço sem criar uma conta, sem fornecer seu e-mail ou número de telefone. O anonimato real significa que você controla o quanto revela sobre si mesmo. Ao mesmo tempo, a plataforma precisa ter sistemas de denúncia e moderação para proteger os usuários de conteúdo inadequado, mantendo o equilíbrio entre liberdade e segurança.
+Privacy is another cornerstone. You should be able to use the service without creating an account, without providing your email or phone number. Real anonymity means you control how much you reveal about yourself. At the same time, the platform needs robust reporting and moderation systems to protect users from inappropriate content while balancing freedom and safety.
 
-A interface também importa. Uma experiência moderna, responsiva e intuitiva torna cada sessão mais agradável. Suporte a dispositivos móveis é indispensável, já que muitos usuários preferem conversar pelo smartphone. O Louuz atende a todos esses requisitos: conexão em segundos, anonimato completo, denúncias facilitadas e design responsivo que funciona perfeitamente em qualquer dispositivo.`,
+The interface matters too. A modern, responsive, and intuitive experience makes every session more pleasant. Mobile support is essential, since many users prefer to chat from their smartphones. Louuz meets all these requirements: connection in seconds, full anonymity, easy reporting, and a responsive design that works flawlessly on any device.`,
       },
       {
-        title: "Como começar a usar a melhor alternativa ao Omegle hoje",
-        content: `Começar é extremamente simples. Não há cadastro, formulários longos ou verificações complicadas. Basta acessar o site, escolher entre chat de texto ou vídeo chat, e clicar em iniciar. Em poucos segundos, você será conectado a outra pessoa que também está online naquele momento, em qualquer parte do globo.
+        title: "How to Start Using the Best Omegle Alternative Today",
+        content: `Getting started is incredibly simple. No signup, long forms, or complicated verification. Just visit the site, choose between text chat or video chat, and click to start. Within seconds, you'll be connected to another person who's also online at that moment, anywhere in the world.
 
-A liberdade de pular para a próxima pessoa com um único clique permanece. Se a conversa não fluir, não há obrigação de permanecer. Essa agilidade é parte do que torna o chat aleatório tão envolvente: sempre há a possibilidade de conhecer alguém incrível na próxima conexão. Muitos usuários relatam que encontram amigos duradouros, parceiros de prática de idiomas e conversas memoráveis em plataformas modernas como o Louuz.
+The freedom to skip to the next person with a single click remains. If the conversation doesn't flow, there's no obligation to stay. That agility is part of what makes random chat so engaging: there's always the possibility of meeting someone amazing on the next connection. Many users report finding lasting friends, language practice partners, and memorable conversations on modern platforms like Louuz.
 
-A comunidade está crescendo rapidamente. Milhares de pessoas já migraram e estão construindo novas conexões todos os dias. Junte-se a eles e descubra por que tantos consideram o Louuz a verdadeira sucessão espiritual do Omegle, com as melhorias que só o tempo e a tecnologia puderam proporcionar.`,
+The community is growing fast. Thousands have already made the switch and are building new connections every day. Join them and discover why so many consider Louuz the true spiritual successor to Omegle — with the improvements only time and technology could deliver.`,
       },
     ],
     faq: [
       {
-        question: "O Louuz é realmente gratuito como o Omegle era?",
+        question: "Is Louuz really free like Omegle was?",
         answer:
-          "Sim. O Louuz é 100% gratuito para uso. Não há assinaturas premium, paywalls ou recursos bloqueados. Você pode usar chat de texto e vídeo chat sem custo algum.",
+          "Yes. Louuz is 100% free to use. There are no premium subscriptions, paywalls, or locked features. You can use both text chat and video chat at no cost.",
       },
       {
-        question: "Preciso criar uma conta para usar?",
+        question: "Do I need to create an account to use it?",
         answer:
-          "Não. Assim como o Omegle, você pode acessar e começar a conversar imediatamente sem registro. Basta entrar no site e clicar para iniciar.",
+          "No. Just like Omegle, you can access and start chatting immediately without signing up. Simply visit the site and click to begin.",
       },
       {
-        question: "A plataforma é segura para menores?",
+        question: "Is the platform safe for minors?",
         answer:
-          "O Louuz é destinado a maiores de 18 anos. Recomendamos que pais orientem jovens sobre os riscos de plataformas de chat anônimo e supervisionem o uso quando apropriado.",
+          "Louuz is intended for users 18 and older. We recommend that parents educate teens about the risks of anonymous chat platforms and supervise use when appropriate.",
       },
       {
-        question: "Posso usar no celular?",
+        question: "Can I use it on my phone?",
         answer:
-          "Sim. O Louuz é totalmente responsivo e funciona perfeitamente em smartphones e tablets, assim como em computadores.",
+          "Yes. Louuz is fully responsive and works perfectly on smartphones and tablets, as well as computers.",
       },
     ],
   },
 
   "/random-video-chat": {
     path: "/random-video-chat",
-    title: "Random Video Chat | Conecte-se por Vídeo com Estranhos ao Vivo",
+    title: "Random Video Chat | Connect Live with Strangers by Video",
     description:
-      "Random video chat gratuito e instantâneo. Conecte sua câmera e fale com pessoas aleatórias ao vivo. Sem cadastro. Experimente agora.",
-    h1: "Random Video Chat – Conecte-se por Vídeo com o Mundo",
+      "Free and instant random video chat. Turn on your camera and talk to random people live. No signup required. Try it now.",
+    h1: "Random Video Chat – Connect Face-to-Face with the World",
     intro:
-      "O random video chat reinventa a forma como conhecemos pessoas online. Um clique, sua câmera ligada, e você está face a face com alguém em tempo real, em qualquer lugar do planeta. Simples, direto e incrivelmente envolvente.",
+      "Random video chat reimagines how we meet people online. One click, your camera on, and you're face-to-face with someone in real time, anywhere on the planet. Simple, direct, and incredibly engaging.",
     article: [
       {
-        title: "O que é Random Video Chat e por que está tão popular",
-        content: `Random video chat, ou vídeo chat aleatório, é uma modalidade de comunicação online onde você é conectado aleatoriamente a outra pessoa via câmera e microfone em tempo real. Diferente de aplicativos de mensagem onde você escolhe com quem falar, aqui a emoção está na surpresa: você não sabe quem aparecerá na tela até a conexão ser estabelecida. Essa imprevisibilidade cria momentos genuínos de descoberta e conexão humana.
+        title: "What Is Random Video Chat and Why Is It So Popular",
+        content: `Random video chat is an online communication format where you're randomly connected to another person via camera and microphone in real time. Unlike messaging apps where you choose who to talk to, here the thrill is in the surprise: you don't know who will appear on screen until the connection is made. That unpredictability creates genuine moments of discovery and human connection.
 
-A popularidade explodiu nos últimos anos. Durante períodos de isolamento, milhões descobriram o valor de interações humanas casuais, mesmo que virtuais. Praticar um novo idioma com nativos, fazer amizades internacionais, ou simplesmente bater um papo descontraído tornou-se parte da rotina de muitas pessoas. A tecnologia WebRTC permitiu que essa experiência fluísse diretamente no navegador, sem necessidade de instalar programas, tornando o acesso ainda mais democrático.
+Popularity has exploded in recent years. During periods of isolation, millions discovered the value of casual human interaction — even when virtual. Practicing a new language with natives, making international friends, or simply having a relaxed chat became part of many people's routines. WebRTC technology let this experience run directly in the browser, with no software to install, making access more democratic than ever.
 
-O Louuz oferece random video chat com qualidade de áudio e vídeo otimizada. A conexão é rápida, a interface é limpa, e você pode passar para a próxima pessoa com um clique se desejar. A simplicidade é proposital: o foco deve estar na conversa, não em configurar ferramentas complicadas.`,
+Louuz offers random video chat with optimized audio and video quality. Connection is fast, the interface is clean, and you can skip to the next person with one click whenever you want. The simplicity is intentional: the focus should be on the conversation, not on configuring complicated tools.`,
       },
       {
-        title: "Como funciona o random video chat na prática",
-        content: `O fluxo é extremamente intuitivo. Primeiro, você permite o acesso à sua câmera e microfone quando o navegador solicitar. Em seguida, clica no botão para iniciar o vídeo chat. O sistema busca outro usuário online que também está esperando uma conexão e os une em uma sala de vídeo em poucos segundos. A conversa começa imediatamente.
+        title: "How Random Video Chat Works in Practice",
+        content: `The flow is extremely intuitive. First, you allow camera and microphone access when your browser prompts you. Then, click the button to start video chat. The system finds another online user also waiting for a connection and brings you together in a video room within seconds. The conversation begins immediately.
 
-Se você gostar da pessoa, pode continuar falando quanto quiser. Se preferir conhecer outra pessoa, basta clicar em "próximo" e será conectado a alguém novo. Não há limite de trocas nem penalidades. A liberdade total para explorar conexões é parte central da experiência. Muitos usuários passam horas alternando entre conversas curtas e longas, descobrindo culturas, sotaques e histórias fascinantes.
+If you like the person, you can keep talking as long as you want. If you'd rather meet someone else, just click "next" and you'll be connected to someone new. There's no limit on skips and no penalties. Total freedom to explore connections is central to the experience. Many users spend hours switching between short and long conversations, discovering cultures, accents, and fascinating stories.
 
-A privacidade é respeitada. Você não precisa revelar seu nome real, e pode desligar a câmera ou o áudio a qualquer momento. O controle está sempre nas suas mãos. Para quem busca uma experiência mais discreta, o chat de texto também está disponível na mesma plataforma, permitindo alternar entre modos conforme sua preferência.`,
+Privacy is respected. You don't need to reveal your real name, and you can turn off your camera or audio at any time. You're always in control. For those who want a more low-key experience, text chat is also available on the same platform, so you can switch between modes as you prefer.`,
       },
       {
-        title: "Dicas para aproveitar ao máximo seu random video chat",
-        content: `A iluminação adequada faz diferença. Posicione-se de frente para uma fonte de luz para que seu rosto fique bem iluminado. Evite ter luz forte atrás de você, o que cria silhuetas. Um fundo neutro ou arrumado também transmite uma impressão positiva, embora muitos usuários não se importem com isso – a informalidade é parte do charme.
+        title: "Tips to Get the Most Out of Your Random Video Chat",
+        content: `Good lighting makes a difference. Position yourself facing a light source so your face is well lit. Avoid strong light behind you, which creates silhouettes. A neutral or tidy background also leaves a positive impression, though many users don't mind — informality is part of the charm.
 
-Seja respeitoso e autêntico. As melhores conversas acontecem quando as pessoas se sentem à vontade para ser elas mesmas. Respeite os limites dos outros: se alguém não quiser mostrar o rosto ou preferir só falar, aceite com naturalidade. Use o sistema de denúncia se encontrar comportamento inadequado – comunidades saudáveis dependem da participação dos usuários.
+Be respectful and authentic. The best conversations happen when people feel comfortable being themselves. Respect others' boundaries: if someone doesn't want to show their face or prefers just to talk, take it in stride. Use the reporting system if you encounter inappropriate behavior — healthy communities depend on user participation.
 
-Por fim, divirta-se. O random video chat foi feito para conectar pessoas e criar momentos inesperados. Você pode encontrar um professor de idiomas improvisado, um amigo para debater filmes, ou alguém que compartilhe seus hobbies. A cada conexão há uma nova história. Experimente com mente aberta e descubra o que o mundo tem a oferecer.`,
+Finally, have fun. Random video chat was made to connect people and create unexpected moments. You might find an impromptu language teacher, a friend to debate movies with, or someone who shares your hobbies. Every connection holds a new story. Try it with an open mind and discover what the world has to offer.`,
       },
     ],
     faq: [
       {
-        question: "Preciso instalar algum programa para usar o random video chat?",
+        question: "Do I need to install any software to use random video chat?",
         answer:
-          "Não. O Louuz funciona diretamente no navegador. Basta ter um navegador moderno (Chrome, Firefox, Safari ou Edge) com câmera e microfone.",
+          "No. Louuz runs directly in your browser. You just need a modern browser (Chrome, Firefox, Safari, or Edge) with a camera and microphone.",
       },
       {
-        question: "A conexão de vídeo é segura e privada?",
+        question: "Is the video connection secure and private?",
         answer:
-          "As conexões são estabelecidas de forma peer-to-peer quando possível, o que significa que o tráfego de vídeo e áudio flui diretamente entre você e a outra pessoa, sem passar por servidores desnecessários.",
+          "Connections are established peer-to-peer when possible, meaning video and audio traffic flows directly between you and the other person, without passing through unnecessary servers.",
       },
       {
-        question: "Posso usar random video chat no celular?",
+        question: "Can I use random video chat on my phone?",
         answer:
-          "Sim. O Louuz é totalmente responsivo e funciona em smartphones. Você pode usar a câmera frontal ou traseira do seu aparelho.",
+          "Yes. Louuz is fully responsive and works on smartphones. You can use your device's front or rear camera.",
       },
       {
-        question: "Há limite de tempo por conversa?",
+        question: "Is there a time limit per conversation?",
         answer:
-          "Não. Você pode manter a mesma conversa pelo tempo que desejar, ou trocar de pessoa quantas vezes quiser. A escolha é sua.",
+          "No. You can keep the same conversation going as long as you want, or switch to someone new as often as you like. The choice is yours.",
       },
     ],
   },
 
   "/anonymous-video-chat": {
     path: "/anonymous-video-chat",
-    title: "Anonymous Video Chat | Vídeo Chat Anônimo Sem Cadastro",
+    title: "Anonymous Video Chat | No-Signup Video Chat with Strangers",
     description:
-      "Anonymous video chat 100% anônimo. Converse por vídeo sem revelar sua identidade. Sem registro, sem rastreio. Comece agora.",
-    h1: "Anonymous Video Chat – Privacidade Total em Conversas por Vídeo",
+      "100% anonymous video chat. Talk by video without revealing your identity. No registration, no tracking. Start now.",
+    h1: "Anonymous Video Chat – Total Privacy in Video Conversations",
     intro:
-      "O anonymous video chat permite que você se conecte por vídeo com pessoas de todo o mundo sem comprometer sua identidade. Sem cadastro, sem dados pessoais e sem compromissos. Apenas você, sua câmera e o mundo.",
+      "Anonymous video chat lets you connect by video with people worldwide without compromising your identity. No signup, no personal data, no commitments. Just you, your camera, and the world.",
     article: [
       {
-        title: "O que significa anonymous video chat na prática",
-        content: `Anonymous video chat é uma modalidade de comunicação por vídeo onde sua identidade real permanece protegida. Você não precisa criar uma conta, informar e-mail, nome ou telefone. Ao entrar na plataforma, recebe um identificador temporário (como "Guest12345") que dura apenas a sessão. Ninguém pode rastrear suas conversas até você a menos que você escolha revelar informações pessoais.
+        title: "What Anonymous Video Chat Means in Practice",
+        content: `Anonymous video chat is a form of video communication where your real identity stays protected. You don't need to create an account, share an email, name, or phone number. When you join the platform, you receive a temporary identifier (like "Guest12345") that lasts only for the session. No one can trace your conversations back to you unless you choose to share personal information.
 
-Essa camada de privacidade atrai pessoas por diversos motivos. Alguns querem praticar idiomas sem o constrangimento de errar na frente de conhecidos. Outros buscam discutir ideias ou experiências de forma aberta, sem medo de julgamento em seu círculo social. Há quem use para expandir horizontes, conhecendo perspectivas de pessoas de culturas completamente diferentes. O anonimato não significa anomia: a expectativa é de comportamento respeitoso, mas a barreira para participar é drasticamente reduzida.
+This privacy layer attracts people for many reasons. Some want to practice languages without the embarrassment of making mistakes in front of people they know. Others seek to discuss ideas or experiences openly, without fear of judgment from their social circle. Some use it to broaden horizons by hearing perspectives from people in completely different cultures. Anonymity doesn't mean lawlessness: respectful behavior is expected, but the barrier to participate is drastically lowered.
 
-O Louuz foi projetado com a privacidade em primeiro lugar. Não armazenamos transcrições de conversas nem gravamos vídeos. Cada sessão existe apenas no momento em que ela acontece. Quando você fecha a aba ou navega para outro site, não há registro persistente das interações. Essa filosofia garante que você pode explorar conexões humanas com a tranquilidade de que seus dados não estão sendo coletados.`,
+Louuz was designed with privacy first. We don't store conversation transcripts or record videos. Each session exists only in the moment it happens. When you close the tab or navigate away, there's no persistent record of your interactions. That philosophy ensures you can explore human connections with the peace of mind that your data isn't being collected.`,
       },
       {
-        title: "Por que escolher anonymous video chat em vez de redes sociais tradicionais",
-        content: `Nas redes sociais tradicionais, seu perfil está ligado ao seu nome real, fotos e histórico. Cada interação pode ser vista por amigos, familiares ou potenciais empregadores. Essa visibilidade permanente desencoraja muitas pessoas de expressar opiniões, fazer perguntas "bobas" ou simplesmente relaxar em conversas casuais. O anonymous video chat remove essa pressão: você é apenas mais uma pessoa na fila, sem baggage digital.
+        title: "Why Choose Anonymous Video Chat Over Traditional Social Media",
+        content: `On traditional social media, your profile is tied to your real name, photos, and history. Every interaction can be seen by friends, family, or potential employers. That permanent visibility discourages many people from expressing opinions, asking "silly" questions, or simply relaxing in casual conversations. Anonymous video chat removes that pressure: you're just another person in the queue, with no digital baggage.
 
-A ausência de algoritmo também importa. Em plataformas como Instagram ou TikTok, você vê principalmente conteúdo de quem já segue ou que o algoritmo decide mostrar. No anonymous video chat, você encontra pessoas genuinamente aleatórias. Um estudante do Brasil pode conversar com um aposentado na Coreia do Sul. Uma artista na França pode trocar ideias com um desenvolvedor na Índia. A diversidade de encontros é orgânica e imprevisível.
+The absence of an algorithm matters too. On platforms like Instagram or TikTok, you mostly see content from people you already follow or that the algorithm chooses to show you. In anonymous video chat, you meet genuinely random people. A student in Brazil might chat with a retiree in South Korea. An artist in France might swap ideas with a developer in India. The diversity of encounters is organic and unpredictable.
 
-Para quem valoriza tempo e simplicidade, não há necessidade de construir um perfil, acumular seguidores ou manter uma presença constante. Você entra quando quiser, conversa quanto quiser e sai sem deixar rastros. É a forma mais direta de conexão humana que a internet permite.`,
+For those who value time and simplicity, there's no need to build a profile, accumulate followers, or maintain a constant presence. You join when you want, chat as long as you want, and leave without a trace. It's the most direct form of human connection the internet allows.`,
       },
       {
-        title: "Como manter-se seguro em anonymous video chat",
-        content: `O anonimato é uma faca de dois gumes. Protege sua identidade, mas também significa que a outra pessoa pode não ser quem afirma ser. Algumas práticas simples aumentam sua segurança. Nunca compartilhe dados sensíveis: endereço, telefone, CPF, senhas ou informações bancárias. Se alguém pressionar por esses dados, desconfie e passe para a próxima pessoa.
+        title: "How to Stay Safe in Anonymous Video Chat",
+        content: `Anonymity is a double-edged sword. It protects your identity but also means the other person may not be who they claim to be. A few simple practices boost your safety. Never share sensitive data: address, phone number, social security number, passwords, or banking information. If someone pushes for these details, be wary and skip to the next person.
 
-Use o recurso de denúncia. Todas as plataformas sérias, incluindo o Louuz, permitem reportar usuários que violam as regras. Assédio, conteúdo inapropriado ou solicitações suspeitas devem ser denunciados. A moderação existe para proteger a comunidade. Quanto mais usuários participam ativamente da segurança coletiva, melhor o ambiente para todos.
+Use the reporting feature. All serious platforms, including Louuz, allow you to report users who break the rules. Harassment, inappropriate content, or suspicious requests should be reported. Moderation exists to protect the community. The more users actively participate in collective safety, the better the environment for everyone.
 
-Por fim, confie em sua intuição. Se algo em uma conversa parece estranho ou desconfortável, você não precisa continuar. A beleza do anonymous video chat é que você pode encerrar a qualquer momento, sem explicações. Sua segurança e bem-estar vêm sempre em primeiro lugar. Use a ferramenta com consciência e aproveite as conexões positivas que ela oferece.`,
+Finally, trust your gut. If something in a conversation feels off or uncomfortable, you don't have to continue. The beauty of anonymous video chat is that you can end it at any moment, no explanations needed. Your safety and well-being always come first. Use the tool responsibly and enjoy the positive connections it offers.`,
       },
     ],
     faq: [
       {
-        question: "Meus vídeos são gravados ou armazenados?",
+        question: "Are my videos recorded or stored?",
         answer:
-          "Não. O Louuz não grava, armazena ou transmite suas conversas de vídeo para servidores. As conexões são estabelecidas de forma peer-to-peer para máximo de privacidade.",
+          "No. Louuz does not record, store, or transmit your video conversations to servers. Connections are established peer-to-peer for maximum privacy.",
       },
       {
-        question: "Posso ser identificado de alguma forma?",
+        question: "Can I be identified in any way?",
         answer:
-          "Você controla o que revela. Não pedimos dados pessoais. Use um apelido se preferir e evite mostrar documentos ou informações identificáveis no vídeo.",
+          "You control what you reveal. We don't ask for personal data. Use a nickname if you prefer and avoid showing documents or identifiable information on video.",
       },
       {
-        question: "O anonymous video chat é legal?",
+        question: "Is anonymous video chat legal?",
         answer:
-          "Sim. Conversar por vídeo com consentimento mútuo é perfeitamente legal. O Louuz exige que os usuários tenham 18 anos ou mais e sigam as regras de uso.",
+          "Yes. Talking by video with mutual consent is perfectly legal. Louuz requires users to be 18 or older and to follow the rules of use.",
       },
       {
-        question: "Posso denunciar usuários inadequados?",
+        question: "Can I report inappropriate users?",
         answer:
-          "Sim. Há um sistema de denúncia integrado. Use-o sempre que encontrar comportamento que viole os termos de uso. A moderação analisa os reportes.",
+          "Yes. There is an integrated reporting system. Use it whenever you encounter behavior that violates the terms of use. Moderation reviews all reports.",
       },
     ],
   },
 
   "/talk-to-strangers": {
     path: "/talk-to-strangers",
-    title: "Talk to Strangers | Converse com Estranhos Online Grátis",
+    title: "Talk to Strangers | Free Online Chat with Random People",
     description:
-      "Talk to strangers online. Chat de texto e vídeo gratuito com pessoas aleatórias do mundo todo. Sem cadastro. Comece a conversar agora.",
-    h1: "Talk to Strangers – Converse com o Mundo Inteiro",
+      "Talk to strangers online. Free text and video chat with random people from around the world. No signup. Start chatting now.",
+    h1: "Talk to Strangers – Connect with the Whole World",
     intro:
-      "Talk to strangers é mais do que um conceito: é uma experiência. Conectar-se com pessoas que você nunca encontraria no dia a dia, trocar ideias, aprender e se surpreender. Tudo isso a um clique de distância, de forma gratuita e anônima.",
+      "Talk to strangers is more than a concept: it's an experience. Connect with people you'd never meet in everyday life, exchange ideas, learn, and be surprised. All of it one click away, free and anonymous.",
     article: [
       {
-        title: "A arte de conversar com estranhos e por que isso importa",
-        content: `Conversar com estranhos pode parecer intimidante à primeira vista. Desde criança, muitos de nós ouvimos avisos sobre "não falar com estranhos". No contexto online controlado, porém, essa experiência se revela extraordinariamente enriquecedora. Estranhos não têm expectativas prévias sobre você. Não conhecem seu histórico, seus erros ou suas inseguranças. Cada conversa é uma página em branco, uma oportunidade de se mostrar como você é naquele momento.
+        title: "The Art of Talking to Strangers and Why It Matters",
+        content: `Talking to strangers can seem intimidating at first. Many of us grew up hearing warnings about "don't talk to strangers." In a controlled online context, however, this experience proves extraordinarily enriching. Strangers have no preconceived expectations about you. They don't know your history, your mistakes, or your insecurities. Every conversation is a blank page, a chance to show who you are in that moment.
 
-Pesquisas em psicologia sugerem que interações positivas com estranhos aumentam o bem-estar. Um bom papo casual pode elevar o humor por horas. Conhecer perspectivas diferentes expande nossa visão de mundo e nos torna mais empáticos. Para quem vive em bolhas sociais homogêneas, falar com pessoas de outros países, profissões e idades é uma forma poderosa de quebrar preconceitos e ampliar horizontes.
+Psychology research suggests that positive interactions with strangers boost well-being. A good casual chat can lift your mood for hours. Encountering different perspectives expands our view of the world and makes us more empathetic. For those living in homogeneous social bubbles, talking to people from other countries, professions, and ages is a powerful way to break prejudices and broaden horizons.
 
-O Louuz facilita essas conexões. Em segundos, você pode estar trocando mensagens ou vídeo com alguém em outro continente. Pode praticar um idioma, discutir um filme, compartilhar uma receita ou simplesmente ouvir a história de vida de outra pessoa. A diversidade humana é vasta, e há sempre algo novo para descobrir quando nos abrimos ao diálogo com quem não conhecemos.`,
+Louuz makes these connections easy. Within seconds, you can be messaging or video-chatting with someone on another continent. You might practice a language, discuss a movie, share a recipe, or simply listen to someone else's life story. Human diversity is vast, and there's always something new to discover when we open ourselves to dialogue with people we don't know.`,
       },
       {
-        title: "Talk to strangers: dicas para conversas memoráveis",
-        content: `A abertura é fundamental. Uma saudação amigável e uma pergunta aberta tendem a funcionar melhor do que mensagens genéricas ou monossilábicas. "De onde você é?" ou "O que te trouxe aqui hoje?" são ótimos inícios. Mostrar genuíno interesse no outro costuma gerar respostas engajadas e conversas que fluem naturalmente.
+        title: "Talk to Strangers: Tips for Memorable Conversations",
+        content: `The opening matters. A friendly greeting and an open-ended question tend to work better than generic or one-word messages. "Where are you from?" or "What brought you here today?" are great starters. Showing genuine interest in the other person usually sparks engaged responses and conversations that flow naturally.
 
-Seja respeitoso, mas autêntico. Você não precisa fingir ser outra pessoa. A graça do talk to strangers está justamente na autenticidade possível no anonimato. Compartilhe opiniões, conte histórias, faça piadas. Se a química não existir, você pode passar para a próxima pessoa sem culpa. Não há obrigação de continuar uma conversa que não está funcionando.
+Be respectful but authentic. You don't need to pretend to be someone else. The beauty of talk to strangers lies in the authenticity possible with anonymity. Share opinions, tell stories, crack jokes. If the chemistry isn't there, you can move on to the next person with no guilt. There's no obligation to keep a conversation going that isn't working.
 
-Ouça tanto quanto fala. As melhores conversas são uma troca. Pergunte sobre a cultura, o dia a dia, os sonhos da pessoa do outro lado. Muitos usuários relatam que as conversas mais gratificantes acontecem quando ambos investem em conhecer o outro. Um estranho hoje pode ser um amigo amanhã – ou simplesmente uma interação agradável que você levará na memória. Ambas as experiências têm valor.`,
+Listen as much as you speak. The best conversations are a two-way exchange. Ask about their culture, daily life, dreams. Many users report that the most rewarding chats happen when both people invest in getting to know each other. A stranger today might be a friend tomorrow — or simply a pleasant interaction you'll carry in your memory. Both experiences have value.`,
       },
       {
-        title: "Onde e como falar com estranhos online com segurança",
-        content: `A escolha da plataforma faz diferença. Opte por serviços que priorizam privacidade, não coletam dados desnecessários e oferecem ferramentas de denúncia e bloqueio. O Louuz atende a esses critérios: uso gratuito, sem cadastro obrigatório, e sistemas para reportar comportamentos inadequados.
+        title: "Where and How to Talk to Strangers Online Safely",
+        content: `Platform choice makes a difference. Opt for services that prioritize privacy, don't collect unnecessary data, and offer reporting and blocking tools. Louuz meets these criteria: free to use, no mandatory signup, and systems to report inappropriate behavior.
 
-Estabeleça seus próprios limites. Decida com antecedência o que você não compartilhará – endereço, nome completo, fotos íntimas, etc. Manter esses limites firmes protege você independentemente de com quem esteja conversando. A maioria das pessoas está ali por motivos legítimos, mas a prevenção nunca é demais.
+Set your own boundaries. Decide beforehand what you won't share — address, full name, intimate photos, etc. Keeping those boundaries firm protects you regardless of who you're talking to. Most people are there for legitimate reasons, but prevention is never a bad idea.
 
-Por fim, lembre-se de que você está no controle. Se uma conversa tomar um rumo que não te agrada, encerre. Bloqueie ou denuncie se necessário. Falar com estranhos deve ser uma experiência positiva. Com as ferramentas e o mindset corretos, é exatamente isso que ela será. Experimente o Louuz e descubra um mundo de conexões esperando por você.`,
+Finally, remember you're in control. If a conversation takes a turn you don't like, end it. Block or report if needed. Talking to strangers should be a positive experience. With the right tools and mindset, that's exactly what it will be. Try Louuz and discover a world of connections waiting for you.`,
       },
     ],
     faq: [
       {
-        question: "É gratuito falar com estranhos no Louuz?",
+        question: "Is it free to talk to strangers on Louuz?",
         answer:
-          "Sim. O Louuz é 100% gratuito. Não há assinaturas, anúncios intrusivos ou recursos pagos. Chat de texto e vídeo estão disponíveis sem custo.",
+          "Yes. Louuz is 100% free. There are no subscriptions, intrusive ads, or paid features. Text and video chat are available at no cost.",
       },
       {
-        question: "Preciso baixar um app para talk to strangers?",
+        question: "Do I need to download an app to talk to strangers?",
         answer:
-          "Não. O Louuz funciona no navegador. Você pode acessar pelo computador ou celular sem instalar nada. Basta ter conexão com a internet.",
+          "No. Louuz runs in your browser. You can access it from your computer or phone without installing anything. All you need is an internet connection.",
       },
       {
-        question: "Posso escolher o país ou idioma da pessoa com quem falar?",
+        question: "Can I choose the country or language of the person I talk to?",
         answer:
-          "O matching é aleatório, o que significa que você pode encontrar pessoas de qualquer lugar. A diversidade faz parte da experiência. Muitos aproveitam para praticar idiomas com nativos.",
+          "Matching is random, meaning you can meet people from anywhere. Diversity is part of the experience. Many use it to practice languages with native speakers.",
       },
       {
-        question: "O que fazer se encontrar alguém inadequado?",
+        question: "What should I do if I encounter someone inappropriate?",
         answer:
-          "Use o botão de denúncia ou pule para a próxima pessoa. O Louuz tem moderação para manter a comunidade segura. Sua contribuição ao reportar ajuda todos.",
+          "Use the report button or skip to the next person. Louuz has moderation to keep the community safe. Your reports help everyone.",
       },
     ],
   },
