@@ -9,6 +9,7 @@ import Setup from "./pages/Setup";
 import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import SeoLandingPage from "./pages/SeoLandingPage";
+import DynamicSeoPage from "./pages/DynamicSeoPage";
 
 import Lobby from "./pages/lobby"; // Agora é o "Lar"
 import Rooms from "./pages/Rooms"; // <--- IMPORTAR NOVO ARQUIVO "Quartos"
@@ -48,6 +49,7 @@ const App = () => (
           {/* Modos de Conversa */}
           <Route path="/text-chat" element={<TextChat1v1 />} />
           <Route path="/video" element={<VideoChat />} />
+          <Route path="/chat/:slug" element={<DynamicSeoPage />} />
           <Route path="/chat" element={<Chat />} />
 
           <Route path="*" element={<NotFound />} />
