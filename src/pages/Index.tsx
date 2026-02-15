@@ -6,16 +6,15 @@ import {
   Keyboard, 
   Layers, 
   Home, 
-  Zap, // Voltando com o ícone de Raio original
 } from "lucide-react"; 
-import { useTranslation } from "react-i18next";
 import SeoExpansion from "@/components/SeoExpansion";
+
+const PAGE_TITLE = "Louuz — Talk to Strangers | Free Omegle Alternative";
 
 const Index = () => {
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
   
-  // Estado para o contador fake (Começa igual ao print)
+  // Dynamic online counter state
   const [onlineCount, setOnlineCount] = useState(1384);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -27,21 +26,20 @@ const Index = () => {
     }
   }, [isMenuOpen]);
 
-  // Lógica do contador (Sutil e Dinâmico)
+  // Dynamic counter - updates every 4 seconds for organic feel
   useEffect(() => {
-    document.title = t('page_title');
-    document.documentElement.lang = i18n.language;
+    document.title = PAGE_TITLE;
+    document.documentElement.lang = "en";
     
-    // Atualiza o contador a cada 4 segundos para parecer orgânico
     const interval = setInterval(() => {
       setOnlineCount(prev => {
-        const change = Math.floor(Math.random() * 7) - 3; // Varia pouco (-3 a +3)
+        const change = Math.floor(Math.random() * 7) - 3;
         return prev + change;
       });
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [t, i18n.language]);
+  }, []);
 
   const handleEnterChat = (mode: 'text' | 'video') => {
     const randomNum = Math.floor(Math.random() * 90000) + 10000;
@@ -79,13 +77,8 @@ const Index = () => {
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setIsMenuOpen(false)} />
           <div className="relative w-full max-w-md bg-[#18181b] border-t border-white/10 rounded-t-[30px] sm:rounded-[30px] shadow-2xl overflow-hidden p-6 animate-in slide-in-from-bottom duration-300">
              <div className="flex flex-col gap-2">
-                <MenuItem icon={<Home size={20} />} label={t('index.menu_home')} onClick={() => setIsMenuOpen(false)} />
-                <MenuItem icon={<Layers size={20} />} label={t('index.menu_rooms')} onClick={() => navigate("/rooms")} />
-                <div className="border-t border-white/10 my-2"></div>
-                <div className="flex gap-4 justify-center pt-2">
-                    <button onClick={() => i18n.changeLanguage('pt')} className={`text-sm font-bold ${i18n.language === 'pt' ? 'text-cyan-400' : 'text-zinc-500'}`}>PT-BR</button>
-                    <button onClick={() => i18n.changeLanguage('en')} className={`text-sm font-bold ${i18n.language === 'en' ? 'text-cyan-400' : 'text-zinc-500'}`}>ENGLISH</button>
-                </div>
+                <MenuItem icon={<Home size={20} />} label="Home" onClick={() => setIsMenuOpen(false)} />
+                <MenuItem icon={<Layers size={20} />} label="Rooms" onClick={() => navigate("/rooms")} />
              </div>
           </div>
         </div>
@@ -104,9 +97,9 @@ const Index = () => {
         {/* HEADLINE */}
         <div className="text-center mb-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-100">
           <h2 className="text-5xl sm:text-7xl font-black text-white uppercase leading-[0.9] tracking-tighter drop-shadow-lg">
-            CONVERSE COM<br />
+            TALK TO<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-zinc-500">
-              ESTRANHOS
+              STRANGERS
             </span>
           </h2>
         </div>
@@ -127,9 +120,9 @@ const Index = () => {
                     {onlineCount.toLocaleString()}
                 </span>
                 
-                {/* Texto Descritivo */}
+                {/* Counter Label */}
                 <span className="text-emerald-400 font-bold text-sm sm:text-base uppercase tracking-[0.2em] mt-1">
-                    Pessoas Online
+                    Online Users
                 </span>
             </div>
         </div>
@@ -145,8 +138,8 @@ const Index = () => {
             <div className="flex items-center gap-4">
               <Video size={28} className="text-white drop-shadow-md" strokeWidth={3} />
               <div className="flex flex-col items-start leading-none text-shadow">
-                <span className="text-[11px] uppercase font-bold text-cyan-100 tracking-wider mb-0.5">Câmera Ligada</span>
-                <span className="text-2xl sm:text-3xl font-black uppercase tracking-tight italic">Vídeo Chat</span>
+                <span className="text-[11px] uppercase font-bold text-cyan-100 tracking-wider mb-0.5">Cam On</span>
+                <span className="text-2xl sm:text-3xl font-black uppercase tracking-tight italic">START VIDEO CHAT</span>
               </div>
             </div>
           </Button>
@@ -159,8 +152,8 @@ const Index = () => {
             <div className="flex items-center gap-4">
               <Keyboard size={24} className="text-black group-hover:text-cyan-600 transition-colors" strokeWidth={2.5} />
               <div className="flex flex-col items-start leading-none">
-                <span className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider mb-0.5">Modo Rápido</span>
-                <span className="text-xl sm:text-2xl font-black uppercase tracking-tight">Chat de Texto</span>
+                <span className="text-[10px] uppercase font-bold text-zinc-400 tracking-wider mb-0.5">Fast Mode</span>
+                <span className="text-xl sm:text-2xl font-black uppercase tracking-tight">START TEXT CHAT</span>
               </div>
             </div>
           </Button>
@@ -169,11 +162,11 @@ const Index = () => {
 
         </div>
 
-        {/* Rodapé Legal */}
+        {/* Legal Footer */}
         <div className="mt-auto mb-6 text-center animate-in fade-in duration-1000 delay-500 opacity-50 hover:opacity-100 transition-opacity">
           <p className="text-[11px] text-zinc-400">
-            {t('age_warning_1')} <br />
-            <button onClick={() => navigate("/terms")} className="underline hover:text-white transition-colors">{t('age_warning_2')}</button>{t('age_warning_3')}
+            You must be 18+ to use Louuz.{" "}
+            <button onClick={() => navigate("/terms")} className="underline hover:text-white transition-colors">Read the terms</button>{" "}before continuing.
           </p>
         </div>
 
@@ -195,5 +188,5 @@ const MenuItem = ({ icon, label, onClick }: { icon: React.ReactNode, label: stri
     <span className="text-lg font-bold tracking-tight">{label}</span>
   </button>
 );
-//olakkkk
+
 export default Index;
