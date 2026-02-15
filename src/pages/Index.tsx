@@ -8,7 +8,7 @@ import {
   Home, 
 } from "lucide-react"; 
 import SeoExpansion from "@/components/SeoExpansion";
-
+import Footer from "@/components/Footer";
 const PAGE_TITLE = "Louuz — Talk to Strangers | Free Omegle Alternative";
 
 const Index = () => {
@@ -173,6 +173,7 @@ const Index = () => {
       </div>
 
       <SeoExpansion />
+      <Footer />
     </div>
   );
 };
