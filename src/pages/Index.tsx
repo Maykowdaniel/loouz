@@ -195,5 +195,5 @@ const MenuItem = ({ icon, label, onClick }: { icon: React.ReactNode, label: stri
     <span className="text-lg font-bold tracking-tight">{label}</span>
   </button>
 );
-//ola
+//olakkkk
 export default Index;
