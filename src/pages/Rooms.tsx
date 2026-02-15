@@ -2,79 +2,26 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button"; 
-import { useTranslation } from "react-i18next"; 
 import { 
   Globe, Ghost, Heart, LogOut, 
   Flame, TrendingUp, Zap, BookOpen 
 } from "lucide-react";
 
 const roomsData = [
-  {
-    id: "global",
-    nameKey: "rooms.list.global.name",
-    descKey: "rooms.list.global.desc",
-    icon: Globe,
-    color: "text-blue-400",
-    bg: "bg-blue-400/10",
-  },
-  {
-    id: "trending",
-    nameKey: "rooms.list.trending.name",
-    descKey: "rooms.list.trending.desc",
-    icon: Flame, 
-    color: "text-orange-500",
-    bg: "bg-orange-500/10",
-  },
-  {
-    id: "money",
-    nameKey: "rooms.list.money.name",
-    descKey: "rooms.list.money.desc",
-    icon: TrendingUp,
-    color: "text-emerald-400",
-    bg: "bg-emerald-400/10", 
-  },
-  {
-    id: "nofilter",
-    nameKey: "rooms.list.nofilter.name",
-    descKey: "rooms.list.nofilter.desc",
-    icon: Zap,
-    color: "text-yellow-400",
-    bg: "bg-yellow-400/10", 
-  },
-  {
-    id: "stories",
-    nameKey: "rooms.list.stories.name",
-    descKey: "rooms.list.stories.desc",
-    icon: BookOpen,
-    color: "text-violet-400",
-    bg: "bg-violet-400/10", 
-  },
-  {
-    id: "area51",
-    nameKey: "rooms.list.area51.name",
-    descKey: "rooms.list.area51.desc",
-    icon: Ghost, 
-    color: "text-zinc-400",
-    bg: "bg-zinc-400/10",
-  },
-  {
-    id: "love",
-    nameKey: "rooms.list.love.name",
-    descKey: "rooms.list.love.desc",
-    icon: Heart,
-    color: "text-pink-500",
-    bg: "bg-pink-500/10", 
-  },
+  { id: "global", name: "Global Chat", desc: "Talk to everyone.", icon: Globe, color: "text-blue-400", bg: "bg-blue-400/10" },
+  { id: "trending", name: "Trending Topics", desc: "What's viral right now. 🔥", icon: Flame, color: "text-orange-500", bg: "bg-orange-500/10" },
+  { id: "money", name: "Investments & Crypto", desc: "Crypto, stocks, and business talk. 💸", icon: TrendingUp, color: "text-emerald-400", bg: "bg-emerald-400/10" },
+  { id: "nofilter", name: "No Filter / Uncensored", desc: "Free speech and hot takes. ⚡", icon: Zap, color: "text-yellow-400", bg: "bg-yellow-400/10" },
+  { id: "stories", name: "Real Stories", desc: "Confessions and life experiences. 📖", icon: BookOpen, color: "text-violet-400", bg: "bg-violet-400/10" },
+  { id: "area51", name: "Area 51 / Mystery", desc: "Top secret discussions.", icon: Ghost, color: "text-zinc-400", bg: "bg-zinc-400/10" },
+  { id: "love", name: "Love", desc: "Dating, flirting and connections. ❤️", icon: Heart, color: "text-pink-500", bg: "bg-pink-500/10" },
 ];
 
 const Rooms = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation(); 
   
   const state = location.state as { name?: string; gender?: string } | null;
-  
-  // ✅ LÓGICA DE NOME: Se vier do Index sem nome, cria um Guest na hora.
   const [userData] = useState({
       name: state?.name || `Guest${Math.floor(Math.random() * 90000) + 10000}`,
       gender: state?.gender || "unspecified"
@@ -85,7 +32,7 @@ const Rooms = () => {
       state: { 
         name: userData.name, 
         gender: userData.gender,
-        roomName: t(room.nameKey),
+        roomName: room.name,
         roomId: room.id 
       } 
     });
@@ -102,7 +49,7 @@ const Rooms = () => {
             lo<span className="text-accent">uu</span>z
           </h1>
           <p className="text-xs text-muted-foreground">
-            {t('rooms.header_hello', { name: userData.name })}
+            Hello, {userData.name}
           </p>
         </div>
         <Button
@@ -115,13 +62,12 @@ const Rooms = () => {
         </Button>
       </header>
 
-      {/* 2. TÍTULO TRADUZIDO */}
       <div className="px-6 pt-6 pb-2">
         <h2 className="text-xl font-bold text-white uppercase tracking-tight">
-          {t('rooms.title')}
+          PUBLIC ROOMS
         </h2>
         <p className="text-xs text-zinc-400">
-          {t('rooms.subtitle')}
+          Choose a topic and join the conversation
         </p>
       </div>
 
@@ -141,10 +87,10 @@ const Rooms = () => {
 
               <div className="flex-1">
                 <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                  {t(room.nameKey)} 
+                  {room.name}
                 </h3>
                 <p className="text-sm text-muted-foreground line-clamp-1">
-                  {t(room.descKey)}
+                  {room.desc}
                 </p>
               </div>
 

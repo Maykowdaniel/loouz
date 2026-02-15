@@ -2,15 +2,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Video, LogOut } from "lucide-react";
 import BottomNav from "@/components/BottomNav"; 
-import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 
 const Lobby = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation();
   const state = location.state as { name?: string; gender?: string } | null;
-  const userName = state?.name || "Visitante";
+  const userName = state?.name || "Guest";
   const userGender = state?.gender;
 
   // ✅ 1. FAIXA AJUSTADA PARA 1000 - 2000 (IGUAL AO INDEX.TSX)
@@ -44,7 +42,7 @@ const Lobby = () => {
             lo<span className="text-accent">uu</span>z
           </h1>
           <p className="text-xs text-muted-foreground">
-            {t('lobby.welcome', { name: userName })}
+            Hello, {userName}
           </p>
         </div>
         
@@ -68,13 +66,13 @@ const Lobby = () => {
               <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
             </div>
             <span className="text-green-400 font-bold text-sm tracking-wide">
-                {onlineCount.toLocaleString()} {t('connected')}
+                {onlineCount.toLocaleString()} Online
             </span>
         </div>
 
         <div className="text-center mb-2">
-          <h2 className="text-2xl font-bold text-white mb-2">{t('lobby.title')}</h2>
-          <p className="text-zinc-400 text-sm">{t('lobby.subtitle')}</p>
+          <h2 className="text-2xl font-bold text-white mb-2">Meet someone new</h2>
+          <p className="text-zinc-400 text-sm">Choose how you want to connect.</p>
         </div>
 
         {/* Botão Texto 1v1 */}
@@ -86,8 +84,8 @@ const Lobby = () => {
             <MessageCircle size={28} />
           </div>
           <div className="text-left">
-            <h3 className="text-lg font-bold text-white">{t('lobby.text_chat.title')}</h3>
-            <p className="text-xs text-purple-200/70">{t('lobby.text_chat.subtitle')}</p>
+            <h3 className="text-lg font-bold text-white">Text Chat</h3>
+            <p className="text-xs text-purple-200/70">Random • 1v1</p>
           </div>
         </button>
 
@@ -100,8 +98,8 @@ const Lobby = () => {
             <Video size={28} />
           </div>
           <div className="text-left">
-            <h3 className="text-lg font-bold text-white">{t('lobby.video_chat.title')}</h3>
-            <p className="text-xs text-pink-200/70">{t('lobby.video_chat.subtitle')}</p>
+            <h3 className="text-lg font-bold text-white">Video Chat</h3>
+            <p className="text-xs text-pink-200/70">Camera On • 1v1</p>
           </div>
         </button>
       </div>

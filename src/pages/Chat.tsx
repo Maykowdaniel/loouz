@@ -29,9 +29,9 @@ const Chat = () => {
     gender?: "male" | "female" | "unspecified"
   } | null;
 
-  const userName = state?.name || "Visitante";
+  const userName = state?.name || "Guest";
   const userGender = state?.gender || "unspecified"; 
-  const roomName = state?.roomName || "Bate-papo Vooz";
+  const roomName = state?.roomName || "Global Chat";
   const roomId = state?.roomId || "global";
 
   const [messages, setMessages] = useState<Message[]>([]);
@@ -138,7 +138,7 @@ const Chat = () => {
         </div>
         <Button onClick={handleLogout} variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10 hover:text-destructive">
           <LogOut className="mr-1 h-3.5 w-3.5" />
-          <span className="hidden sm:inline">Sair</span>
+          <span className="hidden sm:inline">Leave</span>
         </Button>
       </header>
 
@@ -149,8 +149,8 @@ const Chat = () => {
               <div className="mb-4 rounded-full bg-primary/10 p-4 ring-1 ring-primary/20">
                 <Send className="h-6 w-6 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground">Bem-vindo à sala {roomName}!</h3>
-              <p className="max-w-xs text-sm text-muted-foreground">Envie uma mensagem para começar.</p>
+              <h3 className="text-lg font-semibold text-foreground">Welcome to {roomName}!</h3>
+              <p className="max-w-xs text-sm text-muted-foreground">Send a message to get started.</p>
             </div>
           )}
 
@@ -175,7 +175,7 @@ const Chat = () => {
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage()}
-            placeholder={`Conversar em ${roomName}...`}
+            placeholder={`Chat in ${roomName}...`}
             disabled={!isConnected}
             maxLength={500}
             className="flex-1 border-border bg-background/50 text-foreground placeholder:text-muted-foreground focus-visible:ring-primary"

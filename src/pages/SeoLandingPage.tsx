@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Home, Layers, Info, HelpCircle } from "lucide-react";
 import { seoPages, type SeoPageData } from "@/data/seoPages";
@@ -10,7 +9,6 @@ const SITE_URL = "https://www.louuz.com";
 const SeoLandingPage = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const { t, i18n } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const pageData: SeoPageData | undefined = seoPages[pathname];
@@ -107,7 +105,7 @@ const SeoLandingPage = () => {
             <div className="p-4 flex flex-col gap-1">
               <MenuItem
                 icon={<Home size={20} />}
-                label={t('index.menu_home')}
+                label="Home"
                 onClick={() => {
                   setIsMenuOpen(false);
                   navigate("/");
@@ -116,7 +114,7 @@ const SeoLandingPage = () => {
               <div className="h-px bg-zinc-800 my-1 mx-4" />
               <MenuItem
                 icon={<Layers size={20} />}
-                label={t('index.menu_rooms')}
+                label="Rooms"
                 onClick={() => {
                   setIsMenuOpen(false);
                   navigate("/rooms");
@@ -125,28 +123,12 @@ const SeoLandingPage = () => {
               <div className="h-px bg-zinc-800 my-1 mx-4" />
               <MenuItem
                 icon={<Info size={20} />}
-                label={t('index.menu_about')}
+                label="About"
                 onClick={() => {
                   setIsMenuOpen(false);
                   navigate("/about");
                 }}
               />
-              <div className="h-px bg-zinc-800 my-1 mx-4" />
-              <div className="px-4 py-2 flex items-center gap-2">
-                <span className="text-xs text-zinc-500 uppercase tracking-wider">{t('index.menu_lang')}</span>
-                <button
-                  onClick={() => { i18n.changeLanguage('pt'); setIsMenuOpen(false); }}
-                  className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${i18n.language === 'pt' ? 'bg-purple-500/30 text-purple-300' : 'text-zinc-400 hover:bg-white/5'}`}
-                >
-                  PT
-                </button>
-                <button
-                  onClick={() => { i18n.changeLanguage('en'); setIsMenuOpen(false); }}
-                  className={`px-3 py-1 rounded-lg text-sm font-medium transition-colors ${i18n.language === 'en' ? 'bg-purple-500/30 text-purple-300' : 'text-zinc-400 hover:bg-white/5'}`}
-                >
-                  EN
-                </button>
-              </div>
             </div>
             <div className="h-6" />
           </div>
@@ -162,7 +144,7 @@ const SeoLandingPage = () => {
           role="button"
           tabIndex={0}
           onKeyDown={(e) => e.key === "Enter" && navigate("/")}
-          aria-label="Louuz - Voltar ao início"
+          aria-label="Louuz - Back to home"
         >
           <span className="text-5xl sm:text-6xl font-black tracking-tighter text-white drop-shadow-2xl">
             lo<span className="text-cyan-400">uu</span>z
@@ -205,7 +187,7 @@ const SeoLandingPage = () => {
         {/* FAQ */}
         <section className="mt-20 space-y-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-white text-center mb-8">
-            {t('seo_exp.faq_title')}
+            Frequently Asked Questions
           </h2>
           <div className="grid gap-6">
             {pageData.faq.map((item, idx) => (
@@ -235,7 +217,7 @@ const SeoLandingPage = () => {
             variant="outline"
             className="rounded-full border-white/20 text-white hover:bg-white/10"
           >
-            {t('back_to_home')}
+            Back to Home
           </Button>
         </div>
       </main>

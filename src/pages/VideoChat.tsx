@@ -4,25 +4,27 @@ import { Button } from "@/components/ui/button";
 import { SkipForward, Flag, LogOut } from "lucide-react"; 
 import SimplePeer from "simple-peer";
 import { io, Socket } from "socket.io-client";
-import { useTranslation } from "react-i18next";
 
 const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
+
+const STATUS_SEARCHING = "Searching for someone...";
+const STATUS_CONNECTING = "Connecting...";
+const STATUS_CONNECTED = "Connected!";
+const STATUS_ERROR = "Error: Allow camera access.";
 
 const VideoChat = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation();
-  
   const state = location.state as { name?: string; gender?: string } | null;
   const userData = {
-      name: state?.name || "Visitante",
+      name: state?.name || "Guest",
       gender: state?.gender || "unspecified"
   };
 
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [partnerStream, setPartnerStream] = useState<MediaStream | null>(null);
   const [callAccepted, setCallAccepted] = useState(false);
-  const [status, setStatus] = useState(t('video_chat.video_searching')); 
+  const [status, setStatus] = useState(STATUS_SEARCHING); 
   
   const myVideo = useRef<HTMLVideoElement>(null);
   const partnerVideo = useRef<HTMLVideoElement>(null);
@@ -55,7 +57,7 @@ const VideoChat = () => {
         });
 
         socket.current.on("start_call", ({ socketId, initiator }) => {
-          setStatus(t('video_chat.video_connecting'));
+          setStatus(STATUS_CONNECTING);
           currentPartnerId.current = socketId; 
 
           if (peerRef.current) {
@@ -75,7 +77,7 @@ const VideoChat = () => {
           peer.on("stream", (remoteStream) => {
             setPartnerStream(remoteStream);
             setCallAccepted(true);
-            setStatus(t('video_chat.connected'));
+            setStatus(STATUS_CONNECTED);
           });
 
           peer.on("error", (err) => {
@@ -89,8 +91,8 @@ const VideoChat = () => {
         socket.current.emit("join_video_queue");
       })
       .catch((err) => {
-        console.error("Erro de mídia:", err);
-        setStatus(t('video_chat.video_error'));
+        console.error("Media error:", err);
+        setStatus(STATUS_ERROR);
       });
 
     return () => {
@@ -98,7 +100,7 @@ const VideoChat = () => {
       if(stream) stream.getTracks().forEach(track => track.stop());
       if(peerRef.current) peerRef.current.destroy();
     };
-  }, [t]);
+  }, []);
 
   const handleSkip = () => {
     if (peerRef.current) {
@@ -108,7 +110,7 @@ const VideoChat = () => {
     setCallAccepted(false);
     setPartnerStream(null);
     currentPartnerId.current = null;
-    setStatus(t('video_chat.video_searching'));
+    setStatus(STATUS_SEARCHING);
     
     setTimeout(() => {
       socket.current?.emit("join_video_queue");
@@ -123,8 +125,7 @@ const VideoChat = () => {
 
   const handleReport = () => {
     if (!currentPartnerId.current) return;
-    console.log(`REPORTANDO USUÁRIO: ${currentPartnerId.current}`);
-    alert(t('Usuário reportado com sucesso!')); 
+    alert("User reported successfully!");
     handleSkip();
   };
 
@@ -176,7 +177,7 @@ const VideoChat = () => {
             className="w-full h-full object-cover mirror-mode" 
           />
           <div className="absolute bottom-4 left-4 bg-black/60 px-3 py-1 rounded-md text-xs font-bold uppercase tracking-widest text-white/80 backdrop-blur-sm">
-            {t('video_chat.you')}
+            You
           </div>
         </div>
       </div>

@@ -6,8 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ArrowLeft, Send, SkipForward, User, Loader2 } from "lucide-react";
 import { io, Socket } from "socket.io-client";
 import ChatMessage from "@/components/ChatMessage"; 
-import SidePanel from "@/components/SidePanel"; 
-import { useTranslation } from "react-i18next";
+import SidePanel from "@/components/SidePanel";
 
 const getFlagEmoji = (countryCode: string) => {
   if (!countryCode || countryCode === "UN") return "🌐";
@@ -21,14 +20,13 @@ const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 const TextChat1v1 = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation();
   
   const [messages, setMessages] = useState<any[]>([]);
   const [input, setInput] = useState("");
-  const [status, setStatus] = useState(t('text_chat.status_searching')); 
+  const [status, setStatus] = useState("Looking for a stranger..."); 
   const [isPaired, setIsPaired] = useState(false);
   
-  const [partnerName, setPartnerName] = useState(t('text_chat.partner_default'));
+  const [partnerName, setPartnerName] = useState("Stranger");
   const [partnerCountry, setPartnerCountry] = useState("UN");
   const [partnerGender, setPartnerGender] = useState<"male" | "female" | "unspecified">("unspecified");
   
@@ -92,7 +90,7 @@ const TextChat1v1 = () => {
       const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
       audio.play().catch(() => {});
 
-      setStatus(t('text_chat.status_connected'));
+      setStatus("Connected");
       setIsPaired(true); 
       setPartnerName(data.partnerName);
       setPartnerCountry(data.partnerCountry);
@@ -101,7 +99,7 @@ const TextChat1v1 = () => {
       setMessages([{ 
         id: "sys-start", 
         sender: "system", 
-        text: t('text_chat.welcome_msg', { name: data.partnerName }) 
+        text: `You are talking to ${data.partnerName}. Say hi!` 
       }]);
     });
 
@@ -113,11 +111,11 @@ const TextChat1v1 = () => {
       setMessages((prev) => [...prev, { 
         id: "sys-disc", 
         sender: "system", 
-        text: t('text_chat.partner_left', { name: partnerName }) 
+        text: `${partnerName} has disconnected.` 
       }]);
       setIsPaired(false); 
-      setTimer(10); // Reinicia o timer para a nova busca
-      setStatus(t('text_chat.status_disconnected'));
+      setTimer(10);
+      setStatus("Partner logged out. Click skip.");
     });
 
     socketRef.current.emit("join_text_queue", { 
@@ -126,7 +124,7 @@ const TextChat1v1 = () => {
     });
 
     return () => { socketRef.current?.disconnect(); };
-  }, [t, partnerName, userData]);
+  }, [partnerName, userData]);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -147,9 +145,9 @@ const TextChat1v1 = () => {
   const handleSkip = () => {
     setMessages([]);
     setIsPaired(false);
-    setTimer(10); // Reset do timer ao pular manualmente
-    setStatus(t('text_chat.status_searching'));
-    setPartnerName(t('text_chat.partner_default'));
+    setTimer(10);
+    setStatus("Looking for a stranger...");
+    setPartnerName("Stranger");
     setPartnerCountry("UN");
     setPartnerGender("unspecified");
     
@@ -176,7 +174,7 @@ const TextChat1v1 = () => {
             </div>
             <div>
                 <div className="flex items-center gap-2 font-bold text-foreground">
-                {isPaired ? partnerName : "Procurando..."} 
+                {isPaired ? partnerName : "Searching..."} 
                 <span className="text-lg">{getFlagEmoji(partnerCountry)}</span>
                 </div>
                 <div className="text-[10px] font-mono uppercase tracking-wider text-green-500 flex items-center gap-2">
@@ -191,14 +189,13 @@ const TextChat1v1 = () => {
              {!isPaired && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm z-20 text-center px-6">
                     <Loader2 className="w-12 h-12 text-purple-500 animate-spin mb-4" />
-                    <h3 className="text-xl font-bold text-white mb-2">Procurando alguém...</h3>
+                    <h3 className="text-xl font-bold text-white mb-2">Searching for someone...</h3>
                     
-                    {/* CRONÓMETRO EM VERMELHO */}
                     <div className="text-5xl font-black text-red-600 font-mono mt-2 drop-shadow-[0_0_10px_rgba(220,38,38,0.5)]">
                         00:{timer < 10 ? `0${timer}` : timer}
                     </div>
                     <p className="text-xs text-zinc-500 mt-4 max-w-xs">
-                        Aguarde enquanto conectamos você com o mundo.
+                        Connecting you to the world...
                     </p>
                 </div>
             )}
@@ -229,13 +226,13 @@ const TextChat1v1 = () => {
         <div className="border-t border-border bg-card/60 px-4 py-3 backdrop-blur-sm">
             <div className="max-w-3xl mx-auto flex gap-2">
             <Button onClick={handleSkip} variant="secondary" className="rounded-full px-4 border border-border">
-                <SkipForward size={18} className="mr-2" /> {t('text_chat.btn_skip')}
+                <SkipForward size={18} className="mr-2" /> Skip
             </Button>
             <Input 
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                placeholder={t('text_chat.placeholder')}
+                placeholder="Type your message..."
                 className="flex-1 border-border bg-background/50 text-foreground rounded-full focus-visible:ring-primary"
                 disabled={!isPaired}
             />

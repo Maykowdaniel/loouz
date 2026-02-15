@@ -89,7 +89,7 @@ const MiniGlobalChat = ({ username }: { username: string }) => {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                placeholder="Diga oi pro mundo..."
+                placeholder="Say hi to the world..."
                 className="h-8 text-xs bg-zinc-800 border-none focus-visible:ring-1 focus-visible:ring-purple-500"
             />
             <Button size="icon" className="h-8 w-8 bg-purple-600 hover:bg-purple-700" onClick={handleSend}>
