@@ -20,7 +20,7 @@ const Index = () => {
   const navigate = useNavigate();
   
   // Dynamic online counter state
-  const [onlineCount, setOnlineCount] = useState(10);
+  const [onlineCount, setOnlineCount] = useState(70);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // --- NOVOS ESTADOS PARA O FILTRO ---
