@@ -41,9 +41,9 @@ const BOT_SCRIPTS = [
         name: 'Stranger',
         gender: 'male',
         messages: [
-            { text: "m", delay: 1500 },
-            { text: "u?", delay: 3000 },
-            { text: "from?", delay: 2500 }
+            { text: "m", delay: 3500 },
+            { text: "u?", delay: 5000 },
+            { text: "from?", delay: 5600 }
             // Fim do script -> Bot desconecta
         ]
     },
@@ -54,9 +54,9 @@ const BOT_SCRIPTS = [
         name: 'Stranger',
         gender: 'female',
         messages: [
-            { text: "hi", delay: 1000 },
-            { text: "wanna chat?", delay: 2500 },
-            { text: "cool", delay: 2000 }
+            { text: "hi", delay: 2000 },
+            { text: "wanna chat?", delay: 5500 },
+            { text: "cool", delay: 8000 }
         ]
     },
     // TIPO C: O "Insta Skipper" (O que pula - Realismo Puro)
@@ -66,7 +66,7 @@ const BOT_SCRIPTS = [
         name: 'Stranger',
         gender: 'male',
         messages: [
-            { text: "oi", delay: 1000 },
+            { text: "oi", delay: 4000 },
             // Desconecta logo depois
         ]
     },
@@ -77,9 +77,9 @@ const BOT_SCRIPTS = [
         name: 'Stranger',
         gender: 'male',
         messages: [
-            { text: "hello", delay: 1200 },
-            { text: "where form?", delay: 2000 }, // Erro proposital
-            { text: "bobs and vegana", delay: 4000 } // Meme clássico (opcional, gera risada)
+            { text: "hello", delay: 4200 },
+            { text: "where form?", delay: 5000 }, // Erro proposital
+            { text: "bobs and vegana", delay: 9000 } // Meme clássico (opcional, gera risada)
         ]
     }
 ];
