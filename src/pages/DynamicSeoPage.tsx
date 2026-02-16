@@ -278,6 +278,12 @@ const DynamicSeoPage = () => {
           <h1 className="text-2xl sm:text-3xl font-bold text-white uppercase tracking-wider opacity-80">
             {niche.emoji} {niche.h1}
           </h1>
+          {niche.nativeH1 && (
+            <h2 className="text-xl sm:text-2xl font-semibold text-cyan-400 mt-2">
+              {niche.nativeH1}
+            </h2>
+          )}
+
           <p className="text-lg text-zinc-400 max-w-2xl mx-auto mt-4 leading-relaxed">
             {intro}
           </p>

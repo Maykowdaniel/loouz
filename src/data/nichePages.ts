@@ -12,6 +12,8 @@ export interface NichePageData {
   keywords: string[];
   /** Short name for placeholders (e.g. "Brazil", "Anime") */
   displayName: string;
+  /** (Novo) Frase na língua nativa para SEO Local */
+  nativeH1?: string; 
 }
 
 /** Placeholders used in templates: [Niche], [NicheName], [Emoji] */
@@ -19,11 +21,12 @@ export const NICHE_PAGES: NichePageData[] = [
   {
     slug: "brazil",
     title: "Brazil Video Chat | Talk to Brazilians Online - Louuz",
-    description: "Free video and text chat with people from Brazil. Meet Brazilians online, practice Portuguese, make friends. No login required.",
+    description: "Free video and text chat with people from Brazil. Meet Brazilians online. Chat em vídeo com brasileiros grátis. No login required.",
     h1: "Brazil Chat – Connect with Brazilians Worldwide",
+    nativeH1: "Chat de Vídeo com Brasileiros", // <--- O Google ama isso
     emoji: "🇧🇷",
     displayName: "Brazil",
-    keywords: ["brazil chat", "brazilian video chat", "chat with brazilians", "brazil random chat", "omgele brasil"],
+    keywords: ["brazil chat", "brazilian video chat", "chat with brazilians", "videochamada aleatoria", "conversar com estranhos"],
   },
   {
     slug: "usa",
@@ -37,20 +40,22 @@ export const NICHE_PAGES: NichePageData[] = [
   {
     slug: "germany",
     title: "Germany Video Chat | Chat with Germans - Louuz",
-    description: "Free video chat with people from Germany. Meet Germans, practice German, make international friends. No registration.",
+    description: "Free video chat with people from Germany. Meet Germans, practice German. Kostenloser Videochat auf Deutsch. No registration.",
     h1: "Germany Chat – Connect with Germans Online",
+    nativeH1: "Kostenloser Videochat mit Fremden", // <--- Alemão Nativo
     emoji: "🇩🇪",
     displayName: "Germany",
-    keywords: ["germany chat", "german video chat", "chat with germans", "deutschland chat", "omegle germany"],
+    keywords: ["germany chat", "german video chat", "chat with germans", "deutschland chat", "videochat mit fremden"],
   },
   {
     slug: "india",
     title: "India Video Chat | Chat with Indians Online - Louuz",
-    description: "Free random video and text chat with people from India. Meet Indians, make friends, practice Hindi or English. No login.",
+    description: "Free random video and text chat with people from India. Meet Indians, make friends. Free Indian Video Chat. No login.",
     h1: "India Chat – Talk to Indians Worldwide",
+    nativeH1: "Free Random Video Chat India",
     emoji: "🇮🇳",
     displayName: "India",
-    keywords: ["india chat", "indian video chat", "chat with indians", "india random chat", "omegle india"],
+    keywords: ["india chat", "indian video chat", "chat with indians", "india random chat", "desi video chat"],
   },
   {
     slug: "anime",

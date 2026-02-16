@@ -1,7 +1,7 @@
 import React from 'react';
 import { Instagram } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+//import { useTranslation } from 'react-i18next';
 
 // --- Ícones SVG Personalizados para Marcas ---
 const DiscordIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -42,7 +42,7 @@ const SocialLink = ({ href, icon, label }: { href: string; icon: React.ReactNode
 );
 
 const Footer = () => {
-  const { t } = useTranslation();
+  //const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -79,6 +79,19 @@ const Footer = () => {
           />
         </div>
 
+<div className="w-full border-t border-white/5 my-6"></div>
+        
+        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-zinc-600 uppercase tracking-widest font-semibold text-center max-w-4xl mx-auto">
+          <Link to="/chat/brazil" className="hover:text-zinc-400 transition-colors">Chat Brazil</Link>
+          <Link to="/chat/usa" className="hover:text-zinc-400 transition-colors">USA Video Chat</Link>
+          <Link to="/chat/germany" className="hover:text-zinc-400 transition-colors">German Chat</Link>
+          <Link to="/chat/india" className="hover:text-zinc-400 transition-colors">India Chat</Link>
+          <Link to="/chat/anime" className="hover:text-zinc-400 transition-colors">Anime Talk</Link>
+          <Link to="/chat/lgbtq" className="hover:text-zinc-400 transition-colors">LGBTQ+ Chat</Link>
+          <Link to="/chat/gamers" className="hover:text-zinc-400 transition-colors">Gamer Chat</Link>
+          <Link to="/chat/dating" className="hover:text-zinc-400 transition-colors">Dating Chat</Link>
+        </div>
+        
         {/* Links Legais e Copyright */}
         <div className="text-center">
           <p className="text-zinc-500 text-sm mb-2">
