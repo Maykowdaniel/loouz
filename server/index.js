@@ -3,9 +3,16 @@ const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const geoip = require('geoip-lite');
+const OpenAI = require("openai"); // Biblioteca instalada
 
 const app = express();
 app.use(cors());
+
+// Configuração do OpenRouter (Dolphin)
+const openai = new OpenAI({
+    baseURL: "https://openrouter.ai/api/v1",
+    apiKey: process.env.OPENROUTER_API_KEY || "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",
+});
 
 const server = http.createServer(app);
 
@@ -16,75 +23,89 @@ const io = new Server(server, {
     }
 });
 
-// --- MEMÓRIA DO SERVIDOR ---
-const activeUsers = new Map(); // Para salas de grupo
-
-// Memória de Vídeo
-let videoQueue = [];
-const videoPairs = new Map();
-
-// Memória de Texto 1v1
+// MEMÓRIA
 let textQueue = [];
-const textPairs = new Map(); // Mapeia socket.id -> { partnerId, roomId, isBot }
-const textUsers = new Map(); // Guarda nome/país
+const textPairs = new Map();
+const textUsers = new Map(); // socket.id -> { name, interests, country }
+const botConversations = new Map(); // socket.id -> [history]
 
-// --- LÓGICA DOS BOTS (NOVO) ---
-const BOT_TIMEOUT_MS = 1000; // Tempo de espera até o bot entrar (9 segundos)
-const userBotTimers = new Map(); // Guarda os timers de espera de cada usuário
+const BOT_TIMEOUT_MS = 3000; // 3 segundos para parecer rápido
+const userBotTimers = new Map();
 
-// Roteiros dos Bots (Scripts)
-const BOT_SCRIPTS = [
-    // TIPO A: O "Clássico Omegle" (Curto e Grosso)
-    {
-        type: 'classic',
-        country: 'US',
-        name: 'Stranger',
-        gender: 'male',
-        messages: [
-            { text: "m", delay: 3500 },
-            { text: "u?", delay: 5000 },
-            { text: "from?", delay: 5600 }
-            // Fim do script -> Bot desconecta
-        ]
-    },
-    // TIPO B: O "Curioso Rápido" (Amigável)
-    {
-        type: 'friendly',
-        country: 'GB',
-        name: 'Stranger',
-        gender: 'female',
-        messages: [
-            { text: "hi", delay: 2000 },
-            { text: "wanna chat?", delay: 5500 },
-            { text: "cool", delay: 8000 }
-        ]
-    },
-    // TIPO C: O "Insta Skipper" (O que pula - Realismo Puro)
-    {
-        type: 'skipper',
-        country: 'BR',
-        name: 'Stranger',
-        gender: 'male',
-        messages: [
-            { text: "oi", delay: 4000 },
-            // Desconecta logo depois
-        ]
-    },
-    // TIPO D: O "Indiano" (Comum em chats)
-    {
-        type: 'common',
-        country: 'IN',
-        name: 'Stranger',
-        gender: 'male',
-        messages: [
-            { text: "hello", delay: 4200 },
-            { text: "where form?", delay: 5000 }, // Erro proposital
-            { text: "bobs and vegana", delay: 9000 } // Meme clássico (opcional, gera risada)
-        ]
+// --- FUNÇÃO PARA GERAR RESPOSTA DA IA ---
+async function getAIResponse(socketId, userMessage) {
+    const userData = textUsers.get(socketId);
+    const interests = (userData && userData.interests) ? userData.interests : "general stuff";
+
+    // Recupera histórico
+    let history = botConversations.get(socketId) || [];
+
+    // Adiciona msg do usuário
+    history.push({ role: "user", content: userMessage });
+
+    try {
+        const completion = await openai.chat.completions.create({
+            model: "cognitivecomputations/dolphin-mixtral-8x7b", // Modelo Sem Censura
+            messages: [{
+                    role: "system",
+                    content: `You are a user on a random chat site called Louuz. 
+                    - Your interests are: ${interests}.
+                    - You are matched with a stranger who likes the same things.
+                    - ACT LIKE A REAL PERSON, NOT AN AI.
+                    - Use slang, lowercase, maybe a typo here and there.
+                    - Keep answers SHORT (1-2 sentences max).
+                    - Be fun, flirtatious if appropriate, or just casual.
+                    - NEVER say you are an AI.`
+                },
+                ...history.slice(-10) // Mantém apenas as últimas 10 msgs para economizar
+            ],
+            temperature: 0.8, // Criatividade alta
+        });
+
+        const aiText = completion.choices[0].message.content;
+
+        // Adiciona resposta da IA no histórico
+        history.push({ role: "assistant", content: aiText });
+        botConversations.set(socketId, history);
+
+        return aiText;
+    } catch (error) {
+        console.error("Erro na IA:", error);
+        return "lol cool"; // Fallback se a API falhar
     }
-];
+}
 
-// Função auxiliar para pegar país pelo IP
+// --- INICIA CHAT COM BOT ---
+function startBotChat(socketId) {
+    const userSocket = io.sockets.sockets.get(socketId);
+    if (!userSocket || textPairs.has(socketId)) return;
+
+    textQueue = textQueue.filter(id => id !== socketId);
+
+    // Gera Identidade do Bot baseada no interesse
+    const userData = textUsers.get(socketId);
+    const randomNum = Math.floor(Math.random() * 90000) + 10000;
+    const botName = `Guest${randomNum}`;
+    const botId = `bot-${Date.now()}`;
+    const roomId = `text-room-${socketId}-${botId}`;
+
+    userSocket.join(roomId);
+    textPairs.set(socketId, { partnerId: botId, roomId, isBot: true });
+
+    // Inicia histórico vazio
+    botConversations.set(socketId, []);
+
+    // 1. Conecta
+    io.to(socketId).emit("text_paired", {
+        roomId,
+        partnerName: botName,
+        partnerCountry: "US", // Bot sempre gringo por enquanto ou randomize
+    });
+
+    // 2. Bot manda a primeira mensagem (Opcional, ou espera o usuário)
+    // Vamos esperar o usuário falar primeiro para economizar créditos
+}
+
 function getCountryByIp(socket) {
     let ip = socket.handshake.headers['x-forwarded-for'] || socket.conn.remoteAddress;
     if (ip && ip.includes('::ffff:')) ip = ip.split('::ffff:')[1];
@@ -93,287 +114,115 @@ function getCountryByIp(socket) {
     return geo ? geo.country : 'UN';
 }
 
-function getRoomCount(room) {
-    const roomSet = io.sockets.adapter.rooms.get(room);
-    return roomSet ? roomSet.size : 0;
-}
-
-// --- FUNÇÃO PARA INICIAR UM BOT ---
-function startBotChat(socketId) {
-    const userSocket = io.sockets.sockets.get(socketId);
-    if (!userSocket || textPairs.has(socketId)) return; // Se já estiver pareado, cancela
-
-    // Remove o usuário da fila real (para ele não dar match com humano enquanto fala com bot)
-    textQueue = textQueue.filter(id => id !== socketId);
-
-    // Escolhe um script aleatório
-    const script = BOT_SCRIPTS[Math.floor(Math.random() * BOT_SCRIPTS.length)];
-    const botId = `bot-${Date.now()}`;
-    const roomId = `text-room-${socketId}-${botId}`;
-
-    userSocket.join(roomId);
-
-    // Salva que o usuário está falando com um bot
-    textPairs.set(socketId, { partnerId: botId, roomId, isBot: true });
-
-    // 1. Avisa o usuário que conectou
-    io.to(socketId).emit("text_paired", {
-        roomId,
-        partnerName: "Stranger",
-        partnerCountry: script.country,
-        partnerGender: script.gender
-    });
-
-    // 2. Executa o Roteiro do Bot
-    let currentTime = 0;
-
-    script.messages.forEach((msg, index) => {
-        currentTime += msg.delay;
-
-        setTimeout(() => {
-            // Verifica se o usuário AINDA está conectado e falando com ESSE bot
-            const pair = textPairs.get(socketId);
-            if (pair && pair.partnerId === botId) {
-                // Simula envio de mensagem
-                io.to(roomId).emit("receive_1v1_message", {
-                    text: msg.text,
-                    sender: "stranger", // Frontend vai interpretar como estranho
-                    senderId: botId,
-                    timestamp: Date.now(),
-                    id: `msg-${Date.now()}-${index}`
-                });
-
-                // Se for a última mensagem, desconecta o bot depois de um tempinho
-                if (index === script.messages.length - 1) {
-                    setTimeout(() => {
-                        const currentPair = textPairs.get(socketId);
-                        if (currentPair && currentPair.partnerId === botId) {
-                            io.to(socketId).emit("text_partner_disconnected");
-                            textPairs.delete(socketId);
-                            userSocket.leave(roomId);
-                        }
-                    }, 2000); // Espera 2s depois da última fala para sair
-                }
-            }
-        }, currentTime);
-    });
-}
-
-
 io.on("connection", (socket) => {
-    console.log(`Socket conectado: ${socket.id}`);
-
-    // --- 1. CHAT DE SALAS (QUARTOS) ---
-    socket.on("join_room", (data) => {
-        const { room, username, gender, country } = data;
-        socket.join(room);
-        const finalCountry = country || getCountryByIp(socket);
-
-        // Limpa filas anteriores
-        videoQueue = videoQueue.filter(id => id !== socket.id);
-        textQueue = textQueue.filter(id => id !== socket.id);
-        if (userBotTimers.has(socket.id)) {
-            clearTimeout(userBotTimers.get(socket.id));
-            userBotTimers.delete(socket.id);
-        }
-
-        activeUsers.set(socket.id, { username, room, country: finalCountry, gender });
-
-        socket.to(room).emit("receive_message", {
-            id: "sys-" + Date.now(),
-            sender: "system",
-            senderName: "Sistema",
-            text: `${username} entrou na sala.`,
-            timestamp: Date.now()
-        });
-        const count = getRoomCount(room);
-        io.to(room).emit("room_meta", { count });
-    });
-
-    socket.on("send_message", (data) => {
-        const user = activeUsers.get(socket.id);
-        const senderCountry = user ? user.country : 'UN';
-        const senderGender = user ? user.gender : 'unspecified';
-        const messageWithDetails = {...data, senderCountry, senderGender };
-        io.to(data.room).emit("receive_message", messageWithDetails);
-    });
-
-    // --- 2. VÍDEO 1v1 (SEM BOTS POR ENQUANTO) ---
-    socket.on("join_video_queue", () => {
-        // Limpa timer de bot se existir
-        if (userBotTimers.has(socket.id)) {
-            clearTimeout(userBotTimers.get(socket.id));
-            userBotTimers.delete(socket.id);
-        }
-
-        const currentPartner = videoPairs.get(socket.id);
-        if (currentPartner) {
-            io.to(currentPartner).emit("partner_disconnected");
-            videoPairs.delete(currentPartner);
-            videoPairs.delete(socket.id);
-        }
-        videoQueue = videoQueue.filter(id => id !== socket.id);
-
-        if (videoQueue.length > 0) {
-            const partnerSocketId = videoQueue.shift();
-            if (partnerSocketId === socket.id) {
-                videoQueue.push(socket.id);
-                return;
-            }
-            videoPairs.set(socket.id, partnerSocketId);
-            videoPairs.set(partnerSocketId, socket.id);
-            io.to(partnerSocketId).emit("start_call", { socketId: socket.id, initiator: true });
-            io.to(socket.id).emit("start_call", { socketId: partnerSocketId, initiator: false });
-        } else {
-            videoQueue.push(socket.id);
-        }
-    });
-
-    socket.on("send_signal", ({ userToCall, signalData }) => {
-        io.to(userToCall).emit("receive_signal", { signal: signalData });
-    });
-
-    // --- 3. CHAT DE TEXTO 1V1 (AGORA COM BOTS) ---
+    // CHAT 1v1 COM IA
     socket.on("join_text_queue", (userData) => {
-        const { name, gender, country } = userData || { name: "Estranho", gender: "unspecified" };
-        const finalCountry = country || getCountryByIp(socket);
-        textUsers.set(socket.id, { name, gender, country: finalCountry });
+        const { name, interests } = userData || {};
+        const country = getCountryByIp(socket);
 
-        // 1. Limpa conexões antigas (se estava falando com alguém ou bot)
-        const oldPair = textPairs.get(socket.id);
-        if (oldPair) {
-            if (!oldPair.isBot) {
-                io.to(oldPair.partnerId).emit("text_partner_disconnected");
-                textPairs.delete(oldPair.partnerId);
-            }
+        // Salva interesses
+        textUsers.set(socket.id, { name, interests, country });
+
+        // Limpezas
+        if (textPairs.has(socket.id)) {
+            const old = textPairs.get(socket.id);
+            if (!old.isBot) io.to(old.partnerId).emit("text_partner_disconnected");
             textPairs.delete(socket.id);
         }
+        if (userBotTimers.has(socket.id)) clearTimeout(userBotTimers.get(socket.id));
 
-        // 2. Limpa timer anterior se o usuário clicou "Skip" rápido
-        if (userBotTimers.has(socket.id)) {
-            clearTimeout(userBotTimers.get(socket.id));
-            userBotTimers.delete(socket.id);
-        }
-
-        // 3. Tenta parear com HUMANO primeiro
+        // Tenta Humano (Lógica simplificada: se tiver fila, conecta. Se não, Bot)
         textQueue = textQueue.filter(id => id !== socket.id);
 
         if (textQueue.length > 0) {
-            // ACHOU HUMANO!
+            // MATCH HUMANO (Raro no início)
             const partnerId = textQueue.shift();
 
-            // Se o parceiro estava esperando um bot, CANCELA o bot dele
+            // Remove o timer do bot do parceiro se existir
             if (userBotTimers.has(partnerId)) {
                 clearTimeout(userBotTimers.get(partnerId));
                 userBotTimers.delete(partnerId);
             }
 
-            if (partnerId === socket.id) {
-                textQueue.push(socket.id);
-                return;
-            }
-
             const roomId = `text-room-${socket.id}-${partnerId}`;
             socket.join(roomId);
-            const partnerSocket = io.sockets.sockets.get(partnerId);
-            if (partnerSocket) partnerSocket.join(roomId);
+
+            const pSocket = io.sockets.sockets.get(partnerId);
+            if (pSocket) pSocket.join(roomId);
 
             textPairs.set(socket.id, { partnerId, roomId, isBot: false });
             textPairs.set(partnerId, { partnerId: socket.id, roomId, isBot: false });
 
+            const pData = textUsers.get(partnerId);
             const myData = textUsers.get(socket.id);
-            const partnerData = textUsers.get(partnerId);
 
+            // CORREÇÃO AQUI: Usando ternário simples em vez de ?.
             io.to(socket.id).emit("text_paired", {
                 roomId,
-                partnerName: (partnerData && partnerData.name) ? partnerData.name : "Estranho",
-                partnerCountry: (partnerData && partnerData.country) ? partnerData.country : "UN"
+                partnerName: pData ? pData.name : "Stranger",
+                partnerCountry: pData ? pData.country : "UN"
             });
+
             io.to(partnerId).emit("text_paired", {
                 roomId,
-                partnerName: (myData && myData.name) ? myData.name : "Estranho",
-                partnerCountry: (myData && myData.country) ? myData.country : "UN"
+                partnerName: myData ? myData.name : "Stranger",
+                partnerCountry: myData ? myData.country : "UN"
             });
 
         } else {
-            // NÃO ACHOU HUMANO -> Entra na fila e inicia o timer do BOT
+            // SEM HUMANO -> BOT EM 3 SEGUNDOS
             textQueue.push(socket.id);
-
-            console.log(`Usuário ${socket.id} na fila. Bot em ${BOT_TIMEOUT_MS/1000}s...`);
-
-            const botTimer = setTimeout(() => {
-                // Se o timer estourar, inicia o bot
-                startBotChat(socket.id);
-            }, BOT_TIMEOUT_MS);
-
-            userBotTimers.set(socket.id, botTimer);
+            const timer = setTimeout(() => startBotChat(socket.id), BOT_TIMEOUT_MS);
+            userBotTimers.set(socket.id, timer);
         }
     });
 
-    socket.on("send_1v1_message", (data) => {
+    socket.on("send_1v1_message", async(data) => {
         const pair = textPairs.get(socket.id);
         if (pair) {
-            // Se for bot, a mensagem vai pro limbo (mas podemos logar se quiser)
-            // Se for humano, vai pro roomId
             if (!pair.isBot) {
+                // Humano para Humano
                 io.to(pair.roomId).emit("receive_1v1_message", {
                     ...data,
                     sender: socket.id === data.senderId ? "user" : "stranger"
                 });
             } else {
-                // Se estou falando com bot, só eu vejo minha mensagem (o frontend já mostra)
-                // O bot não precisa "receber" nada, ele só segue o script
-                socket.emit("receive_1v1_message", {
-                    ...data,
-                    sender: "user" // Garante que apareça como "Você" no chat
-                });
+                // Humano para IA
+                // 1. Mostra a msg do usuário
+                socket.emit("receive_1v1_message", {...data, sender: "user" });
+
+                // 2. Simula "Stranger is typing..." (Opcional)
+                // 3. Gera resposta da IA
+                // Delay artificial para parecer humano digitando
+                setTimeout(async() => {
+                    const aiReply = await getAIResponse(socket.id, data.text);
+                    socket.emit("receive_1v1_message", {
+                        text: aiReply,
+                        sender: "stranger",
+                        senderId: "bot",
+                        timestamp: Date.now(),
+                        id: `msg-${Date.now()}`
+                    });
+                }, 1500 + Math.random() * 2000); // 1.5s a 3.5s de delay
             }
         }
     });
 
-    // --- 4. DESCONEXÃO ---
     socket.on("disconnect", () => {
         textUsers.delete(socket.id);
-
-        // Limpa timer de bot
-        if (userBotTimers.has(socket.id)) {
-            clearTimeout(userBotTimers.get(socket.id));
-            userBotTimers.delete(socket.id);
-        }
-
-        videoQueue = videoQueue.filter(id => id !== socket.id);
-        const vidPartner = videoPairs.get(socket.id);
-        if (vidPartner) {
-            io.to(vidPartner).emit("partner_disconnected");
-            videoPairs.delete(vidPartner);
-            videoPairs.delete(socket.id);
-        }
-
+        botConversations.delete(socket.id); // Limpa memória da IA
+        if (userBotTimers.has(socket.id)) clearTimeout(userBotTimers.get(socket.id));
         textQueue = textQueue.filter(id => id !== socket.id);
-        const txtPair = textPairs.get(socket.id);
-        if (txtPair) {
-            if (!txtPair.isBot) {
-                io.to(txtPair.partnerId).emit("text_partner_disconnected");
-                textPairs.delete(txtPair.partnerId);
-            }
-            textPairs.delete(socket.id);
-        }
 
-        const user = activeUsers.get(socket.id);
-        if (user) {
-            io.to(user.room).emit("receive_message", {
-                id: "sys-" + Date.now(),
-                sender: "system",
-                senderName: "Sistema",
-                text: `${user.username} saiu da sala.`,
-                timestamp: Date.now()
-            });
-            activeUsers.delete(socket.id);
+        const pair = textPairs.get(socket.id);
+        if (pair) {
+            if (!pair.isBot) io.to(pair.partnerId).emit("text_partner_disconnected");
+            textPairs.delete(socket.id);
         }
     });
 });
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-    console.log(`SERVIDOR ARRUAMADO RODANDO NA PORTA ${PORT}`);
+    console.log(`SERVER COM IA RODANDO NA PORTA ${PORT}`);
 });

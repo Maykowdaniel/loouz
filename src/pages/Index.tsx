@@ -20,7 +20,7 @@ const Index = () => {
   const navigate = useNavigate();
   
   // Dynamic online counter state
-  const [onlineCount, setOnlineCount] = useState(Math.floor(Math.random() * 70) + 80);
+  const [onlineCount, setOnlineCount] = useState(Math.floor(Math.random() * 7000) + 80);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // --- NOVOS ESTADOS PARA O FILTRO ---
@@ -233,18 +233,19 @@ const Index = () => {
         <div className="w-full max-w-lg space-y-4 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300 pb-12">
 
           <Button
-            onClick={() => handleInitialClick('video')} // <--- Alterado aqui
+            onClick={() => handleInitialClick('text')} // <--- Alterado aqui
             className="w-full h-16 sm:h-[80px] rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-0 shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] active:scale-95 transition-all duration-200 animate-pulse-scale"
           >
             <div className="flex items-center gap-4">
               <Video size={28} className="text-white drop-shadow-md" strokeWidth={3} />
               <div className="flex flex-col items-start leading-none text-shadow">
-                <span className="text-[11px] uppercase font-bold text-cyan-100 tracking-wider mb-0.5">Cam On</span>
-                <span className="text-2xl sm:text-3xl font-black uppercase tracking-tight italic">START VIDEO CHAT</span>
+                <span className="text-[11px] uppercase font-bold text-cyan-100 tracking-wider mb-0.5">Fast Mode</span>
+                <span className="text-2xl sm:text-3xl font-black uppercase tracking-tight italic">START CHAT TEXT</span>
               </div>
             </div>
           </Button>
           
+          {/*/
           <Button
             onClick={() => handleInitialClick('text')} // <--- Alterado aqui
             className="w-full h-16 sm:h-[72px] rounded-full bg-white text-black hover:bg-zinc-200 hover:scale-[1.01] active:scale-95 transition-all duration-200 border-0 shadow-lg group"
@@ -257,7 +258,7 @@ const Index = () => {
               </div>
             </div>
           </Button>
-
+*/}
         </div>
 
         {/* Legal Footer (O que você queria manter) */}
