@@ -22,8 +22,8 @@ const SEARCH_PHRASES = [
 ];
 
 // Troque para LOCALHOST se estiver testando no PC
-//const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
- const SOCKET_URL = "http://localhost:3001";
+const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
+ //const SOCKET_URL = "http://localhost:3001";
 
 const TextChat1v1 = () => {
   const navigate = useNavigate();
