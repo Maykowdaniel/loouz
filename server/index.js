@@ -38,6 +38,7 @@ const BOT_SCRIPTS = [
     {
         type: 'classic',
         country: 'US',
+        name: 'Stranger',
         gender: 'male',
         messages: [
             { text: "m", delay: 3500 },
@@ -50,6 +51,7 @@ const BOT_SCRIPTS = [
     {
         type: 'friendly',
         country: 'GB',
+        name: 'Stranger',
         gender: 'female',
         messages: [
             { text: "hi", delay: 2000 },
@@ -61,6 +63,7 @@ const BOT_SCRIPTS = [
     {
         type: 'skipper',
         country: 'BR',
+        name: 'Stranger',
         gender: 'male',
         messages: [
             { text: "oi", delay: 4000 },
@@ -71,11 +74,12 @@ const BOT_SCRIPTS = [
     {
         type: 'common',
         country: 'IN',
+        name: 'Stranger',
         gender: 'male',
         messages: [
             { text: "hello", delay: 4200 },
             { text: "where form?", delay: 5000 }, // Erro proposital
-            { text: "bobs and vegana", delay: 9000 } // Meme clássico
+            { text: "bobs and vegana", delay: 9000 } // Meme clássico (opcional, gera risada)
         ]
     }
 ];
@@ -104,12 +108,6 @@ function startBotChat(socketId) {
 
     // Escolhe um script aleatório
     const script = BOT_SCRIPTS[Math.floor(Math.random() * BOT_SCRIPTS.length)];
-
-    // --- MUDANÇA AQUI: GERA NOME ALEATÓRIO PARA O BOT ---
-    const randomNum = Math.floor(Math.random() * 90000) + 10000;
-    const botName = `Guest${randomNum}`;
-    // ----------------------------------------------------
-
     const botId = `bot-${Date.now()}`;
     const roomId = `text-room-${socketId}-${botId}`;
 
@@ -118,10 +116,10 @@ function startBotChat(socketId) {
     // Salva que o usuário está falando com um bot
     textPairs.set(socketId, { partnerId: botId, roomId, isBot: true });
 
-    // 1. Avisa o usuário que conectou (USANDO O NOME ALEATÓRIO)
+    // 1. Avisa o usuário que conectou
     io.to(socketId).emit("text_paired", {
         roomId,
-        partnerName: botName, // <--- Aqui usamos a variável botName
+        partnerName: "Stranger",
         partnerCountry: script.country,
         partnerGender: script.gender
     });
@@ -296,7 +294,7 @@ io.on("connection", (socket) => {
                 partnerName: (myData && myData.name) ? myData.name : "Estranho",
                 partnerCountry: (myData && myData.country) ? myData.country : "UN"
             });
-            //jnewjfr
+
         } else {
             // NÃO ACHOU HUMANO -> Entra na fila e inicia o timer do BOT
             textQueue.push(socket.id);
@@ -315,15 +313,16 @@ io.on("connection", (socket) => {
     socket.on("send_1v1_message", (data) => {
         const pair = textPairs.get(socket.id);
         if (pair) {
-            // Se for bot, devolvemos a mensagem para o usuário (echo)
-            // Se for humano, a mensagem vai normal para a sala
+            // Se for bot, a mensagem vai pro limbo (mas podemos logar se quiser)
+            // Se for humano, vai pro roomId
             if (!pair.isBot) {
                 io.to(pair.roomId).emit("receive_1v1_message", {
                     ...data,
                     sender: socket.id === data.senderId ? "user" : "stranger"
                 });
             } else {
-                // CORREÇÃO: Se for Bot, ecoa a mensagem de volta para o usuário vê-la
+                // Se estou falando com bot, só eu vejo minha mensagem (o frontend já mostra)
+                // O bot não precisa "receber" nada, ele só segue o script
                 socket.emit("receive_1v1_message", {
                     ...data,
                     sender: "user" // Garante que apareça como "Você" no chat
