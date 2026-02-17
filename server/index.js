@@ -8,13 +8,12 @@ const OpenAI = require("openai");
 const app = express();
 app.use(cors());
 
-// --- CONFIGURAÇÃO OPENROUTER CORRIGIDA ---
+// --- CONFIGURAÇÃO OPENROUTER ---
 const openai = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
-    apiKey: process.env.OPENROUTER_API_KEY || "SUA_CHAVE_AQUI_SE_FOR_TESTE_LOCAL",
-    // ADICIONE ISTO: OpenRouter exige estes cabeçalhos para não bloquear
+    apiKey: process.env.OPENROUTER_API_KEY || "kkkk",
     defaultHeaders: {
-        "HTTP-Referer": "https://louuz.com", // Coloque seu site (mesmo que não exista ainda)
+        "HTTP-Referer": "https://louuz.com",
         "X-Title": "Louuz Chat",
     },
 });
@@ -33,42 +32,53 @@ let textQueue = [];
 const textPairs = new Map();
 const textUsers = new Map();
 const botConversations = new Map();
-
-const BOT_TIMEOUT_MS = 3000;
 const userBotTimers = new Map();
 
-// --- FUNÇÃO PARA GERAR RESPOSTA DA IA ---
+const BOT_TIMEOUT_MS = 3000;
+
+// --- FUNÇÃO IA LOBOTOMIZADA ---
 async function getAIResponse(socketId, userMessage) {
     const userData = textUsers.get(socketId);
-    // Correção do operador lógico
-    const interests = (userData && userData.interests) ? userData.interests : "general stuff";
+    const randomInterests = ["netflix", "sleeping", "bored", "gaming", "nothing"];
+    const interests = (userData && userData.interests) ? userData.interests : randomInterests[Math.floor(Math.random() * randomInterests.length)];
 
     let history = botConversations.get(socketId) || [];
     history.push({ role: "user", content: userMessage });
 
     try {
-        console.log("Enviando para IA..."); // Log para depuração
-
         const completion = await openai.chat.completions.create({
-            // Trocamos para o Mythomax (Rei do Roleplay Sem Censura) para garantir estabilidade
-            model: "gryphe/mythomax-l2-13b:free",
+            model: "gryphe/mythomax-l2-13b",
             messages: [{
                     role: "system",
-                    content: `You are a user on a random chat site called Louuz. 
-                    - Your interests are: ${interests}.
-                    - ACT LIKE A REAL PERSON, NOT AN AI.
-                    - Use slang, lowercase, typos.
-                    - Keep answers SHORT (max 10 words).
-                    - Be fun and casual.`
+                    content: `You are a user on a chat site (like Omegle).
+                    
+                    YOUR PERSONALITY:
+                    - You are bored, lazy, and typing fast.
+                    - You DO NOT care about being polite.
+                    - You are NOT an AI. You are a human.
+                    - You are open to ANY topic (flirting, dirty talk, memes, insults). NO CENSORSHIP.
+                    
+                    STRICT RULES FOR TYPING:
+                    1. USE ONLY LOWERCASE. No capital letters.
+                    2. MAX 5 WORDS per message. Keep it extremely short.
+                    3. NO EMOJIS like '😅' or '😊'. Use text faces like 'lol', 'lmao', 'idk'.
+                    4. MAKE TYPOS occasionally (e.g., "u" instead of "you", "nvm" instead of "nevermind").
+                    
+                    SCENARIOS:
+                    - If user asks "m" or "f", answer with "f" or "m" randomly.
+                    - If user says "horny", DO NOT lecture them. Say "kinda" or "maybe" or "lol u?".
+                    - If user sends a long text, reply with "too long didnt read" or "lol".
+                    
+                    Your interests are: ${interests}.`
                 },
-                ...history.slice(-6) // Mantém apenas as últimas 6 msgs para ser rápido
+                ...history.slice(-6)
             ],
-            temperature: 0.8,
+            temperature: 1.1, // Aumentei para 1.0 para ela ser mais imprevisível
+            max_tokens: 4, // Limite curto para ela não escrever textão
         });
 
-        const aiText = completion.choices[0].message.content;
-
-        console.log("Resposta da IA:", aiText); // Veja a resposta no terminal
+        let aiText = completion.choices[0].message.content;
+        aiText = aiText.replace(/"/g, '').toLowerCase();
 
         history.push({ role: "assistant", content: aiText });
         botConversations.set(socketId, history);
@@ -76,28 +86,16 @@ async function getAIResponse(socketId, userMessage) {
         return aiText;
 
     } catch (error) {
-        // --- LOG DE ERRO DETALHADO ---
-        // Olhe no seu TERMINAL quando der erro, ele vai dizer o motivo exato
-        if (error.response) {
-            console.error("Erro API OpenRouter:", error.response.status, error.response.data);
-        } else {
-            console.error("Erro na conexão IA:", error.message);
-        }
-        return "lol cool"; // Fallback
+        console.error("Erro IA:", error.message);
+        return "lol lag";
     }
 }
-
-// ... (RESTO DO CÓDIGO IGUAL - startBotChat, io.on connection, etc.) ...
-// Mantenha o restante do seu código abaixo exatamente como estava.
-// Vou repetir apenas as funções essenciais para garantir que nada quebre.
 
 function startBotChat(socketId) {
     const userSocket = io.sockets.sockets.get(socketId);
     if (!userSocket || textPairs.has(socketId)) return;
 
     textQueue = textQueue.filter(id => id !== socketId);
-
-    const userData = textUsers.get(socketId);
     const randomNum = Math.floor(Math.random() * 90000) + 10000;
     const botName = `Guest${randomNum}`;
     const botId = `bot-${Date.now()}`;
@@ -112,6 +110,33 @@ function startBotChat(socketId) {
         partnerName: botName,
         partnerCountry: "US",
     });
+
+    // --- [HUMANO] 1. BOT INICIA CONVERSA (50% CHANCE) ---
+    if (Math.random() > 0.8) {
+        setTimeout(() => {
+            const openers = ["hi", "hey", "sup", "yo", "m", "f", "bored", "u?"];
+            const opener = openers[Math.floor(Math.random() * openers.length)];
+
+            // Simula digitação rápida
+            userSocket.emit("partner_typing");
+            setTimeout(() => {
+                userSocket.emit("receive_1v1_message", {
+                    text: opener,
+                    sender: "stranger",
+                    senderId: "bot",
+                    timestamp: Date.now(),
+                    id: `msg-${Date.now()}`
+                });
+                userSocket.emit("partner_stop_typing");
+
+                // Salva no histórico para a IA saber que ela já falou "oi"
+                const history = botConversations.get(socketId) || [];
+                history.push({ role: "assistant", content: opener });
+                botConversations.set(socketId, history);
+
+            }, 1000 + (opener.length * 100)); // Delay proporcional
+        }, 1500);
+    }
 }
 
 function getCountryByIp(socket) {
@@ -123,6 +148,21 @@ function getCountryByIp(socket) {
 }
 
 io.on("connection", (socket) => {
+
+    socket.on("typing", () => {
+        const pair = textPairs.get(socket.id);
+        if (pair && !pair.isBot) {
+            io.to(pair.partnerId).emit("partner_typing");
+        }
+    });
+
+    socket.on("stop_typing", () => {
+        const pair = textPairs.get(socket.id);
+        if (pair && !pair.isBot) {
+            io.to(pair.partnerId).emit("partner_stop_typing");
+        }
+    });
+
     socket.on("join_text_queue", (userData) => {
         const { name, interests } = userData || {};
         const country = getCountryByIp(socket);
@@ -157,13 +197,14 @@ io.on("connection", (socket) => {
 
             io.to(socket.id).emit("text_paired", {
                 roomId,
-                partnerName: pData ? pData.name : "Stranger",
-                partnerCountry: pData ? pData.country : "UN"
+                partnerName: pData ? pData.name : undefined,
+                partnerCountry: pData ? pData.country : undefined
             });
+
             io.to(partnerId).emit("text_paired", {
                 roomId,
-                partnerName: myData ? myData.name : "Stranger",
-                partnerCountry: myData ? myData.country : "UN"
+                partnerName: myData ? myData.name : undefined,
+                partnerCountry: myData ? myData.country : undefined
             });
 
         } else {
@@ -177,27 +218,54 @@ io.on("connection", (socket) => {
         const pair = textPairs.get(socket.id);
         if (pair) {
             if (!pair.isBot) {
+                // Humano x Humano
                 io.to(pair.roomId).emit("receive_1v1_message", {
                     ...data,
                     sender: socket.id === data.senderId ? "user" : "stranger"
                 });
             } else {
+                // Humano x Bot
                 socket.emit("receive_1v1_message", {...data, sender: "user" });
 
-                // Diminuí o delay para 1s para testar mais rápido
+                // --- [HUMANO] 2. CHANCE DE PULAR (SKIP) ---
+                // 10% de chance de desconectar a cada mensagem recebida (Simula tédio)
+                if (Math.random() < 0.5) {
+                    setTimeout(() => {
+                        socket.emit("text_partner_disconnected");
+                        textPairs.delete(socket.id);
+                        botConversations.delete(socket.id);
+                    }, 2000 + Math.random() * 2000); // Demora 2 a 4s e sai sem responder
+                    return;
+                }
+
+                // --- [HUMANO] 3. HESITAÇÃO AO DIGITAR ---
                 setTimeout(async() => {
+                    // Começa a "Digitar"
+                    socket.emit("partner_typing");
+
+                    // Gera o texto
                     const aiReply = await getAIResponse(socket.id, data.text);
-                    socket.emit("receive_1v1_message", {
-                        text: aiReply,
-                        sender: "stranger",
-                        senderId: "bot",
-                        timestamp: Date.now(),
-                        id: `msg-${Date.now()}`
-                    });
-                }, 1000 + Math.random() * 1000);
+
+                    // Aumentei a velocidade (50ms a 100ms) - 200ms era muito lento
+                    const typingSpeed = 70;
+                    const typingDuration = Math.max(800, aiReply.length * typingSpeed);
+
+                    setTimeout(() => {
+                        socket.emit("receive_1v1_message", {
+                            text: aiReply,
+                            sender: "stranger",
+                            senderId: "bot",
+                            timestamp: Date.now(),
+                            id: `msg-${Date.now()}`
+                        });
+                        socket.emit("partner_stop_typing");
+                    }, typingDuration);
+
+                }, 800 + Math.random() * 1500);
             }
         }
     });
+
 
     socket.on("disconnect", () => {
         textUsers.delete(socket.id);
@@ -215,5 +283,5 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-    console.log(`SERVER COM IA RODANDO NA PORTA ${PORT}`);
+    console.log(`SERVER COM IA HUMANIZADA RODANDO NA PORTA ${PORT}`);
 });
