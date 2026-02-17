@@ -229,7 +229,7 @@ io.on("connection", (socket) => {
 
                 // --- [HUMANO] 2. CHANCE DE PULAR (SKIP) ---
                 // 10% de chance de desconectar a cada mensagem recebida (Simula tédio)
-                if (Math.random() < 0.5) {
+                if (Math.random() < 0.1) {
                     setTimeout(() => {
                         socket.emit("text_partner_disconnected");
                         textPairs.delete(socket.id);
