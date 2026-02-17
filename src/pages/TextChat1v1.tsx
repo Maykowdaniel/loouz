@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArrowLeft, Send, SkipForward, User, X } from "lucide-react";
+import { ArrowLeft, Send, SkipForward, User } from "lucide-react";
 import { io, Socket } from "socket.io-client";
 import ChatMessage from "@/components/ChatMessage"; 
 import SidePanel from "@/components/SidePanel";
@@ -22,6 +22,7 @@ const SEARCH_PHRASES = [
   "Searching global database...",
 ];
 
+// LINK DO RENDER (Produção)
 const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 
 const TextChat1v1 = () => {
@@ -37,11 +38,10 @@ const TextChat1v1 = () => {
   const [partnerName, setPartnerName] = useState("Stranger");
   const [partnerCountry, setPartnerCountry] = useState("UN");
   
-  // --- PEGAR INTERESSES DO STATE ---
   const state = location.state as { name?: string; interests?: string } | null;
-  const [userData] = useState({
+  const userDataRef = useRef({
       name: state?.name || `Guest${Math.floor(Math.random() * 90000) + 10000}`,
-      interests: state?.interests || "" // <--- Interesses aqui
+      interests: state?.interests || "" 
   });
 
   const [myId, setMyId] = useState<string>("");
@@ -56,11 +56,13 @@ const TextChat1v1 = () => {
         timerRef.current = null;
     }
     setTimer(10); 
-    // Envia os interesses novamente no retry
-    socketRef.current?.emit("join_text_queue", { 
-        name: userData.name, 
-        interests: userData.interests 
-    });
+    
+    if (socketRef.current) {
+        socketRef.current.emit("join_text_queue", { 
+            name: userDataRef.current.name, 
+            interests: userDataRef.current.interests 
+        });
+    }
   };
 
   useEffect(() => {
@@ -89,10 +91,17 @@ const TextChat1v1 = () => {
     socketRef.current = io(SOCKET_URL);
 
     socketRef.current.on("connect", () => {
+        console.log("Conectado ao servidor!");
         setMyId(socketRef.current?.id || "");
+        
+        socketRef.current?.emit("join_text_queue", { 
+            name: userDataRef.current.name, 
+            interests: userDataRef.current.interests 
+        });
     });
 
     socketRef.current.on("text_paired", (data: any) => {
+      console.log("Pareado com:", data);
       const audio = new Audio("https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3");
       audio.play().catch(() => {});
 
@@ -109,6 +118,7 @@ const TextChat1v1 = () => {
     });
 
     socketRef.current.on("receive_1v1_message", (msg: any) => {
+      console.log("Mensagem recebida:", msg);
       setMessages((prev) => [...prev, msg]);
     });
 
@@ -116,21 +126,19 @@ const TextChat1v1 = () => {
       setMessages((prev) => [...prev, { 
         id: "sys-disc", 
         sender: "system", 
-        text: `${partnerName} has disconnected.` 
+        text: `Partner has disconnected.` 
       }]);
       setIsPaired(false); 
       setTimer(10);
       setStatus("Partner disconnected.");
     });
 
-    // --- ENVIAR INTERESSES PARA O SERVIDOR ---
-    socketRef.current.emit("join_text_queue", { 
-        name: userData.name, 
-        interests: userData.interests 
-    });
-
-    return () => { socketRef.current?.disconnect(); };
-  }, [partnerName, userData]);
+    return () => { 
+        if (socketRef.current) {
+            socketRef.current.disconnect();
+        }
+    };
+  }, []);
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -139,12 +147,14 @@ const TextChat1v1 = () => {
   const handleSend = () => {
     if (!input.trim() || !isPaired) return;
     
-    socketRef.current?.emit("send_1v1_message", {
+    const msgData = {
       text: input,
-      senderId: socketRef.current.id, 
+      senderId: socketRef.current?.id, 
       timestamp: Date.now(),
       id: crypto.randomUUID()
-    });
+    };
+
+    socketRef.current?.emit("send_1v1_message", msgData);
     setInput("");
   };
 
@@ -158,8 +168,8 @@ const TextChat1v1 = () => {
     setCurrentPhraseIndex(0); 
     
     socketRef.current?.emit("join_text_queue", { 
-        name: userData.name, 
-        interests: userData.interests 
+        name: userDataRef.current.name, 
+        interests: userDataRef.current.interests 
     });
   };
 
@@ -210,7 +220,7 @@ const TextChat1v1 = () => {
               {messages.map((msg, i) => {
                   const isMe = msg.senderId === myId;
                   const visualSender = msg.sender === "system" ? "system" : (isMe ? "user" : "stranger");
-                  const displayName = isMe ? userData.name : partnerName;
+                  const displayName = isMe ? userDataRef.current.name : partnerName;
                   return (
                   <ChatMessage
                       key={i}
@@ -247,10 +257,11 @@ const TextChat1v1 = () => {
       </div>
       <div className="hidden md:flex w-[500px] h-full shadow-2xl z-30 border-l border-zinc-800 flex-none bg-zinc-950">
          <div className="w-full h-full flex flex-col items-stretch">
-            <SidePanel username={userData.name} />
+            <SidePanel username={userDataRef.current.name} />
          </div>
       </div>
     </div>
   );
 };
+
 export default TextChat1v1;
