@@ -29,7 +29,7 @@ const textPairs = new Map(); // Mapeia socket.id -> { partnerId, roomId, isBot }
 const textUsers = new Map(); // Guarda nome/país
 
 // --- LÓGICA DOS BOTS (NOVO) ---
-const BOT_TIMEOUT_MS = 9000; // Tempo de espera até o bot entrar (9 segundos)
+const BOT_TIMEOUT_MS = 1000; // Tempo de espera até o bot entrar (9 segundos)
 const userBotTimers = new Map(); // Guarda os timers de espera de cada usuário
 
 // Roteiros dos Bots (Scripts)

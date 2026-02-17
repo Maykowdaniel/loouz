@@ -20,7 +20,7 @@ const Index = () => {
   const navigate = useNavigate();
   
   // Dynamic online counter state
-  const [onlineCount, setOnlineCount] = useState(70);
+  const [onlineCount, setOnlineCount] = useState(Math.floor(Math.random() * 70) + 80);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // --- NOVOS ESTADOS PARA O FILTRO ---
@@ -43,8 +43,11 @@ const Index = () => {
     
     const interval = setInterval(() => {
       setOnlineCount(prev => {
-        const change = Math.floor(Math.random() * 7) - 3;
-        return prev + change;
+        // Oscila entre -4 e +6 a cada 4 segundos (Crescimento lento orgânico)
+        const change = Math.floor(Math.random() * 11) - 4; 
+        // Garante que nunca caia abaixo de 50 para não parecer vazio
+        const newValue = prev + change;
+        return newValue < 50 ? 55 : newValue;
       });
     }, 4000);
 
