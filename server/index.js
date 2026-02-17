@@ -296,7 +296,7 @@ io.on("connection", (socket) => {
                 partnerName: (myData && myData.name) ? myData.name : "Estranho",
                 partnerCountry: (myData && myData.country) ? myData.country : "UN"
             });
-
+            //jnewjfr
         } else {
             // NÃO ACHOU HUMANO -> Entra na fila e inicia o timer do BOT
             textQueue.push(socket.id);
