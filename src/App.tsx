@@ -10,6 +10,8 @@ import Terms from "./pages/Terms";
 import NotFound from "./pages/NotFound";
 import SeoLandingPage from "./pages/SeoLandingPage";
 import DynamicSeoPage from "./pages/DynamicSeoPage";
+import BlogIndex from "./pages/Blog/BlogIndex";
+import BlogPost from "./pages/Blog/BlogPost";
 
 import Lobby from "./pages/lobby"; // Agora é o "Lar"
 import Rooms from "./pages/Rooms"; // <--- IMPORTAR NOVO ARQUIVO "Quartos"
@@ -51,6 +53,10 @@ const App = () => (
           <Route path="/video" element={<VideoChat />} />
           <Route path="/chat/:slug" element={<DynamicSeoPage />} />
           <Route path="/chat" element={<Chat />} />
+
+          {/* Blog */}
+          <Route path="/blog" element={<BlogIndex />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
