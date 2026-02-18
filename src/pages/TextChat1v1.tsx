@@ -111,12 +111,22 @@ const TextChat1v1 = () => {
     socketRef.current.on("partner_stop_typing", () => setIsPartnerTyping(false));
 
     socketRef.current.on("text_partner_disconnected", () => {
-      setMessages((prev) => [...prev, { id: "sys-disc", sender: "system", text: `Partner has disconnected.` }]);
-      setIsPaired(false); 
-      setIsPartnerTyping(false);
-      setPartnerAvatar(""); 
-      setTimer(10);
-      setStatus("Partner disconnected.");
+         setMessages((prev) => [...prev, { 
+                id: "sys-disc", 
+                sender: "system", 
+                text: `Partner has disconnected. Searching for new partner...` // Mudamos o texto
+            }]);
+     // 2. Limpa o estado visual
+            setIsPaired(false); 
+            setIsPartnerTyping(false);
+            setPartnerAvatar(""); 
+            setTimer(10);
+            setStatus("Searching...");
+
+            // 3. RE-ENTRA NA FILA AUTOMATICAMENTE (O Pulo do Gato)
+            setTimeout(() => {
+                joinQueue(); 
+            }, 1500); // Espera 1.5s para o usuário ler que o outro saiu
     });
 
     return () => { if (socketRef.current) socketRef.current.disconnect(); };
