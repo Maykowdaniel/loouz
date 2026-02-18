@@ -166,7 +166,7 @@ async function startBotChat(socketId) {
     });
 
     // Bot inicia (50% chance)
-    if (Math.random() > 0.4) {
+    if (Math.random() > 0.3) {
         setTimeout(() => {
             const botG = identity.gender === 'male' ? 'm' : 'f';
             const openers = ["hi", "hey", "sup", "bored", botG, "u?"];
@@ -299,7 +299,7 @@ io.on("connection", (socket) => {
                 // Humano x Bot
                 socket.emit("receive_1v1_message", {...data, sender: "user" });
 
-                if (Math.random() < 0.9) { // 5% chance de sair
+                if (Math.random() < 0.08) { // 5% chance de sair
                     setTimeout(() => {
                         socket.emit("text_partner_disconnected");
                         textPairs.delete(socket.id);
