@@ -11,7 +11,7 @@ app.use(cors());
 // --- CONFIGURAÇÃO OPENROUTER ---
 const openai = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
-    apiKey: process.env.OPENROUTER_API_KEY || "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",
+    apiKey: process.env.OPENROUTER_API_KEY,
     defaultHeaders: {
         "HTTP-Referer": "https://louuz.com",
         "X-Title": "Louuz Chat",
