@@ -82,6 +82,7 @@ const Footer = () => {
 <div className="w-full border-t border-white/5 my-6"></div>
         
         <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-zinc-600 uppercase tracking-widest font-semibold text-center max-w-4xl mx-auto">
+          <Link to="/blog" className="hover:text-zinc-400 transition-colors">Blog</Link>
           <Link to="/chat/brazil" className="hover:text-zinc-400 transition-colors">Chat Brazil</Link>
           <Link to="/chat/usa" className="hover:text-zinc-400 transition-colors">USA Video Chat</Link>
           <Link to="/chat/germany" className="hover:text-zinc-400 transition-colors">German Chat</Link>
