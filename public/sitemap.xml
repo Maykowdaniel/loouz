@@ -1,119 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-  
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.louuz.com/</loc>
-    <lastmod>2026-02-15</lastmod>
+    <loc>https://louuz.com/</loc>
     <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-    <image:image>
-      <image:loc>https://www.louuz.com/og-image.png</image:loc>
-      <image:title>Louuz - Talk to Strangers</image:title>
-    </image:image>
+    <priority>1</priority>
   </url>
-
   <url>
-    <loc>https://www.louuz.com/omegle-alternative</loc>
-    <lastmod>2026-02-15</lastmod>
+    <loc>https://louuz.com/text-chat</loc>
+    <changefreq>daily</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://louuz.com/video</loc>
+    <changefreq>daily</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://louuz.com/rooms</loc>
+    <changefreq>daily</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://louuz.com/blog</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://louuz.com/chat/brazil</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
   <url>
-    <loc>https://www.louuz.com/random-video-chat</loc>
-    <lastmod>2026-02-15</lastmod>
+    <loc>https://louuz.com/chat/usa</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
   <url>
-    <loc>https://www.louuz.com/anonymous-video-chat</loc>
-    <lastmod>2026-02-15</lastmod>
+    <loc>https://louuz.com/chat/germany</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
   <url>
-    <loc>https://www.louuz.com/talk-to-strangers</loc>
-    <lastmod>2026-02-15</lastmod>
+    <loc>https://louuz.com/chat/india</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
   <url>
-    <loc>https://www.louuz.com/chat/brazil</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.louuz.com/chat/usa</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.louuz.com/chat/germany</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.louuz.com/chat/india</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.louuz.com/chat/anime</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.louuz.com/chat/lgbtq</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.louuz.com/chat/gamers</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.louuz.com/chat/teens</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.louuz.com/chat/music</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.louuz.com/chat/dating</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://www.louuz.com/rooms</loc>
-    <lastmod>2026-02-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://www.louuz.com/terms</loc>
+    <loc>https://louuz.com/blog/best-free-omegle-alternative-2026</loc>
     <lastmod>2026-02-15</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.7</priority>
   </url>
-
+  <url>
+    <loc>https://louuz.com/blog/how-to-stay-safe-talking-strangers-online</loc>
+    <lastmod>2026-02-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://louuz.com/blog/text-vs-video-chat-which-fits-your-mood</loc>
+    <lastmod>2026-02-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://louuz.com/blog/breaking-the-ice-questions-to-ask-strangers</loc>
+    <lastmod>2026-02-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://louuz.com/blog/global-connections-meet-people-from-other-countries</loc>
+    <lastmod>2026-02-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://louuz.com/blog/psychology-of-random-chat-why-we-love-strangers</loc>
+    <lastmod>2026-02-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://louuz.com/blog/why-no-login-chat-sites-are-the-future</loc>
+    <lastmod>2026-02-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
 </urlset>
