@@ -1,0 +1,106 @@
+/**
+ * Dynamic Sitemap Generator for Louuz
+ * Run: npx tsx scripts/generate-sitemap.ts
+ * Or: npm run generate-sitemap
+ *
+ * Generates public/sitemap.xml from:
+ * - Static routes
+ * - src/data/nichePages.ts (chat pages)
+ * - src/data/blogPosts.ts (blog posts)
+ */
+
+import { writeFileSync } from "fs";
+import { resolve } from "path";
+import { NICHE_PAGES } from "../src/data/nichePages";
+import { BLOG_POSTS } from "../src/data/blogPosts";
+
+const BASE_URL = "https://louuz.com";
+
+const xmlEscape = (str: string): string =>
+  str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+
+function urlEntry(
+  loc: string,
+  options: { lastmod?: string; changefreq?: string; priority?: number } = {}
+): string {
+  const { lastmod, changefreq, priority } = options;
+  let xml = `  <url>
+    <loc>${xmlEscape(loc)}</loc>`;
+  if (lastmod) xml += `\n    <lastmod>${lastmod}</lastmod>`;
+  if (changefreq) xml += `\n    <changefreq>${changefreq}</changefreq>`;
+  if (priority !== undefined) xml += `\n    <priority>${priority}</priority>`;
+  xml += `\n  </url>`;
+  return xml;
+}
+
+const urls: string[] = [];
+
+// 1. Static routes (priority 1.0, changefreq daily)
+const staticRoutes = [
+  { path: "/", changefreq: "daily", priority: 1.0 },
+  { path: "/text-chat", changefreq: "daily", priority: 1.0 },
+  { path: "/video", changefreq: "daily", priority: 1.0 },
+  { path: "/rooms", changefreq: "daily", priority: 1.0 },
+];
+
+for (const route of staticRoutes) {
+  urls.push(
+    urlEntry(`${BASE_URL}${route.path}`, {
+      changefreq: route.changefreq,
+      priority: route.priority,
+    })
+  );
+}
+
+// 2. Blog index
+urls.push(
+  urlEntry(`${BASE_URL}/blog`, {
+    changefreq: "daily",
+    priority: 0.8,
+  })
+);
+
+// 3. Dynamic niche pages (priority 0.9, changefreq weekly)
+for (const niche of NICHE_PAGES) {
+  urls.push(
+    urlEntry(`${BASE_URL}/chat/${niche.slug}`, {
+      changefreq: "weekly",
+      priority: 0.9,
+    })
+  );
+}
+
+// 4. Dynamic blog posts (priority 0.7, lastmod from date)
+for (const post of BLOG_POSTS) {
+  const lastmod = post.date ? post.date.split("T")[0] : undefined;
+  urls.push(
+    urlEntry(`${BASE_URL}/blog/${post.slug}`, {
+      lastmod,
+      changefreq: "monthly",
+      priority: 0.7,
+    })
+  );
+}
+
+// Build full sitemap XML
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.join("\n")}
+</urlset>
+`;
+
+// Write to public/sitemap.xml
+const outputPath = resolve(process.cwd(), "public", "sitemap.xml");
+writeFileSync(outputPath, sitemap, "utf-8");
+
+console.log(`✓ Sitemap generated: ${outputPath}`);
+console.log(`  - ${staticRoutes.length} static routes`);
+console.log(`  - 1 blog index`);
+console.log(`  - ${NICHE_PAGES.length} niche pages`);
+console.log(`  - ${BLOG_POSTS.length} blog posts`);
+console.log(`  Total: ${urls.length} URLs`);

@@ -11,7 +11,8 @@
         "preview": "vite preview",
         "test": "vitest run",
         "test:watch": "vitest",
-        "generate-sitemap": "tsx scripts/generate-sitemap-list.ts"
+        "generate-sitemap": "tsx scripts/generate-sitemap.ts",
+        "prebuild": "tsx scripts/generate-sitemap.ts"
     },
     "dependencies": {
         "@hookform/resolvers": "^3.10.0",
