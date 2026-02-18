@@ -11,7 +11,7 @@ app.use(cors());
 // --- CONFIGURAÇÃO OPENROUTER ---
 const openai = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
-    apiKey: process.env.OPENROUTER_API_KEY || "kkkk",
+    apiKey: process.env.OPENROUTER_API_KEY,
     defaultHeaders: {
         "HTTP-Referer": "https://louuz.com",
         "X-Title": "Louuz Chat",
@@ -47,7 +47,7 @@ async function getAIResponse(socketId, userMessage) {
 
     try {
         const completion = await openai.chat.completions.create({
-            model: "gryphe/mythomax-l2-13b",
+            model: "x-ai/grok-4.1-fast",
             messages: [{
                     role: "system",
                     content: `You are a user on a chat site (like Omegle).
