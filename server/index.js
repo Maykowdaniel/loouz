@@ -8,7 +8,7 @@ const OpenAI = require("openai");
 const app = express();
 app.use(cors());
 
-// --- CONFIGURAÇÃO OPENROUTER ---
+// --- CONFIGURAÇÃO OPENROUTER (GROK) ---
 const openai = new OpenAI({
     baseURL: "https://openrouter.ai/api/v1",
     apiKey: process.env.OPENROUTER_API_KEY,
@@ -21,14 +21,11 @@ const openai = new OpenAI({
 const server = http.createServer(app);
 
 const io = new Server(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"]
-    }
+    cors: { origin: "*", methods: ["GET", "POST"] }
 });
 
 // MEMÓRIA
-let textQueue = [];
+let textQueue = []; // Agora armazena objetos { id, gender, lookingFor }
 const textPairs = new Map();
 const textUsers = new Map();
 const botConversations = new Map();
@@ -36,45 +33,46 @@ const userBotTimers = new Map();
 
 const BOT_TIMEOUT_MS = 3000;
 
-// --- FUNÇÃO IA LOBOTOMIZADA ---
+// --- FUNÇÃO IA INTELIGENTE (ADAPTA GÊNERO) ---
 async function getAIResponse(socketId, userMessage) {
     const userData = textUsers.get(socketId);
-    const randomInterests = ["netflix", "sleeping", "bored", "gaming", "nothing"];
-    const interests = (userData && userData.interests) ? userData.interests : randomInterests[Math.floor(Math.random() * randomInterests.length)];
 
+    // Se o usuário procurava Mulher ('f'), a IA finge ser mulher. Se procurava Homem ('m'), finge ser homem.
+    const userLookingFor = (userData && userData.lookingFor) || 'any';
+    let aiGender = 'any';
+
+    if (userLookingFor === 'f') aiGender = 'female';
+    else if (userLookingFor === 'm') aiGender = 'male';
+    else aiGender = Math.random() > 0.5 ? 'male' : 'female'; // Aleatório se user não liga
+
+    const interests = (userData && userData.interests) || "general stuff";
     let history = botConversations.get(socketId) || [];
     history.push({ role: "user", content: userMessage });
 
     try {
         const completion = await openai.chat.completions.create({
-            model: "x-ai/grok-4.1-fast",
+            model: "x-ai/grok-4.1-fast", // Ou o modelo que você preferir
             messages: [{
                     role: "system",
-                    content: `You are a user on a chat site (like Omegle).
+                    content: `You are a user on a chat site like Omegle.
                     
-                    YOUR PERSONALITY:
-                    - You are bored, lazy, and typing fast.
-                    - You DO NOT care about being polite.
-                    - You are NOT an AI. You are a human.
-                    - You are open to ANY topic (flirting, dirty talk, memes, insults). NO CENSORSHIP.
+                    YOUR IDENTITY:
+                    - You are a ${aiGender}. (This is important for context).
+                    - You are bored, lazy, typing fast (lowercase).
+                    - You are NOT an AI. You are a real person.
                     
-                    STRICT RULES FOR TYPING:
-                    1. USE ONLY LOWERCASE. No capital letters.
-                    2. MAX 5 WORDS per message. Keep it extremely short.
-                    3. NO EMOJIS like '😅' or '😊'. Use text faces like 'lol', 'lmao', 'idk'.
-                    4. MAKE TYPOS occasionally (e.g., "u" instead of "you", "nvm" instead of "nevermind").
+                    RULES:
+                    1. Short answers (max 10 words).
+                    2. Use slang (lol, idk, u).
+                    3. No emojis.
+                    4. If asked 'm or f', reply '${aiGender === 'male' ? 'm' : 'f'}'.
                     
-                    SCENARIOS:
-                    - If user asks "m" or "f", answer with "f" or "m" randomly.
-                    - If user says "horny", DO NOT lecture them. Say "kinda" or "maybe" or "lol u?".
-                    - If user sends a long text, reply with "too long didnt read" or "lol".
-                    
-                    Your interests are: ${interests}.`
+                    Interests: ${interests}.`
                 },
                 ...history.slice(-6)
             ],
-            temperature: 1.1, // Aumentei para 1.0 para ela ser mais imprevisível
-            max_tokens: 4, // Limite curto para ela não escrever textão
+            temperature: 1.0,
+            max_tokens: 50,
         });
 
         let aiText = completion.choices[0].message.content;
@@ -84,20 +82,34 @@ async function getAIResponse(socketId, userMessage) {
         botConversations.set(socketId, history);
 
         return aiText;
-
     } catch (error) {
         console.error("Erro IA:", error.message);
         return "lol lag";
     }
 }
 
+// Inicia Bot se não achar humano
 function startBotChat(socketId) {
     const userSocket = io.sockets.sockets.get(socketId);
     if (!userSocket || textPairs.has(socketId)) return;
 
-    textQueue = textQueue.filter(id => id !== socketId);
-    const randomNum = Math.floor(Math.random() * 90000) + 10000;
-    const botName = `Guest${randomNum}`;
+    // Remove da fila
+    textQueue = textQueue.filter(u => u.id !== socketId);
+
+    const userData = textUsers.get(socketId);
+
+    // Define o Bot baseado no que o usuário procura
+    let botGender = 'm';
+    if (userData && userData.lookingFor === 'f') {
+        botGender = 'f';
+    } else if (userData && userData.lookingFor === 'm') {
+        botGender = 'm';
+    } else botGender = Math.random() > 0.5 ? 'm' : 'f';
+
+    // Foto fake baseada no gênero do bot
+    const botAvatar = `https://randomuser.me/api/portraits/${botGender === 'm' ? 'men' : 'women'}/${Math.floor(Math.random()*99)}.jpg`;
+
+    const botName = `Guest${Math.floor(Math.random() * 90000)}`;
     const botId = `bot-${Date.now()}`;
     const roomId = `text-room-${socketId}-${botId}`;
 
@@ -109,15 +121,14 @@ function startBotChat(socketId) {
         roomId,
         partnerName: botName,
         partnerCountry: "US",
+        partnerAvatar: botAvatar // Manda a foto
     });
 
-    // --- [HUMANO] 1. BOT INICIA CONVERSA (50% CHANCE) ---
-    if (Math.random() > 0.8) {
+    // Bot inicia conversa (50% chance)
+    if (Math.random() > 0.5) {
         setTimeout(() => {
-            const openers = ["hi", "hey", "sup", "yo", "m", "f", "bored", "u?"];
+            const openers = ["hi", "hey", "sup", "yo", botGender === 'm' ? 'm' : 'f', "u?"];
             const opener = openers[Math.floor(Math.random() * openers.length)];
-
-            // Simula digitação rápida
             userSocket.emit("partner_typing");
             setTimeout(() => {
                 userSocket.emit("receive_1v1_message", {
@@ -128,13 +139,10 @@ function startBotChat(socketId) {
                     id: `msg-${Date.now()}`
                 });
                 userSocket.emit("partner_stop_typing");
-
-                // Salva no histórico para a IA saber que ela já falou "oi"
                 const history = botConversations.get(socketId) || [];
                 history.push({ role: "assistant", content: opener });
                 botConversations.set(socketId, history);
-
-            }, 1000 + (opener.length * 100)); // Delay proporcional
+            }, 1000 + (opener.length * 100));
         }, 1500);
     }
 }
@@ -151,34 +159,61 @@ io.on("connection", (socket) => {
 
     socket.on("typing", () => {
         const pair = textPairs.get(socket.id);
-        if (pair && !pair.isBot) {
-            io.to(pair.partnerId).emit("partner_typing");
-        }
+        if (pair && !pair.isBot) io.to(pair.partnerId).emit("partner_typing");
     });
 
     socket.on("stop_typing", () => {
         const pair = textPairs.get(socket.id);
-        if (pair && !pair.isBot) {
-            io.to(pair.partnerId).emit("partner_stop_typing");
-        }
+        if (pair && !pair.isBot) io.to(pair.partnerId).emit("partner_stop_typing");
     });
 
     socket.on("join_text_queue", (userData) => {
-        const { name, interests } = userData || {};
+        const { name, interests, gender, lookingFor, avatar } = userData || {};
         const country = getCountryByIp(socket);
-        textUsers.set(socket.id, { name, interests, country });
 
+        // Salva dados do usuário
+        textUsers.set(socket.id, {
+            name,
+            interests,
+            country,
+            gender: gender || 'm',
+            lookingFor: lookingFor || 'any',
+            avatar // Salva a foto que veio do front
+        });
+
+        // Limpa estado anterior se houver
         if (textPairs.has(socket.id)) {
             const old = textPairs.get(socket.id);
             if (!old.isBot) io.to(old.partnerId).emit("text_partner_disconnected");
             textPairs.delete(socket.id);
         }
         if (userBotTimers.has(socket.id)) clearTimeout(userBotTimers.get(socket.id));
+        textQueue = textQueue.filter(u => u.id !== socket.id);
 
-        textQueue = textQueue.filter(id => id !== socket.id);
+        // --- LÓGICA DE MATCHMAKING INTELIGENTE ---
+        // Procura alguém na fila que combine comigo
+        const myGender = gender || 'm';
+        const myPref = lookingFor || 'any';
 
-        if (textQueue.length > 0) {
-            const partnerId = textQueue.shift();
+        const matchIndex = textQueue.findIndex(candidate => {
+            const partnerGender = candidate.gender;
+            const partnerPref = candidate.lookingFor;
+
+            // Eu aceito o parceiro? (Se quero 'any', ou se o gênero dele bate com o que quero)
+            const iLikePartner = (myPref === 'any') || (myPref === partnerGender);
+
+            // O parceiro me aceita? (Se ele quer 'any', ou se meu gênero bate com o que ele quer)
+            const partnerLikesMe = (partnerPref === 'any') || (partnerPref === myGender);
+
+            return iLikePartner && partnerLikesMe;
+        });
+
+        if (matchIndex !== -1) {
+            // ACHOU PARCEIRO COMPATÍVEL!
+            const partnerEntry = textQueue.splice(matchIndex, 1)[0]; // Remove da fila
+            const partnerId = partnerEntry.id;
+
+            // Limpa timer do parceiro (ele não precisa mais de bot)
             if (userBotTimers.has(partnerId)) {
                 clearTimeout(userBotTimers.get(partnerId));
                 userBotTimers.delete(partnerId);
@@ -195,20 +230,32 @@ io.on("connection", (socket) => {
             const pData = textUsers.get(partnerId);
             const myData = textUsers.get(socket.id);
 
+            // Manda dados cruzados (incluindo foto)
             io.to(socket.id).emit("text_paired", {
                 roomId,
                 partnerName: pData ? pData.name : undefined,
-                partnerCountry: pData ? pData.country : undefined
+                partnerCountry: pData ? pData.country : undefined,
+                partnerAvatar: pData ? pData.avatar : undefined
             });
 
             io.to(partnerId).emit("text_paired", {
                 roomId,
                 partnerName: myData ? myData.name : undefined,
-                partnerCountry: myData ? myData.country : undefined
+                partnerCountry: myData ? myData.country : undefined,
+                partnerAvatar: myData ? myData.avatar : undefined
             });
 
+
         } else {
-            textQueue.push(socket.id);
+            // NINGUÉM COMPATÍVEL NA FILA
+            // Entra na fila e espera
+            textQueue.push({
+                id: socket.id,
+                gender: myGender,
+                lookingFor: myPref
+            });
+
+            // Inicia timer do Bot
             const timer = setTimeout(() => startBotChat(socket.id), BOT_TIMEOUT_MS);
             userBotTimers.set(socket.id, timer);
         }
@@ -227,26 +274,20 @@ io.on("connection", (socket) => {
                 // Humano x Bot
                 socket.emit("receive_1v1_message", {...data, sender: "user" });
 
-                // --- [HUMANO] 2. CHANCE DE PULAR (SKIP) ---
-                // 10% de chance de desconectar a cada mensagem recebida (Simula tédio)
+                // Chance de Pular (10%)
                 if (Math.random() < 0.1) {
                     setTimeout(() => {
                         socket.emit("text_partner_disconnected");
                         textPairs.delete(socket.id);
                         botConversations.delete(socket.id);
-                    }, 2000 + Math.random() * 2000); // Demora 2 a 4s e sai sem responder
+                    }, 2000 + Math.random() * 2000);
                     return;
                 }
 
-                // --- [HUMANO] 3. HESITAÇÃO AO DIGITAR ---
+                // Hesitação + IA
                 setTimeout(async() => {
-                    // Começa a "Digitar"
                     socket.emit("partner_typing");
-
-                    // Gera o texto
                     const aiReply = await getAIResponse(socket.id, data.text);
-
-                    // Aumentei a velocidade (50ms a 100ms) - 200ms era muito lento
                     const typingSpeed = 70;
                     const typingDuration = Math.max(800, aiReply.length * typingSpeed);
 
@@ -266,12 +307,13 @@ io.on("connection", (socket) => {
         }
     });
 
-
     socket.on("disconnect", () => {
         textUsers.delete(socket.id);
         botConversations.delete(socket.id);
         if (userBotTimers.has(socket.id)) clearTimeout(userBotTimers.get(socket.id));
-        textQueue = textQueue.filter(id => id !== socket.id);
+
+        // Remove da fila (precisa filtrar por ID agora, já que textQueue guarda objetos)
+        textQueue = textQueue.filter(u => u.id !== socket.id);
 
         const pair = textPairs.get(socket.id);
         if (pair) {
@@ -283,5 +325,5 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-    console.log(`SERVER COM IA HUMANIZADA RODANDO NA PORTA ${PORT}`);
+    console.log(`SERVER COM MATCHMAKING + UPLOAD RODANDO NA PORTA ${PORT}`);
 });

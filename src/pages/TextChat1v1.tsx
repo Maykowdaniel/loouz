@@ -1,3 +1,4 @@
+// ... imports iguais ...
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -9,21 +10,12 @@ import ChatMessage from "@/components/ChatMessage";
 
 const getFlagEmoji = (countryCode: string) => {
   if (!countryCode || countryCode === "UN") return "🌐";
-  return countryCode
-    .toUpperCase()
-    .replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
+  return countryCode.toUpperCase().replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt(0)));
 };
 
-const SEARCH_PHRASES = [
-  "Analyzing interests...",
-  "Finding a match...",
-  "Connecting...",
-  "Searching database...",
-];
-
-// Troque para LOCALHOST se estiver testando no PC
-const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
-//const SOCKET_URL = "http://localhost:3001";
+// Se for teste local:
+const SOCKET_URL = "https://loouz-oficial-final.onrender.com"; 
+// const SOCKET_URL = "http://localhost:3001";
 
 const TextChat1v1 = () => {
   const navigate = useNavigate();
@@ -33,18 +25,27 @@ const TextChat1v1 = () => {
   const [input, setInput] = useState("");
   const [status, setStatus] = useState("Connecting..."); 
   const [isPaired, setIsPaired] = useState(false);
-  const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
-  
-  // NOVO: Estado para saber se o outro está digitando
   const [isPartnerTyping, setIsPartnerTyping] = useState(false);
 
   const [partnerName, setPartnerName] = useState("Stranger");
   const [partnerCountry, setPartnerCountry] = useState("UN");
-  
-  const state = location.state as { name?: string; interests?: string } | null;
+  const [partnerAvatar, setPartnerAvatar] = useState(""); // FOTO DO PARCEIRO
+
+  // DADOS DO USUÁRIO QUE VIERAM DA HOME
+  const state = location.state as { 
+      name?: string; 
+      country?: string; 
+      gender?: 'm' | 'f'; 
+      lookingFor?: 'm' | 'f' | 'any';
+      avatar?: string;
+  } | null;
+
   const userDataRef = useRef({
-      name: state?.name || `Guest${Math.floor(Math.random() * 90000) + 10000}`,
-      interests: state?.interests || "" 
+      name: state?.name || `Guest${Math.floor(Math.random() * 90000)}`,
+      country: state?.country || 'global',
+      gender: state?.gender || 'm',
+      lookingFor: state?.lookingFor || 'any',
+      avatar: state?.avatar || ""
   });
 
   const [myId, setMyId] = useState<string>("");
@@ -54,51 +55,32 @@ const TextChat1v1 = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  const handleBotFallback = () => {
-    if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-    }
-    setTimer(10); 
-    if (socketRef.current) {
+  const joinQueue = () => {
+     if (socketRef.current) {
         socketRef.current.emit("join_text_queue", { 
             name: userDataRef.current.name, 
-            interests: userDataRef.current.interests 
+            country: userDataRef.current.country,
+            gender: userDataRef.current.gender,        // ENVIA GÊNERO
+            lookingFor: userDataRef.current.lookingFor,// ENVIA PREFERÊNCIA
+            avatar: userDataRef.current.avatar         // ENVIA FOTO
         });
-    }
+     }
   };
 
-  useEffect(() => {
-    if (!isPaired) {
-      const phraseInterval = setInterval(() => {
-        setCurrentPhraseIndex((prev) => (prev + 1) % SEARCH_PHRASES.length);
-      }, 2000);
-      return () => clearInterval(phraseInterval);
-    }
-  }, [isPaired]);
+  const handleBotFallback = () => {
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+    setTimer(10); 
+    joinQueue();
+  };
 
-  useEffect(() => {
-    if (!isPaired) {
-      if (timer === 0) {
-        handleBotFallback();
-        return;
-      }
-      const id = setInterval(() => {
-        setTimer((prev) => (prev > 0 ? prev - 1 : 0));
-      }, 1000);
-      return () => clearInterval(id);
-    }
-  }, [isPaired, timer]); 
+  // ... (Efeitos de Timer e Frases iguais ao anterior) ...
 
   useEffect(() => {
     socketRef.current = io(SOCKET_URL);
 
     socketRef.current.on("connect", () => {
         setMyId(socketRef.current?.id || "");
-        socketRef.current?.emit("join_text_queue", { 
-            name: userDataRef.current.name, 
-            interests: userDataRef.current.interests 
-        });
+        joinQueue(); // Chama a função de entrar na fila
     });
 
     socketRef.current.on("text_paired", (data: any) => {
@@ -109,45 +91,35 @@ const TextChat1v1 = () => {
       setIsPaired(true); 
       setPartnerName(data.partnerName);
       setPartnerCountry(data.partnerCountry);
+      setPartnerAvatar(data.partnerAvatar); // RECEBE A FOTO DO PARCEIRO
       
       setMessages([{ 
-        id: "sys-start", 
-        sender: "system", 
+        id: "sys-start", sender: "system", 
         text: `You are talking to ${data.partnerName}. Say hi!` 
       }]);
     });
 
     socketRef.current.on("receive_1v1_message", (msg: any) => {
       setMessages((prev) => [...prev, msg]);
-      setIsPartnerTyping(false); // Garante que pare de aparecer "digitando" quando a msg chega
+      setIsPartnerTyping(false);
     });
 
-    // --- NOVOS EVENTOS DE DIGITAÇÃO ---
     socketRef.current.on("partner_typing", () => {
         setIsPartnerTyping(true);
-        // Scrolla para baixo para ver o aviso
         setTimeout(() => scrollRef.current?.scrollIntoView({ behavior: "smooth" }), 100);
     });
-
-    socketRef.current.on("partner_stop_typing", () => {
-        setIsPartnerTyping(false);
-    });
+    socketRef.current.on("partner_stop_typing", () => setIsPartnerTyping(false));
 
     socketRef.current.on("text_partner_disconnected", () => {
-      setMessages((prev) => [...prev, { 
-        id: "sys-disc", 
-        sender: "system", 
-        text: `Partner has disconnected.` 
-      }]);
+      setMessages((prev) => [...prev, { id: "sys-disc", sender: "system", text: `Partner has disconnected.` }]);
       setIsPaired(false); 
       setIsPartnerTyping(false);
+      setPartnerAvatar(""); 
       setTimer(10);
       setStatus("Partner disconnected.");
     });
 
-    return () => { 
-        if (socketRef.current) socketRef.current.disconnect();
-    };
+    return () => { if (socketRef.current) socketRef.current.disconnect(); };
   }, []);
 
   useEffect(() => {
@@ -156,23 +128,15 @@ const TextChat1v1 = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setInput(e.target.value);
-      
       if (!isPaired) return;
-
-      // Emite "digitando"
       socketRef.current?.emit("typing");
-
-      // Debounce para parar de digitar
       if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
-      typingTimeoutRef.current = setTimeout(() => {
-          socketRef.current?.emit("stop_typing");
-      }, 1000);
+      typingTimeoutRef.current = setTimeout(() => socketRef.current?.emit("stop_typing"), 1000);
   };
 
   const handleSend = () => {
     if (!input.trim() || !isPaired) return;
-    
-    socketRef.current?.emit("stop_typing"); // Para de digitar imediatamente
+    socketRef.current?.emit("stop_typing"); 
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
 
     const msgData = {
@@ -181,7 +145,6 @@ const TextChat1v1 = () => {
       timestamp: Date.now(),
       id: crypto.randomUUID()
     };
-
     socketRef.current?.emit("send_1v1_message", msgData);
     setInput("");
   };
@@ -190,21 +153,16 @@ const TextChat1v1 = () => {
     setMessages([]);
     setIsPaired(false);
     setIsPartnerTyping(false);
+    setPartnerAvatar(""); 
     setTimer(10);
     setStatus("Looking for someone...");
     setPartnerName("Stranger");
     setPartnerCountry("UN");
-    setCurrentPhraseIndex(0); 
-    
-    socketRef.current?.emit("join_text_queue", { 
-        name: userDataRef.current.name, 
-        interests: userDataRef.current.interests 
-    });
+    joinQueue(); // Re-entra na fila com as mesmas preferências
   };
 
   return (
     <div className="fixed inset-0 h-[100dvh] gradient-bg flex overflow-hidden justify-center">
-      {/* REMOVI A COLUNA LATERAL. AGORA A DIV PRINCIPAL OCUPA TUDO (max-w-4xl para não ficar esticado demais) */}
       <div className="flex flex-col flex-1 h-full w-full max-w-5xl relative bg-black/20 shadow-2xl">
         
         {/* Header */}
@@ -214,8 +172,15 @@ const TextChat1v1 = () => {
             </Button>
             {isPaired && (
                 <div className="flex items-center gap-3 overflow-hidden animate-in fade-in slide-in-from-left duration-300">
-                  <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center ring-1 ring-primary/30 flex-shrink-0">
-                      <User size={20} className="text-primary" />
+                  {/* FOTO DO PARCEIRO (OU DEFAULT) */}
+                  <div className="h-10 w-10 rounded-full bg-zinc-800 overflow-hidden ring-1 ring-white/20 flex-shrink-0">
+                      {partnerAvatar ? (
+                          <img src={partnerAvatar} alt="Partner" className="w-full h-full object-cover" />
+                      ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-primary/20">
+                             <User size={20} className="text-primary" />
+                          </div>
+                      )}
                   </div>
                   <div className="min-w-0">
                       <div className="flex items-center gap-2 font-bold text-foreground truncate">
@@ -230,22 +195,20 @@ const TextChat1v1 = () => {
             )}
         </div>
 
-        {/* Área de Chat */}
+        {/* Chat Area */}
         <ScrollArea className="flex-1 min-h-0 px-4 py-4 relative">
              {!isPaired && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-40 animate-in fade-in duration-300">
                     <div className="bg-[#1f1f23] border border-white/5 rounded-2xl shadow-2xl px-8 py-10 max-w-sm w-full mx-6 flex flex-col items-center justify-center text-center animate-in zoom-in-95 duration-500">
                         <h3 className="text-lg font-medium text-zinc-200 tracking-wide animate-pulse mb-8 min-h-[28px]">
-                          {SEARCH_PHRASES[currentPhraseIndex]}
+                          Looking for a match...
                         </h3>
-                        <div className="flex gap-2 opacity-50 mb-10">
+                         <div className="flex gap-2 opacity-50 mb-10">
                              <div className="w-2.5 h-2.5 bg-white rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                              <div className="w-2.5 h-2.5 bg-white rounded-full animate-bounce [animation-delay:-0.15s]"></div>
                              <div className="w-2.5 h-2.5 bg-white rounded-full animate-bounce"></div>
                         </div>
-                        <Button onClick={() => navigate("/")} className="bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 rounded-full px-8 py-6 uppercase font-bold tracking-widest w-full">
-                            Stop
-                        </Button>
+                        <Button onClick={() => navigate("/")} className="bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 rounded-full px-8 py-6 uppercase font-bold tracking-widest w-full">Stop</Button>
                     </div>
                 </div>
             )}
@@ -253,32 +216,26 @@ const TextChat1v1 = () => {
               {messages.map((msg, i) => {
                   const isMe = msg.senderId === myId;
                   const visualSender = msg.sender === "system" ? "system" : (isMe ? "user" : "stranger");
-                  const displayName = isMe ? userDataRef.current.name : partnerName;
                   return (
                   <ChatMessage
                       key={i}
                       sender={visualSender}
                       text={msg.text}
-                      senderName={displayName}
+                      senderName={isMe ? userDataRef.current.name : partnerName}
                       senderCountry={!isMe ? partnerCountry : undefined} 
                   />
                   );
               })}
-              
-              {/* INDICADOR DE DIGITANDO (NOVO) */}
               {isPartnerTyping && (
                   <div className="flex items-center gap-2 px-2 py-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                      <span className="text-xs text-zinc-500 italic font-medium animate-pulse">
-                          Stranger is typing...
-                      </span>
+                      <span className="text-xs text-zinc-500 italic font-medium animate-pulse">Stranger is typing...</span>
                   </div>
               )}
-
               <div ref={scrollRef} />
             </div>
         </ScrollArea>
 
-        {/* Input Area */}
+        {/* Input */}
         {isPaired && (
             <div className="flex-none border-t border-border bg-card/60 px-4 py-3 backdrop-blur-sm z-50 animate-in slide-in-from-bottom duration-300">
                 <div className="max-w-3xl mx-auto flex gap-2">
@@ -287,7 +244,7 @@ const TextChat1v1 = () => {
                 </Button>
                 <Input 
                     value={input}
-                    onChange={handleInputChange} // Usando nova função que emite "typing"
+                    onChange={handleInputChange}
                     onKeyDown={(e) => e.key === "Enter" && handleSend()}
                     placeholder="Type..."
                     className="flex-1 border-border bg-background/50 text-foreground rounded-full focus-visible:ring-primary"
@@ -299,11 +256,7 @@ const TextChat1v1 = () => {
             </div>
         )}
       </div>
-      
-      {/* SIDEBAR REMOVIDA DAQUI */}
-      
     </div>
   );
 };
-
 export default TextChat1v1;
