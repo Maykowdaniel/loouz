@@ -131,39 +131,6 @@ const getCountryIso = (slug: string) => {
             </div>
 
             <div className="p-6 space-y-6">
-                <div className="flex flex-col items-center justify-center gap-3">
-                    <span className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Your Photo (Optional)</span>
-                    
-                    <input 
-                        type="file" 
-                        ref={fileInputRef} 
-                        className="hidden" 
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                    />
-                    
-                    <button 
-                        onClick={() => fileInputRef.current?.click()}
-                        className="group relative w-24 h-24 rounded-full bg-zinc-800 border-4 border-zinc-800 ring-2 ring-white/10 overflow-hidden hover:ring-cyan-400 transition-all shadow-xl"
-                    >
-                        {myAvatar ? (
-                            <img src={myAvatar} alt="Me" className="w-full h-full object-cover" />
-                        ) : (
-                            <div className="w-full h-full flex flex-col items-center justify-center gap-1 bg-zinc-800 text-zinc-500 group-hover:text-cyan-400 transition-colors">
-                                <Camera size={32} />
-                                <span className="text-[10px] uppercase font-bold">Upload</span>
-                            </div>
-                        )}
-                        {/* Overlay ao passar o mouse */}
-                        {myAvatar && (
-                            <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                <Camera size={24} className="text-white" />
-                            </div>
-                        )}
-                    </button>
-                </div>
-
-                <div className="w-full h-[1px] bg-white/5"></div>
                 {/* 1. SELEÇÃO DE GÊNERO */}
                 <div>
                     <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-3 block">I am</label>

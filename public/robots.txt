@@ -9,4 +9,4 @@ User-agent: ChatGPT-User
 Disallow: /
 
 # Link correto para o Sitemap (sem www, conforme gerado pelo script)
-Sitemap: https://louuz.com/sitemap.xml
+Sitemap: https://www.louuz.com/sitemap.xml

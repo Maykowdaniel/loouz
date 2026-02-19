@@ -1,10 +1,9 @@
-// ... imports iguais ...
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ArrowLeft, Send, SkipForward, User } from "lucide-react";
+import { ArrowLeft, Send, SkipForward } from "lucide-react";
 import { io, Socket } from "socket.io-client";
 import ChatMessage from "@/components/ChatMessage"; 
 
@@ -29,23 +28,20 @@ const TextChat1v1 = () => {
 
   const [partnerName, setPartnerName] = useState("Stranger");
   const [partnerCountry, setPartnerCountry] = useState("UN");
-  const [partnerAvatar, setPartnerAvatar] = useState(""); // FOTO DO PARCEIRO
 
-  // DADOS DO USUÁRIO QUE VIERAM DA HOME
+  // DADOS DO USUÁRIO QUE VIERAM DA HOME (Sem Avatar)
   const state = location.state as { 
       name?: string; 
       country?: string; 
       gender?: 'm' | 'f'; 
       lookingFor?: 'm' | 'f' | 'any';
-      avatar?: string;
   } | null;
 
   const userDataRef = useRef({
       name: state?.name || `Guest${Math.floor(Math.random() * 90000)}`,
       country: state?.country || 'global',
       gender: state?.gender || 'm',
-      lookingFor: state?.lookingFor || 'any',
-      avatar: state?.avatar || ""
+      lookingFor: state?.lookingFor || 'any'
   });
 
   const [myId, setMyId] = useState<string>("");
@@ -60,9 +56,8 @@ const TextChat1v1 = () => {
         socketRef.current.emit("join_text_queue", { 
             name: userDataRef.current.name, 
             country: userDataRef.current.country,
-            gender: userDataRef.current.gender,        // ENVIA GÊNERO
-            lookingFor: userDataRef.current.lookingFor,// ENVIA PREFERÊNCIA
-            avatar: userDataRef.current.avatar         // ENVIA FOTO
+            gender: userDataRef.current.gender,
+            lookingFor: userDataRef.current.lookingFor
         });
      }
   };
@@ -73,14 +68,12 @@ const TextChat1v1 = () => {
     joinQueue();
   };
 
-  // ... (Efeitos de Timer e Frases iguais ao anterior) ...
-
   useEffect(() => {
     socketRef.current = io(SOCKET_URL);
 
     socketRef.current.on("connect", () => {
         setMyId(socketRef.current?.id || "");
-        joinQueue(); // Chama a função de entrar na fila
+        joinQueue(); 
     });
 
     socketRef.current.on("text_paired", (data: any) => {
@@ -91,7 +84,6 @@ const TextChat1v1 = () => {
       setIsPaired(true); 
       setPartnerName(data.partnerName);
       setPartnerCountry(data.partnerCountry);
-      setPartnerAvatar(data.partnerAvatar); // RECEBE A FOTO DO PARCEIRO
       
       setMessages([{ 
         id: "sys-start", sender: "system", 
@@ -114,19 +106,17 @@ const TextChat1v1 = () => {
          setMessages((prev) => [...prev, { 
                 id: "sys-disc", 
                 sender: "system", 
-                text: `Partner has disconnected. Searching for new partner...` // Mudamos o texto
+                text: `Partner has disconnected. Searching for new partner...` 
             }]);
-     // 2. Limpa o estado visual
+            
             setIsPaired(false); 
             setIsPartnerTyping(false);
-            setPartnerAvatar(""); 
             setTimer(10);
             setStatus("Searching...");
 
-            // 3. RE-ENTRA NA FILA AUTOMATICAMENTE (O Pulo do Gato)
             setTimeout(() => {
                 joinQueue(); 
-            }, 1500); // Espera 1.5s para o usuário ler que o outro saiu
+            }, 1500); 
     });
 
     return () => { if (socketRef.current) socketRef.current.disconnect(); };
@@ -163,35 +153,24 @@ const TextChat1v1 = () => {
     setMessages([]);
     setIsPaired(false);
     setIsPartnerTyping(false);
-    setPartnerAvatar(""); 
     setTimer(10);
     setStatus("Looking for someone...");
     setPartnerName("Stranger");
     setPartnerCountry("UN");
-    joinQueue(); // Re-entra na fila com as mesmas preferências
+    joinQueue(); 
   };
 
   return (
     <div className="fixed inset-0 h-[100dvh] gradient-bg flex overflow-hidden justify-center">
       <div className="flex flex-col flex-1 h-full w-full max-w-5xl relative bg-black/20 shadow-2xl">
         
-        {/* Header */}
+        {/* Header (Sem foto) */}
         <div className="flex-none flex items-center gap-3 p-4 border-b border-white/5 bg-card/40 backdrop-blur-sm z-50 min-h-[73px]">
             <Button variant="ghost" size="icon" onClick={() => navigate("/")}>
               <ArrowLeft size={20} className="text-muted-foreground" />
             </Button>
             {isPaired && (
                 <div className="flex items-center gap-3 overflow-hidden animate-in fade-in slide-in-from-left duration-300">
-                  {/* FOTO DO PARCEIRO (OU DEFAULT) */}
-                  <div className="h-10 w-10 rounded-full bg-zinc-800 overflow-hidden ring-1 ring-white/20 flex-shrink-0">
-                      {partnerAvatar ? (
-                          <img src={partnerAvatar} alt="Partner" className="w-full h-full object-cover" />
-                      ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-primary/20">
-                             <User size={20} className="text-primary" />
-                          </div>
-                      )}
-                  </div>
                   <div className="min-w-0">
                       <div className="flex items-center gap-2 font-bold text-foreground truncate">
                         {partnerName}

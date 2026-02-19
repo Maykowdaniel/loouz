@@ -36,14 +36,10 @@ const botIdentities = new Map();
 
 const BOT_TIMEOUT_MS = 1000;
 
-// --- [NOVO] GERADOR DE IDENTIDADE VIA API ---
-// Pega Nome, Foto, Idade e Localização reais da API para garantir consistência
+// --- GERADOR DE IDENTIDADE VIA API ---
 async function fetchBotIdentity(genderPreference) {
     try {
-        // Define o gênero para a API (ou deixa aleatório)
         const genderQuery = (genderPreference === 'm') ? 'male' : (genderPreference === 'f') ? 'female' : '';
-
-        // Solicita apenas usuários de países de língua inglesa para os nomes fazerem sentido
         const url = `https://randomuser.me/api/?gender=${genderQuery}&nat=us,gb,ca,au`;
 
         const response = await fetch(url);
@@ -51,23 +47,20 @@ async function fetchBotIdentity(genderPreference) {
         const person = data.results[0];
 
         return {
-            name: person.name.first.toLowerCase(), // Ex: "jennie"
-            gender: person.gender, // "female"
-            age: person.dob.age, // 24
-            location: person.location.state.toLowerCase(), // "michigan"
-            avatar: person.picture.large // URL da foto real
+            name: person.name.first.toLowerCase(),
+            gender: person.gender,
+            age: person.dob.age,
+            location: person.location.state.toLowerCase()
         };
 
     } catch (error) {
         console.error("Erro ao buscar identidade real:", error);
-        // Fallback de emergência se a API falhar
         const backupGender = genderPreference === 'm' ? 'male' : 'female';
         return {
             name: backupGender === 'male' ? 'mike' : 'sarah',
             gender: backupGender,
             age: 21,
-            location: 'usa',
-            avatar: `https://randomuser.me/api/portraits/${backupGender === 'male' ? 'men' : 'women'}/10.jpg`
+            location: 'usa'
         };
     }
 }
@@ -77,7 +70,6 @@ async function getAIResponse(socketId, userMessage) {
     const userData = textUsers.get(socketId);
     let botIdentity = botIdentities.get(socketId);
 
-    // Segurança caso a identidade tenha se perdido
     if (!botIdentity) {
         botIdentity = { name: "alex", gender: "male", age: 20, location: "usa" };
     }
@@ -136,19 +128,15 @@ async function startBotChat(socketId) {
     textQueue = textQueue.filter(u => u.id !== socketId);
     const userData = textUsers.get(socketId);
 
-    // 1. Determina Preferência
     let targetGender = 'any';
     if (userData && userData.lookingFor === 'f') targetGender = 'f';
     else if (userData && userData.lookingFor === 'm') targetGender = 'm';
     else targetGender = Math.random() > 0.5 ? 'm' : 'f';
 
-    // 2. [NOVO] Busca Identidade Real na API
     const identity = await fetchBotIdentity(targetGender);
 
-    // 3. Salva na memória do servidor
     botIdentities.set(socketId, identity);
 
-    // Nome visual (Mantém "Guest" para o usuário ver, mas a IA sabe o nome real)
     const displayName = `Guest${Math.floor(Math.random() * 90000)}`;
     const botId = `bot-${Date.now()}`;
     const roomId = `text-room-${socketId}-${botId}`;
@@ -157,16 +145,18 @@ async function startBotChat(socketId) {
     textPairs.set(socketId, { partnerId: botId, roomId, isBot: true });
     botConversations.set(socketId, []);
 
-    // 4. Envia dados para o Frontend (incluindo a foto real da API)
+    // Envia dados para o Frontend (SEM FOTO)
     io.to(socketId).emit("text_paired", {
         roomId,
         partnerName: displayName,
-        partnerCountry: "US",
-        partnerAvatar: identity.avatar // A FOTO EXATA DA PESSOA
+        partnerCountry: "US"
     });
 
-    // Bot inicia (50% chance)
+    // Bot inicia (30% chance de mandar primeiro)
     if (Math.random() > 0.3) {
+        // Delay realista
+        const initialHesitation = 2500 + Math.random() * 2000;
+
         setTimeout(() => {
             const botG = identity.gender === 'male' ? 'm' : 'f';
             const openers = ["hi", "hey", "sup", "bored", botG, "u?"];
@@ -178,6 +168,8 @@ async function startBotChat(socketId) {
             history.push({ role: "assistant", content: opener });
             botConversations.set(socketId, history);
 
+            const typingDuration = 800 + (opener.length * 100);
+
             setTimeout(() => {
                 userSocket.emit("receive_1v1_message", {
                     text: opener,
@@ -187,8 +179,9 @@ async function startBotChat(socketId) {
                     id: `msg-${Date.now()}`
                 });
                 userSocket.emit("partner_stop_typing");
-            }, 1000 + (opener.length * 100));
-        }, 1500);
+            }, typingDuration);
+
+        }, initialHesitation);
     }
 }
 
@@ -213,7 +206,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("join_text_queue", (userData) => {
-        const { name, interests, gender, lookingFor, avatar } = userData || {};
+        const { name, interests, gender, lookingFor } = userData || {};
         const country = getCountryByIp(socket);
 
         botIdentities.delete(socket.id);
@@ -223,8 +216,7 @@ io.on("connection", (socket) => {
             interests,
             country,
             gender: gender || 'm',
-            lookingFor: lookingFor || 'any',
-            avatar
+            lookingFor: lookingFor || 'any'
         });
 
         if (textPairs.has(socket.id)) {
@@ -269,15 +261,13 @@ io.on("connection", (socket) => {
             io.to(socket.id).emit("text_paired", {
                 roomId,
                 partnerName: pData ? pData.name : undefined,
-                partnerCountry: pData ? pData.country : undefined,
-                partnerAvatar: pData ? pData.avatar : undefined
+                partnerCountry: pData ? pData.country : undefined
             });
 
             io.to(partnerId).emit("text_paired", {
                 roomId,
                 partnerName: myData ? myData.name : undefined,
-                partnerCountry: myData ? myData.country : undefined,
-                partnerAvatar: myData ? myData.avatar : undefined
+                partnerCountry: myData ? myData.country : undefined
             });
         } else {
             textQueue.push({ id: socket.id, gender: myGender, lookingFor: myPref });
@@ -299,7 +289,7 @@ io.on("connection", (socket) => {
                 // Humano x Bot
                 socket.emit("receive_1v1_message", {...data, sender: "user" });
 
-                if (Math.random() < 0.08) { // 5% chance de sair
+                if (Math.random() < 0.10) { // Chance de sair
                     setTimeout(() => {
                         socket.emit("text_partner_disconnected");
                         textPairs.delete(socket.id);
@@ -353,5 +343,5 @@ io.on("connection", (socket) => {
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
-    console.log(`SERVER COM IDENTIDADE API REAL RODANDO NA PORTA ${PORT}`);
+    console.log(`SERVER SEM FOTO NO CHAT TEXTO RODANDO NA PORTA ${PORT}`);
 });
