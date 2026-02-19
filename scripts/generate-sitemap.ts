@@ -15,6 +15,7 @@ import { NICHE_PAGES } from "../src/data/nichePages";
 import { BLOG_POSTS } from "../src/data/blogPosts";
 
 const BASE_URL = "https://louuz.com";
+const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 
 const xmlEscape = (str: string): string =>
   str
@@ -51,6 +52,7 @@ const staticRoutes = [
 for (const route of staticRoutes) {
   urls.push(
     urlEntry(`${BASE_URL}${route.path}`, {
+      lastmod: today,
       changefreq: route.changefreq,
       priority: route.priority,
     })
@@ -66,6 +68,7 @@ const legalRoutes = [
 for (const path of legalRoutes) {
   urls.push(
     urlEntry(`${BASE_URL}${path}`, {
+      lastmod: today,
       changefreq: "monthly",
       priority: 0.6,
     })
@@ -81,6 +84,7 @@ const landingPages = [
 for (const path of landingPages) {
   urls.push(
     urlEntry(`${BASE_URL}${path}`, {
+      lastmod: today,
       changefreq: "weekly",
       priority: 0.85,
     })
@@ -90,6 +94,7 @@ for (const path of landingPages) {
 // 4. Blog index
 urls.push(
   urlEntry(`${BASE_URL}/blog`, {
+    lastmod: today,
     changefreq: "daily",
     priority: 0.8,
   })
@@ -99,6 +104,7 @@ urls.push(
 for (const niche of NICHE_PAGES) {
   urls.push(
     urlEntry(`${BASE_URL}/chat/${niche.slug}`, {
+      lastmod: today,
       changefreq: "weekly",
       priority: 0.9,
     })
