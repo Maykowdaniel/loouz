@@ -153,7 +153,7 @@ async function startBotChat(socketId) {
     });
 
     // Bot inicia (30% chance de mandar primeiro)
-    if (Math.random() > 0.3) {
+    if (Math.random() > 0.2) {
         // Delay realista
         const initialHesitation = 2500 + Math.random() * 2000;
 
@@ -289,7 +289,7 @@ io.on("connection", (socket) => {
                 // Humano x Bot
                 socket.emit("receive_1v1_message", {...data, sender: "user" });
 
-                if (Math.random() < 0.10) { // Chance de sair
+                if (Math.random() < 0.05) { // Chance de sair
                     setTimeout(() => {
                         socket.emit("text_partner_disconnected");
                         textPairs.delete(socket.id);
