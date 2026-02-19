@@ -11,6 +11,7 @@ const ROUTES_TO_PRERENDER = [
   '/random-video-chat',
   '/anonymous-video-chat',
   '/talk-to-strangers',
+  '/anonymous-chat',
 ]
 
 // Puppeteer não funciona na Vercel (falta libnspr4, Chrome não inicia).

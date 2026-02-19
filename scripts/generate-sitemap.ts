@@ -72,7 +72,22 @@ for (const path of legalRoutes) {
   );
 }
 
-// 3. Blog index
+// 3. Money Pages - High-converting landing pages (priority 0.85)
+const landingPages = [
+  "/anonymous-chat",
+  "/talk-to-strangers",
+  "/omegle-alternative",
+];
+for (const path of landingPages) {
+  urls.push(
+    urlEntry(`${BASE_URL}${path}`, {
+      changefreq: "weekly",
+      priority: 0.85,
+    })
+  );
+}
+
+// 4. Blog index
 urls.push(
   urlEntry(`${BASE_URL}/blog`, {
     changefreq: "daily",
@@ -80,7 +95,7 @@ urls.push(
   })
 );
 
-// 4. Dynamic niche pages (priority 0.9, changefreq weekly)
+// 5. Dynamic niche pages (priority 0.9, changefreq weekly)
 for (const niche of NICHE_PAGES) {
   urls.push(
     urlEntry(`${BASE_URL}/chat/${niche.slug}`, {
@@ -90,7 +105,7 @@ for (const niche of NICHE_PAGES) {
   );
 }
 
-// 5. Dynamic blog posts (priority 0.7, lastmod from date)
+// 6. Dynamic blog posts (priority 0.7, lastmod from date)
 for (const post of BLOG_POSTS) {
   const lastmod = post.date ? post.date.split("T")[0] : undefined;
   urls.push(
@@ -116,6 +131,7 @@ writeFileSync(outputPath, sitemap, "utf-8");
 console.log(`✓ Sitemap generated: ${outputPath}`);
 console.log(`  - ${staticRoutes.length} static routes`);
 console.log(`  - ${legalRoutes.length} legal pages`);
+console.log(`  - ${landingPages.length} landing pages`);
 console.log(`  - 1 blog index`);
 console.log(`  - ${NICHE_PAGES.length} niche pages`);
 console.log(`  - ${BLOG_POSTS.length} blog posts`);
