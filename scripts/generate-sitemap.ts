@@ -57,7 +57,22 @@ for (const route of staticRoutes) {
   );
 }
 
-// 2. Blog index
+// 2. Legal pages (priority 0.6, changefreq monthly - E-E-A-T)
+const legalRoutes = [
+  "/privacy-policy",
+  "/terms-of-service",
+  "/community-guidelines",
+];
+for (const path of legalRoutes) {
+  urls.push(
+    urlEntry(`${BASE_URL}${path}`, {
+      changefreq: "monthly",
+      priority: 0.6,
+    })
+  );
+}
+
+// 3. Blog index
 urls.push(
   urlEntry(`${BASE_URL}/blog`, {
     changefreq: "daily",
@@ -65,7 +80,7 @@ urls.push(
   })
 );
 
-// 3. Dynamic niche pages (priority 0.9, changefreq weekly)
+// 4. Dynamic niche pages (priority 0.9, changefreq weekly)
 for (const niche of NICHE_PAGES) {
   urls.push(
     urlEntry(`${BASE_URL}/chat/${niche.slug}`, {
@@ -75,7 +90,7 @@ for (const niche of NICHE_PAGES) {
   );
 }
 
-// 4. Dynamic blog posts (priority 0.7, lastmod from date)
+// 5. Dynamic blog posts (priority 0.7, lastmod from date)
 for (const post of BLOG_POSTS) {
   const lastmod = post.date ? post.date.split("T")[0] : undefined;
   urls.push(
@@ -100,6 +115,7 @@ writeFileSync(outputPath, sitemap, "utf-8");
 
 console.log(`✓ Sitemap generated: ${outputPath}`);
 console.log(`  - ${staticRoutes.length} static routes`);
+console.log(`  - ${legalRoutes.length} legal pages`);
 console.log(`  - 1 blog index`);
 console.log(`  - ${NICHE_PAGES.length} niche pages`);
 console.log(`  - ${BLOG_POSTS.length} blog posts`);
