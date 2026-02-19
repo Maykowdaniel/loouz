@@ -12,7 +12,7 @@ import TermsOfService from "./pages/Legal/TermsOfService";
 import CommunityGuidelines from "./pages/Legal/CommunityGuidelines";
 import NotFound from "./pages/NotFound";
 import SeoLandingPage from "./pages/SeoLandingPage";
-import DynamicSeoPage from "./pages/DynamicSeoPage";
+import NicheChat from "./pages/NicheChat";
 import AnonymousChat from "./pages/LandingPages/AnonymousChat";
 import TalkToStrangers from "./pages/LandingPages/TalkToStrangers";
 import OmegleAlternative from "./pages/LandingPages/OmegleAlternative";
@@ -65,7 +65,7 @@ const App = () => (
           {/* Modos de Conversa */}
           <Route path="/text-chat" element={<TextChat1v1 />} />
           <Route path="/video" element={<VideoChat />} />
-          <Route path="/chat/:slug" element={<DynamicSeoPage />} />
+          <Route path="/chat/:slug" element={<NicheChat />} />
           <Route path="/chat" element={<Chat />} />
 
           {/* Blog */}
