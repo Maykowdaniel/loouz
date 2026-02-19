@@ -7,9 +7,15 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Setup from "./pages/Setup";
 import Terms from "./pages/Terms";
+import PrivacyPolicy from "./pages/Legal/PrivacyPolicy";
+import TermsOfService from "./pages/Legal/TermsOfService";
+import CommunityGuidelines from "./pages/Legal/CommunityGuidelines";
 import NotFound from "./pages/NotFound";
 import SeoLandingPage from "./pages/SeoLandingPage";
 import DynamicSeoPage from "./pages/DynamicSeoPage";
+import AnonymousChat from "./pages/LandingPages/AnonymousChat";
+import TalkToStrangers from "./pages/LandingPages/TalkToStrangers";
+import OmegleAlternative from "./pages/LandingPages/OmegleAlternative";
 import BlogIndex from "./pages/Blog/BlogIndex";
 import BlogPost from "./pages/Blog/BlogPost";
 
@@ -36,11 +42,19 @@ const App = () => (
           <Route path="/setup" element={<Setup />} />
           <Route path="/terms" element={<Terms />} />
 
+          {/* Legal Pages */}
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<TermsOfService />} />
+          <Route path="/community-guidelines" element={<CommunityGuidelines />} />
+
           {/* SEO Landing Pages */}
-          <Route path="/omegle-alternative" element={<SeoLandingPage />} />
           <Route path="/random-video-chat" element={<SeoLandingPage />} />
           <Route path="/anonymous-video-chat" element={<SeoLandingPage />} />
-          <Route path="/talk-to-strangers" element={<SeoLandingPage />} />
+
+          {/* Money Pages - High-converting landing pages */}
+          <Route path="/anonymous-chat" element={<AnonymousChat />} />
+          <Route path="/talk-to-strangers" element={<TalkToStrangers />} />
+          <Route path="/omegle-alternative" element={<OmegleAlternative />} />
 
           {/* Lar (Botões 1v1) */}
           <Route path="/lobby" element={<Lobby />} />

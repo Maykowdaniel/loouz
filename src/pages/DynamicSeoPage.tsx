@@ -3,32 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Home, Layers, HelpCircle, Video, Keyboard } from "lucide-react";
 import Footer from "@/components/Footer";
-import { getNicheBySlug, type NichePageData } from "@/data/nichePages";
+import { getNicheBySlug, type NichePage } from "@/data/nichePages";
 
 const SITE_URL = "https://www.louuz.com";
 const CHAT_BASE = "/chat";
-
-/** Template sections - placeholders: [Niche], [NicheName], [Emoji] */
-const ARTICLE_TEMPLATES = [
-  {
-    title: "Why [Niche] is Popular on Louuz",
-    content: `[Niche] chat has become one of the most sought-after experiences on Louuz. People from around the world want to connect with [NicheName] users—whether to practice a language, learn about the culture, or simply make international friends. The platform's random matching means you might meet someone from [NicheName] on your very first try.
-
-Louuz is built for global connections. No login, no barriers. Just click "Start Video Chat" or "Start Text Chat" and you're in. [NicheName] users are active at all hours, so you can find someone to talk to anytime. The anonymity lets everyone feel comfortable being themselves, which leads to more genuine conversations.`,
-  },
-  {
-    title: "How [Niche] Chat Works",
-    content: `Getting started with [Niche] chat on Louuz is simple. Open the site, choose video or text mode, and you'll be connected to a random user. There's no algorithm choosing who you see—pure randomness. That means every connection is a surprise and an opportunity.
-
-You can skip to the next person anytime with one click. No penalties, no limits. Many users spend sessions hopping between short chats and longer conversations. The key is to be open and curious. [NicheName] communities on Louuz are diverse; you might meet students, professionals, artists, or anyone in between.`,
-  },
-  {
-    title: "Tips for the Best [Niche] Chat Experience",
-    content: `Good lighting matters. Face a light source so you're visible on camera. A friendly wave or smile in the first seconds often sets the tone. If you're shy, start with Text Chat to warm up before going on camera.
-
-Be respectful and authentic. [Niche] chat thrives when people feel safe to be themselves. Use the report button if someone crosses the line. Louuz has AI moderation, but user reports help keep the community healthy. Most people are there for the same reasons you are—to connect, learn, and have interesting conversations.`,
-  },
-];
 
 const FAQ_TEMPLATES = [
   {
@@ -54,10 +32,10 @@ const FAQ_TEMPLATES = [
 ];
 
 /** Replaces [Niche], [NicheName], [Emoji] in a string */
-function applyPlaceholders(text: string, niche: NichePageData): string {
+function applyPlaceholders(text: string, niche: NichePage): string {
   return text
-    .replace(/\[Niche\]/g, niche.h1.split("–")[0].trim())
-    .replace(/\[NicheName\]/g, niche.displayName)
+    .replace(/\[Niche\]/g, niche.name)
+    .replace(/\[NicheName\]/g, niche.name)
     .replace(/\[Emoji\]/g, niche.emoji);
 }
 
@@ -92,9 +70,9 @@ const DynamicSeoPage = () => {
 
   useEffect(() => {
     if (niche) {
-      document.title = niche.title;
+      document.title = `${niche.h1Title} | Louuz`;
       const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) metaDesc.setAttribute("content", niche.description);
+      if (metaDesc) metaDesc.setAttribute("content", niche.metaDescription);
       let linkCanonical = document.querySelector(
         'link[rel="canonical"]'
       ) as HTMLLinkElement | null;
@@ -116,15 +94,7 @@ const DynamicSeoPage = () => {
 
   if (!niche) return null;
 
-  const intro = applyPlaceholders(
-    `${niche.emoji} [NicheName] chat on Louuz lets you connect with people who share your interest or culture. Free video and text chat, no login, no barriers. Start talking to strangers from around the world right now.`,
-    niche
-  );
-
-  const articles = ARTICLE_TEMPLATES.map((t) => ({
-    title: applyPlaceholders(t.title, niche),
-    content: applyPlaceholders(t.content, niche),
-  }));
+  const intro = `${niche.emoji} ${niche.name} chat on Louuz lets you connect with people who share your interest or culture. Free video and text chat, no login, no barriers. Start talking to strangers from around the world right now.`;
 
   const faq = FAQ_TEMPLATES.map((t) => ({
     question: applyPlaceholders(t.question, niche),
@@ -276,38 +246,18 @@ const DynamicSeoPage = () => {
       <main className="relative flex flex-col flex-grow px-4 w-full max-w-4xl mx-auto z-10 pb-16">
         <div className="text-center mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <h1 className="text-2xl sm:text-3xl font-bold text-white uppercase tracking-wider opacity-80">
-            {niche.emoji} {niche.h1}
+            {niche.emoji} {niche.h1Title}
           </h1>
-          {niche.nativeH1 && (
-            <h2 className="text-xl sm:text-2xl font-semibold text-cyan-400 mt-2">
-              {niche.nativeH1}
-            </h2>
-          )}
 
           <p className="text-lg text-zinc-400 max-w-2xl mx-auto mt-4 leading-relaxed">
             {intro}
           </p>
         </div>
 
-        <article className="space-y-16 border-t border-white/10 pt-16">
-          {articles.map((section, idx) => (
-            <section
-              key={idx}
-              className="animate-in fade-in slide-in-from-bottom-4 duration-700"
-            >
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">
-                {section.title}
-              </h2>
-              <div className="text-zinc-400 leading-relaxed space-y-4">
-                {section.content.split("\n\n").map((para, pIdx) => (
-                  <p key={pIdx} className="text-base sm:text-lg">
-                    {para}
-                  </p>
-                ))}
-              </div>
-            </section>
-          ))}
-        </article>
+        <article
+          className="space-y-6 border-t border-white/10 pt-16 prose prose-invert prose-p:text-zinc-400 prose-p:leading-relaxed max-w-4xl mx-auto"
+          dangerouslySetInnerHTML={{ __html: niche.seoContent }}
+        />
 
         {/* FAQ */}
         <section className="mt-20 space-y-6">

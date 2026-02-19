@@ -81,29 +81,33 @@ const Footer = () => {
 
 <div className="w-full border-t border-white/5 my-6"></div>
         
-        <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-zinc-600 uppercase tracking-widest font-semibold text-center max-w-4xl mx-auto">
-          <Link to="/blog" className="hover:text-zinc-400 transition-colors">Blog</Link>
-          <Link to="/chat/brazil" className="hover:text-zinc-400 transition-colors">Chat Brazil</Link>
-          <Link to="/chat/usa" className="hover:text-zinc-400 transition-colors">USA Video Chat</Link>
-          <Link to="/chat/germany" className="hover:text-zinc-400 transition-colors">German Chat</Link>
-          <Link to="/chat/india" className="hover:text-zinc-400 transition-colors">India Chat</Link>
-          <Link to="/chat/anime" className="hover:text-zinc-400 transition-colors">Anime Talk</Link>
-          <Link to="/chat/lgbtq" className="hover:text-zinc-400 transition-colors">LGBTQ+ Chat</Link>
-          <Link to="/chat/gamers" className="hover:text-zinc-400 transition-colors">Gamer Chat</Link>
-          <Link to="/chat/dating" className="hover:text-zinc-400 transition-colors">Dating Chat</Link>
+        <div className="flex flex-wrap justify-center gap-x-8 gap-y-6 sm:gap-x-12 max-w-4xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-xs text-zinc-600 uppercase tracking-widest font-semibold">
+            <Link to="/blog" className="hover:text-zinc-400 transition-colors">Blog</Link>
+            <Link to="/chat/brazil" className="hover:text-zinc-400 transition-colors">Chat Brazil</Link>
+            <Link to="/chat/usa" className="hover:text-zinc-400 transition-colors">USA Video Chat</Link>
+            <Link to="/chat/germany" className="hover:text-zinc-400 transition-colors">German Chat</Link>
+            <Link to="/chat/india" className="hover:text-zinc-400 transition-colors">India Chat</Link>
+            <Link to="/chat/anime" className="hover:text-zinc-400 transition-colors">Anime Talk</Link>
+            <Link to="/chat/lgbtq" className="hover:text-zinc-400 transition-colors">LGBTQ+ Chat</Link>
+            <Link to="/chat/gaming" className="hover:text-zinc-400 transition-colors">Gamer Chat</Link>
+            <Link to="/chat/dating" className="hover:text-zinc-400 transition-colors">Dating Chat</Link>
+          </div>
+          <div className="flex flex-col items-center sm:items-start">
+            <span className="text-zinc-600 uppercase tracking-widest text-xs font-semibold mb-2">Legal</span>
+            <div className="flex flex-col gap-1 text-sm font-medium text-zinc-400">
+              <Link to="/privacy-policy" className="hover:text-cyan-400 transition-colors">Privacy Policy</Link>
+              <Link to="/terms-of-service" className="hover:text-cyan-400 transition-colors">Terms of Service</Link>
+              <Link to="/community-guidelines" className="hover:text-cyan-400 transition-colors">Community Guidelines</Link>
+            </div>
+          </div>
         </div>
         
-        {/* Links Legais e Copyright */}
-        <div className="text-center">
-          <p className="text-zinc-500 text-sm mb-2">
+        {/* Copyright */}
+        <div className="text-center mt-4">
+          <p className="text-zinc-500 text-sm">
             © {currentYear} Louuz. All rights reserved.
           </p>
-          <div className="flex items-center justify-center gap-4 text-sm font-medium text-zinc-400">
-            <Link to="/terms" className="hover:text-cyan-400 transition-colors">
-              Terms of Service
-            </Link>
-            
-          </div>
         </div>
 
       </div>
