@@ -90,7 +90,7 @@ const Footer = () => {
             <Link to="/chat/india" className="hover:text-zinc-400 transition-colors">India Chat</Link>
             <Link to="/chat/anime" className="hover:text-zinc-400 transition-colors">Anime Talk</Link>
             <Link to="/chat/lgbtq" className="hover:text-zinc-400 transition-colors">LGBTQ+ Chat</Link>
-            <Link to="/chat/gamers" className="hover:text-zinc-400 transition-colors">Gamer Chat</Link>
+            <Link to="/chat/gaming" className="hover:text-zinc-400 transition-colors">Gamer Chat</Link>
             <Link to="/chat/dating" className="hover:text-zinc-400 transition-colors">Dating Chat</Link>
           </div>
           <div className="flex flex-col items-center sm:items-start">

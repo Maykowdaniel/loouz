@@ -1,69 +1,485 @@
 /**
- * Structured data for Long Tail SEO pages - /chat/:slug
- * Each niche/country gets a dedicated page with unique metadata and dynamic content.
+ * Programmatic SEO data for /chat/:slug
+ * 50 niche pages: 25 countries + 25 interests
  */
 
-export interface NichePageData {
+export interface NichePage {
   slug: string;
-  title: string;
-  description: string;
-  h1: string;
+  name: string;
+  type: "country" | "interest";
   emoji: string;
-  keywords: string[];
-  /** Short name for placeholders (e.g. "Brazil", "Anime") */
-  displayName: string;
-  /** (Novo) Frase na língua nativa para SEO Local */
-  nativeH1?: string; 
+  h1Title: string;
+  metaDescription: string;
+  seoContent: string;
 }
 
-/** Placeholders used in templates: [Niche], [NicheName], [Emoji] */
-export const NICHE_PAGES: NichePageData[] = [
-  {
-    slug: "brazil",
-    title: "Brazil Video Chat | Talk to Brazilians Online - Louuz",
-    description: "Free video and text chat with people from Brazil. Meet Brazilians online. Chat em vídeo com brasileiros grátis. No login required.",
-    h1: "Brazil Chat – Connect with Brazilians Worldwide",
-    nativeH1: "Chat de Vídeo com Brasileiros", // <--- O Google ama isso
-    emoji: "🇧🇷",
-    displayName: "Brazil",
-    keywords: ["brazil chat", "brazilian video chat", "chat with brazilians", "videochamada aleatoria", "conversar com estranhos"],
-  },
+export const NICHE_PAGES: NichePage[] = [
+  // ═══════════════════════════════════════════════════════════════
+  // PART 1: 25 COUNTRIES (Language & Culture Focus)
+  // ═══════════════════════════════════════════════════════════════
   {
     slug: "usa",
-    title: "USA Video Chat | Chat with Americans Online - Louuz",
-    description: "Talk to people from USA online. Free random video chat with Americans. No signup. Start chatting now.",
-    h1: "USA Chat – Meet Americans in Random Video Chat",
+    name: "USA",
+    type: "country",
     emoji: "🇺🇸",
-    displayName: "USA",
-    keywords: ["usa chat", "american video chat", "chat with americans", "usa random chat", "omegle usa"],
+    h1Title: "Random Video Chat in USA",
+    metaDescription: "Free random video and text chat with people from the USA. Meet Americans online—no login, no signup. Best Omegle alternative for USA stranger chat.",
+    seoContent: `<p>Meet strangers from the United States in real time with Louuz, the top Omegle alternative for random video chat. Whether you're practicing American English, exploring regional accents from New York to California, or simply want to connect with people across the US, our no-login stranger chat puts you one click away. Americans are online 24/7—college students, professionals, travelers, and everyday people looking for genuine conversation.</p><p>Our free platform requires zero registration. Just pick video or text mode and you're matched with a random stranger from the USA. Skip anytime, report if needed, and enjoy anonymous chat. No app download, no personal data. The best stranger chat for meeting Americans—try it now.</p>`,
+  },
+  {
+    slug: "uk",
+    name: "UK",
+    type: "country",
+    emoji: "🇬🇧",
+    h1Title: "Meet Strangers from UK",
+    metaDescription: "Random video chat with British people. Free stranger chat from UK—London, Manchester, Edinburgh. No login required. Omegle alternative for British chat.",
+    seoContent: `<p>Connect with strangers from the United Kingdom on Louuz, the free Omegle alternative that brings British charm to your screen. Whether you're into British humor, UK culture, football banter, or practicing your accent with natives from England, Scotland, Wales, or Northern Ireland, our random video chat has you covered. No login, no barriers—just instant stranger chat with people across the pond.</p><p>Louuz is built for spontaneous connection. Click start and you're in a 1v1 chat with a random British stranger. Text or video, skip or stay. We don't store chats or require accounts. Join thousands who use Louuz as their go-to stranger chat for meeting UK people. Free forever.</p>`,
+  },
+  {
+    slug: "canada",
+    name: "Canada",
+    type: "country",
+    emoji: "🇨🇦",
+    h1Title: "Random Video Chat in Canada",
+    metaDescription: "Free video chat with Canadians. Meet strangers from Canada—Toronto, Vancouver, Montreal. No signup. Best Omegle alternative for Canadian stranger chat.",
+    seoContent: `<p>Meet friendly strangers from Canada on Louuz, the modern Omegle alternative for random video chat. Canadians are known for being warm and easy to talk to—whether you want to discuss hockey, explore bilingual culture, or just have a chill conversation. Our no-login stranger chat connects you with people from Vancouver to Halifax in seconds. No registration, no personal data collected.</p><p>Louuz makes it easy to talk to strangers from anywhere. Choose video or text, set your preferences, and get matched with a random Canadian. Skip anyone you like, report bad actors, and enjoy anonymous chat. The best free stranger chat for meeting Canadians—try it now. Works on desktop and mobile.</p>`,
+  },
+  {
+    slug: "australia",
+    name: "Australia",
+    type: "country",
+    emoji: "🇦🇺",
+    h1Title: "Meet Strangers from Australia",
+    metaDescription: "Random video chat with Australians. Free stranger chat from Australia—Sydney, Melbourne, Brisbane. No login. Omegle alternative for Aussie chat.",
+    seoContent: `<p>Chat with strangers from Australia on Louuz, the top Omegle alternative for random video and text chat. Aussies bring a laid-back vibe, unique slang, and stories from down under. Whether you're into surfing, cricket, or just curious about life in Sydney, Melbourne, or the outback, our no-login stranger chat puts you in touch. Zero signup, zero hassle.</p><p>Louuz connects you with random strangers worldwide. Australians are active day and night—different time zones mean someone's always online. Free video and text chat, no app required. Skip to the next person anytime. The best stranger chat for meeting Australians—anonymous, fast, and 100% free.</p>`,
+  },
+  {
+    slug: "brazil",
+    name: "Brazil",
+    type: "country",
+    emoji: "🇧🇷",
+    h1Title: "Random Video Chat in Brazil",
+    metaDescription: "Free video chat with Brazilians. Meet strangers from Brazil—no login. Chat em vídeo com brasileiros. Best Omegle alternative for Brazilian stranger chat.",
+    seoContent: `<p>Conecte-se com estranhos do Brasil no Louuz, a melhor alternativa ao Omegle para chat de vídeo aleatório. Brasileiros são animados, receptivos e adoram conversar—seja sobre futebol, música, cultura ou apenas para praticar português. Nosso stranger chat não exige login nem cadastro. Um clique e você está falando com alguém de São Paulo, Rio, ou qualquer canto do país.</p><p>Louuz é 100% gratuito. Escolha vídeo ou texto, pule quando quiser, e aproveite o chat anônimo. Não armazenamos conversas nem pedimos dados pessoais. A melhor forma de conhecer brasileiros online—experimente agora. Funciona no celular e no computador.</p>`,
+  },
+  {
+    slug: "mexico",
+    name: "Mexico",
+    type: "country",
+    emoji: "🇲🇽",
+    h1Title: "Meet Strangers from Mexico",
+    metaDescription: "Random video chat with Mexicans. Free stranger chat from Mexico—no login. Chatea con mexicanos. Omegle alternative for Mexican video chat.",
+    seoContent: `<p>Conoce extraños de México en Louuz, la mejor alternativa a Omegle para chat de vídeo aleatorio. Mexicanos son cálidos, divertidos y siempre listos para una buena plática—ya sea sobre cultura, comida, música o la vida cotidiana. Nuestro stranger chat no requiere registro. Un clic y estás conectado con alguien de CDMX, Guadalajara, Monterrey o cualquier parte del país.</p><p>Louuz es gratis y anónimo. Elige vídeo o texto, salta cuando quieras y disfruta del chat sin login. No guardamos conversaciones ni pedimos datos personales. La mejor forma de conocer mexicanos en línea—pruébalo ahora. Funciona en móvil y escritorio.</p>`,
+  },
+  {
+    slug: "spain",
+    name: "Spain",
+    type: "country",
+    emoji: "🇪🇸",
+    h1Title: "Random Video Chat in Spain",
+    metaDescription: "Free video chat with Spaniards. Meet strangers from Spain—practice Spanish. No login. Best Omegle alternative for Spanish stranger chat.",
+    seoContent: `<p>Conecta con extraños de España en Louuz, la mejor alternativa a Omegle para chat de vídeo aleatorio. Si quieres practicar español con nativos, conocer la cultura española, o simplemente charlar con gente de Madrid, Barcelona, Valencia o Sevilla, nuestro stranger chat te pone en contacto en segundos. Sin registro, sin barreras—solo conversación real.</p><p>Louuz es gratis y anónimo. Elige vídeo o texto, salta cuando quieras. No guardamos chats ni pedimos datos. La mejor forma de conocer españoles online—pruébalo. Funciona en móvil y desktop. Perfect for language exchange and making friends.</p>`,
+  },
+  {
+    slug: "france",
+    name: "France",
+    type: "country",
+    emoji: "🇫🇷",
+    h1Title: "Meet Strangers from France",
+    metaDescription: "Random video chat with French people. Free stranger chat from France—practice French. No login. Omegle alternative for French video chat.",
+    seoContent: `<p>Rencontrez des inconnus de France sur Louuz, la meilleure alternative à Omegle pour le chat vidéo aléatoire. Que vous vouliez pratiquer le français avec des natifs, parler de culture, cuisine ou actualités, notre stranger chat vous connecte en un clic. Pas d'inscription, pas de données personnelles. Les Français sont en ligne à toute heure.</p><p>Louuz est gratuit et anonyme. Choisissez vidéo ou texte, passez à la personne suivante quand vous voulez. Nous ne stockons pas les conversations. La meilleure façon de rencontrer des Français en ligne—essayez maintenant. Fonctionne sur mobile et ordinateur.</p>`,
   },
   {
     slug: "germany",
-    title: "Germany Video Chat | Chat with Germans - Louuz",
-    description: "Free video chat with people from Germany. Meet Germans, practice German. Kostenloser Videochat auf Deutsch. No registration.",
-    h1: "Germany Chat – Connect with Germans Online",
-    nativeH1: "Kostenloser Videochat mit Fremden", // <--- Alemão Nativo
+    name: "Germany",
+    type: "country",
     emoji: "🇩🇪",
-    displayName: "Germany",
-    keywords: ["germany chat", "german video chat", "chat with germans", "deutschland chat", "videochat mit fremden"],
+    h1Title: "Random Video Chat in Germany",
+    metaDescription: "Free video chat with Germans. Meet strangers from Germany—practice German. No login. Best Omegle alternative for German stranger chat.",
+    seoContent: `<p>Triff Fremde aus Deutschland auf Louuz, die beste Omegle-Alternative für Zufalls-Videochat. Ob du Deutsch üben, über Kultur plaudern oder einfach Leute aus Berlin, München oder Hamburg kennenlernen willst—unser stranger chat verbindet dich in Sekunden. Kein Login, keine Anmeldung. Deutsche sind rund um die Uhr online.</p><p>Louuz ist kostenlos und anonym. Wähle Video oder Text, springe weiter wenn du willst. Wir speichern keine Chats. Die beste Art, Deutsche online kennenzulernen—probier es jetzt. Funktioniert auf Handy und PC. Perfect for language exchange.</p>`,
+  },
+  {
+    slug: "italy",
+    name: "Italy",
+    type: "country",
+    emoji: "🇮🇹",
+    h1Title: "Meet Strangers from Italy",
+    metaDescription: "Random video chat with Italians. Free stranger chat from Italy—no login. Omegle alternative for Italian video chat.",
+    seoContent: `<p>Incontra sconosciuti dall'Italia su Louuz, la migliore alternativa a Omegle per chat video casuale. Che tu voglia praticare l'italiano, parlare di cucina, calcio o cultura, il nostro stranger chat ti mette in contatto in un clic. Nessuna registrazione, nessun dato personale. Gli italiani sono online a qualsiasi ora.</p><p>Louuz è gratuito e anonimo. Scegli video o testo, salta quando vuoi. Non salviamo le chat. Il modo migliore per conoscere italiani online—provalo ora. Funziona su mobile e desktop. Best Omegle alternative for Italian stranger chat.</p>`,
+  },
+  {
+    slug: "japan",
+    name: "Japan",
+    type: "country",
+    emoji: "🇯🇵",
+    h1Title: "Random Video Chat in Japan",
+    metaDescription: "Free video chat with Japanese people. Meet strangers from Japan—anime, culture. No login. Best Omegle alternative for Japanese stranger chat.",
+    seoContent: `<p>Meet strangers from Japan on Louuz, the best Omegle alternative for random video chat. Japanese users bring a unique mix—anime fans, culture enthusiasts, language learners, and people curious about life in Tokyo, Osaka, or Kyoto. Our no-login stranger chat connects you in seconds. Practice Japanese, discuss J-pop and anime, or just make friends. No registration required.</p><p>Louuz is free and anonymous. Choose video or text, skip whenever you want. We don't store conversations. The best way to meet Japanese people online—try it now. Works on mobile and desktop. Perfect for language exchange and cultural discovery.</p>`,
+  },
+  {
+    slug: "south-korea",
+    name: "South Korea",
+    type: "country",
+    emoji: "🇰🇷",
+    h1Title: "Meet Strangers from South Korea",
+    metaDescription: "Random video chat with Koreans. Free stranger chat from Korea—K-pop, culture. No login. Omegle alternative for Korean video chat.",
+    seoContent: `<p>Connect with strangers from South Korea on Louuz, the top Omegle alternative for random video chat. Koreans bring K-pop vibes, tech culture, amazing food talks, and genuine curiosity. Whether you're into K-dramas, gaming, or learning Korean, our no-login stranger chat puts you one click away. Seoul, Busan, or anywhere—random matching means surprises every time.</p><p>Louuz is 100% free. No signup, no personal data. Pick video or text, skip to the next person anytime. We don't store chats. The best stranger chat for meeting Koreans—try it now. Works on all devices. Perfect for language exchange.</p>`,
   },
   {
     slug: "india",
-    title: "India Video Chat | Chat with Indians Online - Louuz",
-    description: "Free random video and text chat with people from India. Meet Indians, make friends. Free Indian Video Chat. No login.",
-    h1: "India Chat – Talk to Indians Worldwide",
-    nativeH1: "Free Random Video Chat India",
+    name: "India",
+    type: "country",
     emoji: "🇮🇳",
-    displayName: "India",
-    keywords: ["india chat", "indian video chat", "chat with indians", "india random chat", "desi video chat"],
+    h1Title: "Random Video Chat in India",
+    metaDescription: "Free video chat with Indians. Meet strangers from India—no login. Best Omegle alternative for Indian stranger chat.",
+    seoContent: `<p>Meet strangers from India on Louuz, the best Omegle alternative for random video and text chat. India is incredibly diverse—Bollywood fans, tech enthusiasts, students, professionals, and people from Mumbai to Bengaluru. Our no-login stranger chat connects you in seconds. Discuss cricket, cuisine, culture, or anything. No registration, no barriers.</p><p>Louuz is free and anonymous. Choose video or text, skip when you want. We don't store conversations. The best way to meet Indians online—try it now. Works on mobile and desktop. Perfect for language practice and making friends.</p>`,
   },
-  
+  {
+    slug: "philippines",
+    name: "Philippines",
+    type: "country",
+    emoji: "🇵🇭",
+    h1Title: "Meet Strangers from Philippines",
+    metaDescription: "Random video chat with Filipinos. Free stranger chat from Philippines—no login. Omegle alternative for Filipino video chat.",
+    seoContent: `<p>Connect with strangers from the Philippines on Louuz, the top Omegle alternative for random video chat. Filipinos are friendly, chatty, and love to connect—whether it's about Filipino culture, karaoke, food, or life in Manila, Cebu, or the provinces. Our no-login stranger chat connects you in seconds. No registration required. Perfect for practicing Tagalog or just making friends.</p><p>Louuz is 100% free. Pick video or text, skip anytime. We don't store chats. The best stranger chat for meeting Filipinos—try it now. Works on all devices. Anonymous and fast.</p>`,
+  },
+  {
+    slug: "indonesia",
+    name: "Indonesia",
+    type: "country",
+    emoji: "🇮🇩",
+    h1Title: "Random Video Chat in Indonesia",
+    metaDescription: "Free video chat with Indonesians. Meet strangers from Indonesia—no login. Best Omegle alternative for Indonesian stranger chat.",
+    seoContent: `<p>Meet strangers from Indonesia on Louuz, the best Omegle alternative for random video chat. Indonesians from Jakarta, Bali, Surabaya, and beyond bring warmth and curiosity. Discuss Indonesian culture, food, travel, or practice Bahasa. Our no-login stranger chat connects you in seconds. No registration, no personal data. Just real conversations.</p><p>Louuz is free and anonymous. Choose video or text, skip when you want. We don't store conversations. The best way to meet Indonesians online—try it now. Works on mobile and desktop. Perfect for language exchange.</p>`,
+  },
+  {
+    slug: "turkey",
+    name: "Turkey",
+    type: "country",
+    emoji: "🇹🇷",
+    h1Title: "Meet Strangers from Turkey",
+    metaDescription: "Random video chat with Turks. Free stranger chat from Turkey—no login. Omegle alternative for Turkish video chat.",
+    seoContent: `<p>Connect with strangers from Turkey on Louuz, the top Omegle alternative for random video chat. Turks bring rich culture, amazing food stories, and warmth. Whether you're into Turkish series, history, or practicing the language, our no-login stranger chat puts you in touch. Istanbul, Ankara, or anywhere—random matching means genuine surprises.</p><p>Louuz is 100% free. No signup, no personal data. Pick video or text, skip anytime. We don't store chats. The best stranger chat for meeting Turks—try it now. Works on all devices.</p>`,
+  },
+  {
+    slug: "russia",
+    name: "Russia",
+    type: "country",
+    emoji: "🇷🇺",
+    h1Title: "Random Video Chat in Russia",
+    metaDescription: "Free video chat with Russians. Meet strangers from Russia—no login. Best Omegle alternative for Russian stranger chat.",
+    seoContent: `<p>Meet strangers from Russia on Louuz, the best Omegle alternative for random video chat. Russians bring depth—literature, chess, music, and curiosity about the world. Whether you want to practice Russian, discuss culture, or just connect, our no-login stranger chat puts you one click away. Moscow, St. Petersburg, or anywhere. No registration required.</p><p>Louuz is free and anonymous. Choose video or text, skip when you want. We don't store conversations. The best way to meet Russians online—try it now. Works on mobile and desktop.</p>`,
+  },
+  {
+    slug: "argentina",
+    name: "Argentina",
+    type: "country",
+    emoji: "🇦🇷",
+    h1Title: "Meet Strangers from Argentina",
+    metaDescription: "Random video chat with Argentinians. Free stranger chat from Argentina—no login. Omegle alternative for Argentine video chat.",
+    seoContent: `<p>Conecta con extraños de Argentina en Louuz, la mejor alternativa a Omegle para chat de vídeo aleatorio. Argentineños son apasionados—fútbol, tango, asado, y buena onda. Ya sea que quieras practicar español rioplatense o conocer la vida en Buenos Aires, Córdoba o Mendoza, nuestro stranger chat te conecta en segundos. Sin registro, sin datos personales.</p><p>Louuz es gratis y anónimo. Elige vídeo o texto, salta cuando quieras. No guardamos chats. La mejor forma de conocer argentinos online—pruébalo ahora. Funciona en móvil y PC.</p>`,
+  },
+  {
+    slug: "portugal",
+    name: "Portugal",
+    type: "country",
+    emoji: "🇵🇹",
+    h1Title: "Random Video Chat in Portugal",
+    metaDescription: "Free video chat with Portuguese. Meet strangers from Portugal—no login. Best Omegle alternative for Portuguese stranger chat.",
+    seoContent: `<p>Conheça estranhos de Portugal no Louuz, a melhor alternativa ao Omegle para chat de vídeo aleatório. Portugueses trazem fado, história, e simpatia. Quer praticar português europeu, falar de Lisboa, Porto ou do Algarve? Nosso stranger chat conecta você em segundos. Sem cadastro, sem barreiras. Portugueses estão online a qualquer hora.</p><p>Louuz é gratuito e anónimo. Escolha vídeo ou texto, mude quando quiser. Não armazenamos conversas. A melhor forma de conhecer portugueses online—experimente agora. Funciona em mobile e desktop.</p>`,
+  },
+  {
+    slug: "colombia",
+    name: "Colombia",
+    type: "country",
+    emoji: "🇨🇴",
+    h1Title: "Meet Strangers from Colombia",
+    metaDescription: "Random video chat with Colombians. Free stranger chat from Colombia—no login. Omegle alternative for Colombian video chat.",
+    seoContent: `<p>Conecta con extraños de Colombia en Louuz, la mejor alternativa a Omegle para chat de vídeo aleatorio. Colombianos son alegres, amigables y siempre listos para una buena conversación—cultura, música, café, o la vida en Bogotá, Medellín o Cartagena. Nuestro stranger chat no requiere registro. Un clic y estás conectado.</p><p>Louuz es gratis y anónimo. Elige vídeo o texto, salta cuando quieras. No guardamos chats. La mejor forma de conocer colombianos online—pruébalo ahora. Funciona en móvil y escritorio.</p>`,
+  },
+  {
+    slug: "sweden",
+    name: "Sweden",
+    type: "country",
+    emoji: "🇸🇪",
+    h1Title: "Random Video Chat in Sweden",
+    metaDescription: "Free video chat with Swedes. Meet strangers from Sweden—no login. Best Omegle alternative for Swedish stranger chat.",
+    seoContent: `<p>Meet strangers from Sweden on Louuz, the best Omegle alternative for random video chat. Swedes bring Nordic cool—design, tech, sustainability, and curiosity. Whether you want to practice Swedish, discuss life in Stockholm or Malmö, or just connect, our no-login stranger chat puts you one click away. No registration required.</p><p>Louuz is free and anonymous. Choose video or text, skip when you want. We don't store conversations. The best way to meet Swedes online—try it now. Works on mobile and desktop. Perfect for language exchange.</p>`,
+  },
+  {
+    slug: "netherlands",
+    name: "Netherlands",
+    type: "country",
+    emoji: "🇳🇱",
+    h1Title: "Meet Strangers from Netherlands",
+    metaDescription: "Random video chat with Dutch. Free stranger chat from Netherlands—no login. Omegle alternative for Dutch video chat.",
+    seoContent: `<p>Connect with strangers from the Netherlands on Louuz, the top Omegle alternative for random video chat. Dutch people are direct, friendly, and often multilingual. Discuss Amsterdam, cycling, cheese, or practice Dutch. Our no-login stranger chat connects you in seconds. No registration, no personal data. Just real conversations with people from Holland.</p><p>Louuz is 100% free. Pick video or text, skip anytime. We don't store chats. The best stranger chat for meeting Dutch people—try it now. Works on all devices.</p>`,
+  },
+  {
+    slug: "poland",
+    name: "Poland",
+    type: "country",
+    emoji: "🇵🇱",
+    h1Title: "Random Video Chat in Poland",
+    metaDescription: "Free video chat with Poles. Meet strangers from Poland—no login. Best Omegle alternative for Polish stranger chat.",
+    seoContent: `<p>Meet strangers from Poland on Louuz, the best Omegle alternative for random video chat. Poles bring history, warmth, and strong opinions. Whether you want to practice Polish, discuss Warsaw or Krakow, or just connect, our no-login stranger chat puts you one click away. No registration required.</p><p>Louuz is free and anonymous. Choose video or text, skip when you want. We don't store conversations. The best way to meet Polish people online—try it now. Works on mobile and desktop.</p>`,
+  },
+  {
+    slug: "vietnam",
+    name: "Vietnam",
+    type: "country",
+    emoji: "🇻🇳",
+    h1Title: "Meet Strangers from Vietnam",
+    metaDescription: "Random video chat with Vietnamese. Free stranger chat from Vietnam—no login. Omegle alternative for Vietnamese video chat.",
+    seoContent: `<p>Connect with strangers from Vietnam on Louuz, the top Omegle alternative for random video chat. Vietnamese bring energy, food culture, and curiosity. Hanoi, Ho Chi Minh, or anywhere—our no-login stranger chat connects you in seconds. Practice Vietnamese, discuss culture, or make friends. No registration required.</p><p>Louuz is 100% free. Pick video or text, skip anytime. We don't store chats. The best stranger chat for meeting Vietnamese—try it now. Works on all devices.</p>`,
+  },
+  {
+    slug: "thailand",
+    name: "Thailand",
+    type: "country",
+    emoji: "🇹🇭",
+    h1Title: "Random Video Chat in Thailand",
+    metaDescription: "Free video chat with Thais. Meet strangers from Thailand—no login. Best Omegle alternative for Thai stranger chat.",
+    seoContent: `<p>Meet strangers from Thailand on Louuz, the best Omegle alternative for random video chat. Thais bring the land of smiles—Bangkok vibes, food culture, and warmth. Whether you want to practice Thai, discuss travel, or just connect, our no-login stranger chat puts you one click away. No registration required.</p><p>Louuz is free and anonymous. Choose video or text, skip when you want. We don't store conversations. The best way to meet Thai people online—try it now. Works on mobile and desktop.</p>`,
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // PART 2: 25 INTERESTS (Hobby & Vibe Focus)
+  // ═══════════════════════════════════════════════════════════════
+  {
+    slug: "anime",
+    name: "Anime",
+    type: "interest",
+    emoji: "🎌",
+    h1Title: "Anime Random Chat",
+    metaDescription: "Meet anime fans in random video chat. Free stranger chat for otaku—no login. Best Omegle alternative for anime chat.",
+    seoContent: `<p>Meet anime fans from around the world on Louuz, the best Omegle alternative for random video and text chat. Otaku culture is global—discuss your favorite series, manga, cosplay, or upcoming seasons. Our no-login stranger chat connects you with fellow weebs in seconds. No registration, no barriers. Just instant anime talk with people who get it.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for meeting anime fans—try it now. Works on all devices. Anonymous and fun.</p>`,
+  },
+  {
+    slug: "gaming",
+    name: "Gaming",
+    type: "interest",
+    emoji: "🎮",
+    h1Title: "Meet Gaming Fans Online",
+    metaDescription: "Random video chat for gamers. Free stranger chat—discuss games, no login. Best Omegle alternative for gamer chat.",
+    seoContent: `<p>Connect with gamers worldwide on Louuz, the top Omegle alternative for random video chat. Discuss your favorite games—FPS, RPG, indie, mobile, or retro. Find teammates, debate metas, or just vibe with fellow gamers. Our no-login stranger chat puts you in touch in seconds. No registration. Console, PC, or mobile—gamers of all kinds are here.</p><p>Louuz is free and anonymous. Choose video or text, skip anytime. We don't store chats. The best stranger chat for meeting gamers—try it now. Works on all devices.</p>`,
+  },
+  {
+    slug: "dating",
+    name: "Dating",
+    type: "interest",
+    emoji: "💕",
+    h1Title: "Dating Random Chat",
+    metaDescription: "Meet singles in random video chat. Free stranger chat for dating—no login. Omegle alternative for single people looking to connect.",
+    seoContent: `<p>Meet singles looking to connect on Louuz, the best Omegle alternative for random video chat. Whether you're looking for a casual chat, a potential match, or just to practice your flirting skills, our no-login stranger chat puts you in front of real people. No swiping, no algorithms—just random connections. 18+ only. No registration required.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for meeting singles—try it now. Be respectful and have fun.</p>`,
+  },
+  {
+    slug: "lgbtq",
+    name: "LGBTQ+",
+    type: "interest",
+    emoji: "🏳️‍🌈",
+    h1Title: "LGBTQ+ Random Chat",
+    metaDescription: "Meet LGBTQ+ folks in random video chat. Free stranger chat—no login. Best Omegle alternative for LGBTQ+ community chat.",
+    seoContent: `<p>Connect with LGBTQ+ people worldwide on Louuz, the best Omegle alternative for random video chat. A safe space to be yourself, make friends, and talk openly. Whether you're looking for community, support, or just casual conversation, our no-login stranger chat puts you in touch. No registration. Be respectful—this is a space for everyone.</p><p>Louuz is 100% free and anonymous. Choose video or text, skip when you want. We don't store chats. The best stranger chat for the LGBTQ+ community—try it now. 18+ only.</p>`,
+  },
+  {
+    slug: "music",
+    name: "Music",
+    type: "interest",
+    emoji: "🎵",
+    h1Title: "Meet Music Fans Online",
+    metaDescription: "Random video chat for music lovers. Free stranger chat—discuss music, no login. Omegle alternative for music chat.",
+    seoContent: `<p>Meet music lovers from every genre on Louuz, the top Omegle alternative for random video chat. Discuss your favorite artists, bands, concerts, or discover new sounds. Hip-hop, rock, electronic, classical—our no-login stranger chat connects you with fellow music fans in seconds. No registration. Share playlists, debate hot takes, or just vibe.</p><p>Louuz is free and anonymous. Choose video or text, skip anytime. We don't store chats. The best stranger chat for meeting music fans—try it now. Works on all devices.</p>`,
+  },
+  {
+    slug: "kpop",
+    name: "K-Pop",
+    type: "interest",
+    emoji: "🌟",
+    h1Title: "K-Pop Random Chat",
+    metaDescription: "Meet K-Pop fans in random video chat. Free stranger chat—no login. Best Omegle alternative for K-Pop chat.",
+    seoContent: `<p>Connect with K-Pop fans worldwide on Louuz, the best Omegle alternative for random video chat. BTS, BLACKPINK, Stray Kids, or any group—our no-login stranger chat puts you in touch with fellow stans. Discuss comebacks, bias lists, or just fangirl together. No registration. K-Pop community is global and always active.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for K-Pop fans—try it now. Works on all devices.</p>`,
+  },
+  {
+    slug: "college",
+    name: "College",
+    type: "interest",
+    emoji: "🎓",
+    h1Title: "College Random Chat",
+    metaDescription: "Meet college students in random video chat. Free stranger chat for students—no login. Omegle alternative for college chat.",
+    seoContent: `<p>Meet college students from around the world on Louuz, the best Omegle alternative for random video chat. Discuss classes, campus life, exams, or just blow off steam. Our no-login stranger chat connects you with fellow students in seconds. No registration. Dorm life, majors, future plans—students get it.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for college students—try it now. 18+ only.</p>`,
+  },
+  {
+    slug: "teens",
+    name: "Teens",
+    type: "interest",
+    emoji: "👋",
+    h1Title: "Teens Random Chat",
+    metaDescription: "Meet teens in random video chat. Free stranger chat for young people—no login. Omegle alternative for teen chat. 18+ only.",
+    seoContent: `<p>Louuz is an 18+ platform. Users must be 18 or older to use our random video and text chat. We do not offer chat for minors. If you are 18 or older and looking to meet people in your age group, our no-login stranger chat connects you with random users worldwide. No registration required.</p><p>Louuz is free and anonymous. Choose video or text, skip when you want. We don't store chats. The best Omegle alternative for adult stranger chat—try it now. Please verify your age before using.</p>`,
+  },
+  {
+    slug: "adults",
+    name: "Adults",
+    type: "interest",
+    emoji: "🔞",
+    h1Title: "Adults Random Chat",
+    metaDescription: "Random video chat for adults 18+. Free stranger chat—no login. Best Omegle alternative for adult video chat.",
+    seoContent: `<p>Louuz is an 18+ platform for adults. Our random video and text chat connects you with other adults worldwide. Mature conversations, no judgment, no registration. Our no-login stranger chat puts you in touch in seconds. Be respectful—harassment and explicit content are not allowed. Report bad actors to keep the community safe.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best Omegle alternative for adult stranger chat—try it now. 18+ only.</p>`,
+  },
+  {
+    slug: "roleplay",
+    name: "Roleplay",
+    type: "interest",
+    emoji: "🎭",
+    h1Title: "Meet Roleplay Fans Online",
+    metaDescription: "Random video chat for roleplayers. Free stranger chat—no login. Omegle alternative for roleplay chat.",
+    seoContent: `<p>Meet roleplay enthusiasts on Louuz, the best Omegle alternative for random video chat. Whether you're into D&D, LARP, cosplay roleplay, or creative writing, our no-login stranger chat connects you with like-minded people. No registration. Keep it respectful and consensual. 18+ only.</p><p>Louuz is free and anonymous. Choose video or text, skip when you want. We don't store chats. The best stranger chat for roleplay fans—try it now.</p>`,
+  },
+  {
+    slug: "language-exchange",
+    name: "Language Exchange",
+    type: "interest",
+    emoji: "🗣️",
+    h1Title: "Language Exchange Random Chat",
+    metaDescription: "Practice languages in random video chat. Free stranger chat for language exchange—no login. Best Omegle alternative.",
+    seoContent: `<p>Practice any language with natives on Louuz, the best Omegle alternative for random video chat. Spanish, French, Japanese, Korean, German—our no-login stranger chat connects you with people who speak the language. No registration. Perfect for language learners. Discuss culture, correct each other, or just converse. Free and anonymous.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for language exchange—try it now. Works on all devices.</p>`,
+  },
+  {
+    slug: "fitness",
+    name: "Fitness",
+    type: "interest",
+    emoji: "💪",
+    h1Title: "Meet Fitness Fans Online",
+    metaDescription: "Random video chat for fitness enthusiasts. Free stranger chat—no login. Omegle alternative for fitness chat.",
+    seoContent: `<p>Connect with fitness enthusiasts on Louuz, the best Omegle alternative for random video chat. Gym bros, yogis, runners, or anyone into health and wellness. Discuss routines, nutrition, motivation, or just vibe. Our no-login stranger chat puts you in touch in seconds. No registration.</p><p>Louuz is free and anonymous. Choose video or text, skip when you want. We don't store chats. The best stranger chat for fitness fans—try it now.</p>`,
+  },
+  {
+    slug: "movies",
+    name: "Movies",
+    type: "interest",
+    emoji: "🎬",
+    h1Title: "Movies Random Chat",
+    metaDescription: "Meet movie fans in random video chat. Free stranger chat—no login. Best Omegle alternative for movie chat.",
+    seoContent: `<p>Meet movie buffs worldwide on Louuz, the top Omegle alternative for random video chat. Discuss blockbusters, indie films, classics, or your watchlist. Our no-login stranger chat connects you with fellow cinephiles in seconds. No registration. Spoilers at your own risk—or find your next recommendation.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for movie fans—try it now.</p>`,
+  },
+  {
+    slug: "books",
+    name: "Books",
+    type: "interest",
+    emoji: "📚",
+    h1Title: "Meet Book Lovers Online",
+    metaDescription: "Random video chat for readers. Free stranger chat—no login. Omegle alternative for book chat.",
+    seoContent: `<p>Connect with book lovers on Louuz, the best Omegle alternative for random video chat. Fiction, non-fiction, fantasy, romance—discuss your latest read or get recommendations. Our no-login stranger chat puts you in touch with fellow readers in seconds. No registration. Perfect for introverts who love to talk about stories.</p><p>Louuz is free and anonymous. Choose video or text, skip when you want. We don't store chats. The best stranger chat for book lovers—try it now.</p>`,
+  },
+  {
+    slug: "art",
+    name: "Art",
+    type: "interest",
+    emoji: "🎨",
+    h1Title: "Art Random Chat",
+    metaDescription: "Meet artists in random video chat. Free stranger chat—no login. Best Omegle alternative for art chat.",
+    seoContent: `<p>Meet artists and art lovers on Louuz, the top Omegle alternative for random video chat. Digital art, traditional, photography, design—our no-login stranger chat connects you with creative people. Share your work, get feedback, or discuss inspiration. No registration. The art community is global and welcoming.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for artists—try it now.</p>`,
+  },
+  {
+    slug: "programming",
+    name: "Programming",
+    type: "interest",
+    emoji: "💻",
+    h1Title: "Meet Programmers Online",
+    metaDescription: "Random video chat for developers. Free stranger chat—no login. Omegle alternative for programming chat.",
+    seoContent: `<p>Connect with developers and programmers on Louuz, the best Omegle alternative for random video chat. Discuss languages, frameworks, debugging, or career tips. Our no-login stranger chat puts you in touch with fellow coders. No registration. Perfect for pair programming vibes or just tech talk.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for programmers—try it now.</p>`,
+  },
+  {
+    slug: "travel",
+    name: "Travel",
+    type: "interest",
+    emoji: "✈️",
+    h1Title: "Travel Random Chat",
+    metaDescription: "Meet travelers in random video chat. Free stranger chat—no login. Best Omegle alternative for travel chat.",
+    seoContent: `<p>Meet travel enthusiasts worldwide on Louuz, the top Omegle alternative for random video chat. Share stories, get destination tips, or dream about your next trip. Our no-login stranger chat connects you with wanderers in seconds. No registration. From backpackers to luxury travelers—everyone's welcome.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for travelers—try it now.</p>`,
+  },
+  {
+    slug: "memes",
+    name: "Memes",
+    type: "interest",
+    emoji: "😂",
+    h1Title: "Memes Random Chat",
+    metaDescription: "Meet meme lovers in random video chat. Free stranger chat—no login. Omegle alternative for meme chat.",
+    seoContent: `<p>Meet meme lords and shitposters on Louuz, the best Omegle alternative for random video chat. Discuss the latest viral hits, share references, or just laugh. Our no-login stranger chat puts you in touch with people who speak meme. No registration. Keep it light and fun.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for meme fans—try it now.</p>`,
+  },
+  {
+    slug: "astrology",
+    name: "Astrology",
+    type: "interest",
+    emoji: "✨",
+    h1Title: "Meet Astrology Fans Online",
+    metaDescription: "Random video chat for astrology lovers. Free stranger chat—no login. Omegle alternative for astrology chat.",
+    seoContent: `<p>Connect with astrology enthusiasts on Louuz, the best Omegle alternative for random video chat. Discuss signs, birth charts, compatibility, or cosmic vibes. Our no-login stranger chat puts you in touch with fellow star gazers. No registration. Whether you're a skeptic or a believer, the conversation is always interesting.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for astrology fans—try it now.</p>`,
+  },
+  {
+    slug: "cars",
+    name: "Cars",
+    type: "interest",
+    emoji: "🏎️",
+    h1Title: "Cars Random Chat",
+    metaDescription: "Meet car enthusiasts in random video chat. Free stranger chat—no login. Omegle alternative for car chat.",
+    seoContent: `<p>Meet car lovers on Louuz, the top Omegle alternative for random video chat. JDM, muscle cars, EVs, or classics—our no-login stranger chat connects you with petrolheads. Discuss builds, races, or dream cars. No registration. Gearheads unite.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for car enthusiasts—try it now.</p>`,
+  },
+  {
+    slug: "crypto",
+    name: "Crypto",
+    type: "interest",
+    emoji: "₿",
+    h1Title: "Meet Crypto Fans Online",
+    metaDescription: "Random video chat for crypto enthusiasts. Free stranger chat—no login. Omegle alternative for crypto chat.",
+    seoContent: `<p>Connect with crypto enthusiasts on Louuz, the best Omegle alternative for random video chat. Bitcoin, altcoins, DeFi, NFTs—discuss the markets or share alpha. Our no-login stranger chat puts you in touch with fellow degens. No registration. Not financial advice—just conversation.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for crypto fans—try it now.</p>`,
+  },
+  {
+    slug: "lonely",
+    name: "Lonely",
+    type: "interest",
+    emoji: "💙",
+    h1Title: "Lonely? Meet Strangers Online",
+    metaDescription: "Random video chat when you feel lonely. Free stranger chat—no login. Omegle alternative to connect when you need someone.",
+    seoContent: `<p>Feeling lonely? Louuz is here. Our random video and text chat connects you with real people when you need connection. No login, no judgment—just a chance to talk. Many people come to Louuz for the same reason. A casual chat can make a difference. Our no-login stranger chat puts you one click away from conversation.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best Omegle alternative when you need someone to talk to—try it now. You're not alone.</p>`,
+  },
+  {
+    slug: "vent",
+    name: "Vent",
+    type: "interest",
+    emoji: "💬",
+    h1Title: "Vent to Strangers Online",
+    metaDescription: "Random video chat to vent. Free stranger chat—no login. Omegle alternative to talk when you need to get it out.",
+    seoContent: `<p>Sometimes you need to vent. Louuz offers anonymous random video and text chat where you can talk to strangers without judgment. No login, no trace. Get it off your chest with someone who'll listen. Our no-login stranger chat connects you in seconds. Not a substitute for professional help—but sometimes a listening ear helps.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best Omegle alternative when you need to vent—try it now. Be kind to each other.</p>`,
+  },
+  {
+    slug: "philosophy",
+    name: "Philosophy",
+    type: "interest",
+    emoji: "🤔",
+    h1Title: "Philosophy Random Chat",
+    metaDescription: "Meet philosophy fans in random video chat. Free stranger chat—no login. Omegle alternative for deep conversations.",
+    seoContent: `<p>Meet deep thinkers on Louuz, the best Omegle alternative for random video chat. Discuss existentialism, ethics, meaning of life, or just ask big questions. Our no-login stranger chat puts you in touch with people who love to ponder. No registration. Philosophy fans are always down for a stimulating conversation.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for philosophy lovers—try it now.</p>`,
+  },
+  {
+    slug: "introverts",
+    name: "Introverts",
+    type: "interest",
+    emoji: "🦋",
+    h1Title: "Introverts Random Chat",
+    metaDescription: "Random video chat for introverts. Free stranger chat—no login. Omegle alternative for shy people to connect.",
+    seoContent: `<p>Introverts welcome. Louuz is the best Omegle alternative for random video chat when you prefer low-pressure connection. Start with text chat if video feels like too much. No login, no small talk with people you know. Our stranger chat lets you connect at your own pace. Skip anytime. No registration. Many introverts find it easier to open up to strangers.</p><p>Louuz is 100% free. Pick video or text, skip when you want. We don't store chats. The best stranger chat for introverts—try it now. Take your time.</p>`,
+  },
 ];
 
-/** Lookup niche by slug. Returns undefined if not found. */
-export function getNicheBySlug(slug: string): NichePageData | undefined {
+/** Lookup niche by slug */
+export function getNicheBySlug(slug: string): NichePage | undefined {
   return NICHE_PAGES.find((n) => n.slug === slug);
 }
 
-/** All slugs for sitemap and routing validation */
+/** All slugs for sitemap and routing */
 export const NICHE_SLUGS = NICHE_PAGES.map((n) => n.slug);
+
+/** Countries only - for region filter on Index */
+export const COUNTRY_PAGES = NICHE_PAGES.filter((n) => n.type === "country");

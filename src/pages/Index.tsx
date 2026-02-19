@@ -7,7 +7,7 @@ import {
 } from "lucide-react"; 
 import SeoExpansion from "@/components/SeoExpansion";
 import Footer from "@/components/Footer";
-import { NICHE_PAGES } from "@/data/nichePages"; 
+import { COUNTRY_PAGES } from "@/data/nichePages"; 
 
 const PAGE_TITLE = "Louuz — Talk to Strangers | Free Omegle Alternative";
 
@@ -55,16 +55,17 @@ const Index = () => {
       reader.readAsDataURL(file);
     }
   };
-// Função para pegar o código ISO da bandeira (br, us, de) baseado no slug
+// Country slug -> flag ISO code for region filter
 const getCountryIso = (slug: string) => {
-    const map: Record<string, string> = {
-        'brazil': 'br',
-        'usa': 'us',
-        'germany': 'de',
-        'india': 'in',
-        // adicione outros se precisar
-    };
-    return map[slug] || 'un';
+  const map: Record<string, string> = {
+    usa: "us", uk: "gb", canada: "ca", australia: "au", brazil: "br",
+    mexico: "mx", spain: "es", france: "fr", germany: "de", italy: "it",
+    japan: "jp", "south-korea": "kr", india: "in", philippines: "ph",
+    indonesia: "id", turkey: "tr", russia: "ru", argentina: "ar",
+    portugal: "pt", colombia: "co", sweden: "se", netherlands: "nl",
+    poland: "pl", vietnam: "vn", thailand: "th",
+  };
+  return map[slug] ?? "un";
 };
   useEffect(() => {
     if (isMenuOpen || isFilterModalOpen) {
@@ -171,17 +172,16 @@ const getCountryIso = (slug: string) => {
                          </button>
 
                          {/* PAÍSES COM FOTO */}
-                         {NICHE_PAGES.map(niche => {
+                         {COUNTRY_PAGES.map(niche => {
                              const iso = getCountryIso(niche.slug);
                              return (
                                  <button key={niche.slug} onClick={() => setSelectedCountry(niche.slug)} className={`p-3 rounded-xl border flex flex-col items-center gap-2 transition-all ${selectedCountry === niche.slug ? 'bg-purple-500/10 border-purple-500 text-purple-400' : 'bg-zinc-800/50 border-white/5 text-zinc-400'}`}>
-                                    {/* Imagem da Bandeira (CDN) */}
                                     <img 
                                         src={`https://flagcdn.com/w40/${iso}.png`} 
-                                        alt={niche.displayName} 
+                                        alt={niche.name} 
                                         className="w-8 h-6 object-cover rounded-sm shadow-sm"
                                     />
-                                    <span className="text-xs font-bold truncate w-full text-center">{niche.displayName}</span>
+                                    <span className="text-xs font-bold truncate w-full text-center">{niche.name}</span>
                                  </button>
                              );
                          })}
