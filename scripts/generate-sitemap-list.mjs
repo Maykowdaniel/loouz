@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+
 /**
  * Sitemap URL Generator for Niche Pages
  * Run: node scripts/generate-sitemap-list.mjs
@@ -13,16 +14,16 @@ const CHAT_BASE = "/chat";
 
 // Slugs from src/data/nichePages.ts - keep in sync when adding new niches
 const NICHE_SLUGS = [
-  "brazil",
-  "usa",
-  "germany",
-  "india",
-  "anime",
-  "lgbtq",
-  "gamers",
-  "teens",
-  "music",
-  "dating",
+    "brazil",
+    "usa",
+    "germany",
+    "india",
+    "anime",
+    "lgbtq",
+    "gamers",
+    "teens",
+    "music",
+    "dating",
 ];
 
 const today = new Date().toISOString().split("T")[0];
@@ -30,8 +31,8 @@ const today = new Date().toISOString().split("T")[0];
 console.log("<!-- Copy these <url> entries into your sitemap.xml -->\n");
 
 for (const slug of NICHE_SLUGS) {
-  const loc = `${SITE_URL}${CHAT_BASE}/${slug}`;
-  console.log(`  <url>
+    const loc = `${SITE_URL}${CHAT_BASE}/${slug}`;
+    console.log(`  <url>
     <loc>${loc}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>weekly</changefreq>

@@ -14,8 +14,11 @@ import { resolve } from "path";
 import { NICHE_PAGES } from "../src/data/nichePages";
 import { BLOG_POSTS } from "../src/data/blogPosts";
 
-const BASE_URL = "https://louuz.com";
-const today = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+// 1. CORRIGIDO: Adicionado o www
+const BASE_URL = "https://www.louuz.com";
+
+// 2. CORRIGIDO: Criada a variável 'today' que estava faltando
+const today = new Date().toISOString().split("T")[0];
 
 const xmlEscape = (str: string): string =>
   str
@@ -30,8 +33,7 @@ function urlEntry(
   options: { lastmod?: string; changefreq?: string; priority?: number } = {}
 ): string {
   const { lastmod, changefreq, priority } = options;
-  let xml = `  <url>
-    <loc>${xmlEscape(loc)}</loc>`;
+  let xml = `  <url>\n    <loc>${xmlEscape(loc)}</loc>`;
   if (lastmod) xml += `\n    <lastmod>${lastmod}</lastmod>`;
   if (changefreq) xml += `\n    <changefreq>${changefreq}</changefreq>`;
   if (priority !== undefined) xml += `\n    <priority>${priority}</priority>`;
