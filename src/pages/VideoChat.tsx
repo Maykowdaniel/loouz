@@ -6,7 +6,6 @@ import SimplePeer from "simple-peer";
 import { io, Socket } from "socket.io-client";
 
 const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
-
 const STATUS_SEARCHING = "Searching for someone...";
 const STATUS_CONNECTING = "Connecting...";
 const STATUS_CONNECTED = "Connected!";

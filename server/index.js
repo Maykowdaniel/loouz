@@ -18,6 +18,12 @@ let textQueue = [];
 const textPairs = new Map();
 const textUsers = new Map();
 
+
+// MEMÓRIA (Somente Humanos - Vídeo)
+let videoQueue = [];
+const videoPairs = new Map();
+
+
 function getCountryByIp(socket) {
     let ip = socket.handshake.headers['x-forwarded-for'] || socket.conn.remoteAddress;
     if (ip && ip.includes('::ffff:')) ip = ip.split('::ffff:')[1];
@@ -27,7 +33,31 @@ function getCountryByIp(socket) {
 }
 
 io.on("connection", (socket) => {
+    socket.on("join_video_queue", () => {
+        // Garante que o usuário não esteja duplicado na fila
+        videoQueue = videoQueue.filter(id => id !== socket.id);
 
+        if (videoQueue.length > 0) {
+            // Match encontrado! Pega a primeira pessoa da fila
+            const partnerId = videoQueue.shift();
+
+            // Salva o par
+            videoPairs.set(socket.id, partnerId);
+            videoPairs.set(partnerId, socket.id);
+
+            // Inicia a chamada. Um DEVE ser o 'initiator: true' para o WebRTC funcionar.
+            io.to(partnerId).emit("start_call", { socketId: socket.id, initiator: true });
+            io.to(socket.id).emit("start_call", { socketId: partnerId, initiator: false });
+        } else {
+            // Se não tem ninguém, entra na fila de espera
+            videoQueue.push(socket.id);
+        }
+    });
+
+    // Servidor atua como "carteiro" repassando os sinais SDP/ICE
+    socket.on("send_signal", (data) => {
+        io.to(data.userToCall).emit("receive_signal", { signal: data.signalData });
+    });
     socket.on("typing", () => {
         const pair = textPairs.get(socket.id);
         if (pair) io.to(pair.partnerId).emit("partner_typing");
@@ -132,6 +162,20 @@ io.on("connection", (socket) => {
             textPairs.delete(socket.id);
             textPairs.delete(pair.partnerId);
         }
+
+        socket.on("disconnect", () => {
+        // ... (mantenha seu código de limpeza de texto aqui) ...
+
+        // Limpeza de conexões de vídeo
+        videoQueue = videoQueue.filter(id => id !== socket.id);
+        const partnerId = videoPairs.get(socket.id);
+        
+        if (partnerId) {
+            io.to(partnerId).emit("partner_disconnected");
+            videoPairs.delete(socket.id);
+            videoPairs.delete(partnerId);
+        }
+    });
     });
 });
 
