@@ -43,19 +43,26 @@ const DynamicSeoPage = () => {
   const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [onlineCount, setOnlineCount] = useState(1384);
+  const [onlineCount, setOnlineCount] = useState(Math.floor(Math.random() * 51));
 
   const niche = slug ? getNicheBySlug(slug) : undefined;
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setOnlineCount((prev) => {
-        const change = Math.floor(Math.random() * 7) - 3;
-        return prev + change;
-      });
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+  const interval = setInterval(() => {
+    setOnlineCount((prev) => {
+      // Variação orgânica entre -3 e +3 pessoas a cada ciclo
+      const change = Math.floor(Math.random() * 7) - 3;
+      const newValue = prev + change;
+      
+      // Limita o valor para nunca passar de 50 ou cair abaixo de 0
+      if (newValue < 0) return 0;
+      if (newValue > 50) return 50;
+      return newValue;
+    });
+  }, 4000);
+
+  return () => clearInterval(interval);
+}, []);
 
   const handleEnterChat = (mode: "text" | "video") => {
     const randomNum = Math.floor(Math.random() * 90000) + 10000;

@@ -13,21 +13,27 @@ const SeoLandingPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   // --- LÓGICA DO CONTADOR (Copiada da Home) ---
-  const [onlineCount, setOnlineCount] = useState(1384);
+  const [onlineCount, setOnlineCount] = useState(Math.random() * 51);
 
-  useEffect(() => {
-    // Atualiza o contador a cada 4 segundos
-    const interval = setInterval(() => {
-      setOnlineCount(prev => {
-        const change = Math.floor(Math.random() * 7) - 3;
-        return prev + change;
-      });
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+ useEffect(() => {
+  const interval = setInterval(() => {
+    setOnlineCount((prev) => {
+      // Variação orgânica entre -3 e +3 pessoas a cada ciclo
+      const change = Math.floor(Math.random() * 7) - 3;
+      const newValue = prev + change;
+      
+      // Limita o valor para nunca passar de 50 ou cair abaixo de 0
+      if (newValue < 0) return 0;
+      if (newValue > 50) return 50;
+      return newValue;
+    });
+  }, 4000);
+
+  return () => clearInterval(interval);
+}, []);
 
   const handleEnterChat = (mode: 'text' | 'video') => {
-    const randomNum = Math.floor(Math.random() * 90000) + 10000;
+    const randomNum = Math.floor(Math.random() * 60) + 1;
     const guestName = `Guest${randomNum}`;
     const targetPath = mode === 'video' ? "/video" : "/text-chat";
 

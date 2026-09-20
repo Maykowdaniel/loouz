@@ -13,26 +13,25 @@ const Lobby = () => {
 
   // ✅ 1. FAIXA AJUSTADA PARA 1000 - 2000 (IGUAL AO INDEX.TSX)
   const [onlineCount, setOnlineCount] = useState(
-    Math.floor(Math.random() * (2000 - 1000 + 1)) + 1000
+    Math.floor(Math.random() * (51))
   );
 
   useEffect(() => {
-    // ✅ 2. LÓGICA DE OSCILAÇÃO SINCRONIZADA
-    const interval = setInterval(() => {
-      setOnlineCount((prev) => {
-        // Variação pequena entre -3 e +3 para parecer real (igual ao Index)
-        const change = Math.floor(Math.random() * 7) - 3;
-        const newValue = prev + change;
-        
-        // Garante que o número não saia da faixa de autoridade
-        if (newValue < 1000) return 1005;
-        if (newValue > 2000) return 1995;
-        return newValue;
-      });
-    }, 4000); // Atualiza a cada 4 segundos (igual ao Index)
+  const interval = setInterval(() => {
+    setOnlineCount((prev) => {
+      // Variação orgânica entre -3 e +3 pessoas a cada ciclo
+      const change = Math.floor(Math.random() * 7) - 3;
+      const newValue = prev + change;
+      
+      // Limita o valor para nunca passar de 50 ou cair abaixo de 0
+      if (newValue < 0) return 0;
+      if (newValue > 50) return 50;
+      return newValue;
+    });
+  }, 4000);
 
-    return () => clearInterval(interval);
-  }, []);
+  return () => clearInterval(interval);
+}, []);
 
   return (
     <div className="gradient-bg flex h-screen flex-col pb-16">

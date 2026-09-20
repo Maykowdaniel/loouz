@@ -29,7 +29,7 @@ const Index = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Estados Globais da Página
-  const [onlineCount, setOnlineCount] = useState(Math.floor(Math.random() * 7000) + 80);
+  const [onlineCount, setOnlineCount] = useState(Math.floor(Math.random() * 51));
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [pendingMode, setPendingMode] = useState<'text' | 'video' | null>(null);
@@ -75,20 +75,22 @@ const getCountryIso = (slug: string) => {
     }
   }, [isMenuOpen, isFilterModalOpen]);
 
-  useEffect(() => {
-    document.title = PAGE_TITLE;
-    document.documentElement.lang = "en";
-    
-    const interval = setInterval(() => {
-      setOnlineCount(prev => {
-        const change = Math.floor(Math.random() * 11) - 4; 
-        const newValue = prev + change;
-        return newValue < 50 ? 55 : newValue;
-      });
-    }, 4000);
+useEffect(() => {
+  const interval = setInterval(() => {
+    setOnlineCount((prev) => {
+      // Variação orgânica entre -3 e +3 pessoas a cada ciclo
+      const change = Math.floor(Math.random() * 7) - 3;
+      const newValue = prev + change;
+      
+      // Limita o valor para nunca passar de 50 ou cair abaixo de 0
+      if (newValue < 0) return 0;
+      if (newValue > 50) return 50;
+      return newValue;
+    });
+  }, 4000);
 
-    return () => clearInterval(interval);
-  }, []);
+  return () => clearInterval(interval);
+}, []);
 
   const handleInitialClick = (mode: 'text' | 'video') => {
     setPendingMode(mode);

@@ -35,7 +35,7 @@ const AnonymousChat = () => {
   }, []);
 
   const handleEnterChat = (mode: "text" | "video") => {
-    const randomNum = Math.floor(Math.random() * 90000) + 10000;
+    const randomNum = Math.floor(Math.random() * 60) + 1;
     navigate(mode === "video" ? "/video" : "/text-chat", {
       state: { name: `Guest${randomNum}`, gender: "unspecified" },
     });
