@@ -2,15 +2,15 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { 
-  Video, Home, Globe, CheckCircle2, X, Camera, User
-  // Removi os ícones conflitantes
+  Video, Globe, X 
 } from "lucide-react"; 
 import SeoExpansion from "@/components/SeoExpansion";
 import Footer from "@/components/Footer";
 import { COUNTRY_PAGES } from "@/data/nichePages"; 
+import { io, Socket } from "socket.io-client";
 
 const PAGE_TITLE = "Louuz — Talk to Strangers | Free Omegle Alternative";
-
+const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 // Componente MenuItem auxiliar
 const MenuItem = ({ icon, label, onClick }: { icon: React.ReactNode, label: string, onClick?: () => void }) => (
   <button 
@@ -29,18 +29,18 @@ const Index = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Estados Globais da Página
-  const [onlineCount, setOnlineCount] = useState(Math.floor(Math.random() * 51));
+  const [onlineCount, setOnlineCount] = useState<number>(1);
+  const socketRef = useRef<Socket | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
   const [pendingMode, setPendingMode] = useState<'text' | 'video' | null>(null);
   const [selectedCountry, setSelectedCountry] = useState<string>('global');
 
-  // --- NOVOS ESTADOS (Movidos para dentro do componente) ---
+  // Novos estados do usuário
   const [myGender, setMyGender] = useState<'m' | 'f'>('m'); 
   const [lookingFor, setLookingFor] = useState<'m' | 'f' | 'any'>('any'); 
   const [myAvatar, setMyAvatar] = useState<string>(""); 
 
-  // Função de Upload de Foto (Movida para dentro do componente)
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -55,18 +55,19 @@ const Index = () => {
       reader.readAsDataURL(file);
     }
   };
-// Country slug -> flag ISO code for region filter
-const getCountryIso = (slug: string) => {
-  const map: Record<string, string> = {
-    usa: "us", uk: "gb", canada: "ca", australia: "au", brazil: "br",
-    mexico: "mx", spain: "es", france: "fr", germany: "de", italy: "it",
-    japan: "jp", "south-korea": "kr", india: "in", philippines: "ph",
-    indonesia: "id", turkey: "tr", russia: "ru", argentina: "ar",
-    portugal: "pt", colombia: "co", sweden: "se", netherlands: "nl",
-    poland: "pl", vietnam: "vn", thailand: "th",
+
+  const getCountryIso = (slug: string) => {
+    const map: Record<string, string> = {
+      usa: "us", uk: "gb", canada: "ca", australia: "au", brazil: "br",
+      mexico: "mx", spain: "es", france: "fr", germany: "de", italy: "it",
+      japan: "jp", "south-korea": "kr", india: "in", philippines: "ph",
+      indonesia: "id", turkey: "tr", russia: "ru", argentina: "ar",
+      portugal: "pt", colombia: "co", sweden: "se", netherlands: "nl",
+      poland: "pl", vietnam: "vn", thailand: "th",
+    };
+    return map[slug] ?? "un";
   };
-  return map[slug] ?? "un";
-};
+
   useEffect(() => {
     if (isMenuOpen || isFilterModalOpen) {
       document.body.style.overflow = 'hidden';
@@ -75,22 +76,21 @@ const getCountryIso = (slug: string) => {
     }
   }, [isMenuOpen, isFilterModalOpen]);
 
-useEffect(() => {
-  const interval = setInterval(() => {
-    setOnlineCount((prev) => {
-      // Variação orgânica entre -3 e +3 pessoas a cada ciclo
-      const change = Math.floor(Math.random() * 7) - 3;
-      const newValue = prev + change;
-      
-      // Limita o valor para nunca passar de 50 ou cair abaixo de 0
-      if (newValue < 0) return 0;
-      if (newValue > 50) return 50;
-      return newValue;
-    });
-  }, 4000);
+  // Conexão do Socket para obter a contagem real do servidor
+  useEffect(() => {
+    document.title = PAGE_TITLE;
+    document.documentElement.lang = "en";
 
-  return () => clearInterval(interval);
-}, []);
+    socketRef.current = io(SOCKET_URL);
+
+    socketRef.current.on("global_online_count", (data: { count: number }) => {
+      setOnlineCount(data.count);
+    });
+
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, []);
 
   const handleInitialClick = (mode: 'text' | 'video') => {
     setPendingMode(mode);
@@ -121,8 +121,7 @@ useEffect(() => {
       <div className="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none" />
       <div className="fixed bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
 
-
-    {/* --- MODAL DE CONFIGURAÇÃO --- */}
+      {/* --- MODAL DE CONFIGURAÇÃO --- */}
       {isFilterModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/90 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setIsFilterModalOpen(false)} />
@@ -163,7 +162,7 @@ useEffect(() => {
                     </div>
                 </div>
 
-                {/* 3. PAÍS (AGORA COM BANDEIRAS REAIS) */}
+                {/* 3. PAÍS */}
                 <div>
                     <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-3 block">Region</label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -173,7 +172,7 @@ useEffect(() => {
                             <span className="text-xs font-bold">Global</span>
                          </button>
 
-                         {/* PAÍSES COM FOTO */}
+                         {/* PAÍSES COM BANDEIRA */}
                          {COUNTRY_PAGES.map(niche => {
                              const iso = getCountryIso(niche.slug);
                              return (
@@ -218,7 +217,7 @@ useEffect(() => {
           </h2>
         </div>
         
-        {/* Contador */}
+        {/* CONTADOR EM TEMPO REAL */}
         <div className="flex flex-col items-center justify-center mb-12 animate-in fade-in zoom-in duration-700 delay-200">
              <div className="bg-zinc-900/50 backdrop-blur-md border border-zinc-800/50 px-8 py-4 rounded-2xl flex flex-col items-center shadow-[0_0_30px_rgba(0,0,0,0.5)]">
                 <div className="relative flex items-center justify-center mb-3">
@@ -234,7 +233,7 @@ useEffect(() => {
             </div>
         </div>
 
-        {/* Botão */}
+        {/* BOTÃO */}
         <div className="w-full max-w-lg space-y-4 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300 pb-12">
           <Button onClick={() => handleInitialClick('text')} className="w-full h-16 sm:h-[80px] rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-0 shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] active:scale-95 transition-all duration-200 animate-pulse-scale">
             <div className="flex items-center gap-4">

@@ -1,12 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Home, Layers, HelpCircle, Video, Keyboard } from "lucide-react";
 import Footer from "@/components/Footer";
 import { getNicheBySlug, type NichePage } from "@/data/nichePages";
+import { io, Socket } from "socket.io-client";
 
 const SITE_URL = "https://www.louuz.com";
 const CHAT_BASE = "/chat";
+// Ajuste a URL se necessário ("http://localhost:3001" para testes locais)
+const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 
 const FAQ_TEMPLATES = [
   {
@@ -34,35 +37,34 @@ const FAQ_TEMPLATES = [
 /** Replaces [Niche], [NicheName], [Emoji] in a string */
 function applyPlaceholders(text: string, niche: NichePage): string {
   return text
-    .replace(/\[Niche\]/g, niche.name)
-    .replace(/\[NicheName\]/g, niche.name)
-    .replace(/\[Emoji\]/g, niche.emoji);
+    .replace(/[Niche]/g, niche.name)
+    .replace(/[NicheName]/g, niche.name)
+    .replace(/[Emoji]/g, niche.emoji);
 }
 
 const DynamicSeoPage = () => {
   const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [onlineCount, setOnlineCount] = useState(Math.floor(Math.random() * 51));
+
+  // Estado do número real de usuários online
+  const [onlineCount, setOnlineCount] = useState<number>(1);
+  const socketRef = useRef<Socket | null>(null);
 
   const niche = slug ? getNicheBySlug(slug) : undefined;
 
+  // Escuta a contagem global em tempo real via Socket.io
   useEffect(() => {
-  const interval = setInterval(() => {
-    setOnlineCount((prev) => {
-      // Variação orgânica entre -3 e +3 pessoas a cada ciclo
-      const change = Math.floor(Math.random() * 7) - 3;
-      const newValue = prev + change;
-      
-      // Limita o valor para nunca passar de 50 ou cair abaixo de 0
-      if (newValue < 0) return 0;
-      if (newValue > 50) return 50;
-      return newValue;
-    });
-  }, 4000);
+    socketRef.current = io(SOCKET_URL);
 
-  return () => clearInterval(interval);
-}, []);
+    socketRef.current.on("global_online_count", (data: { count: number }) => {
+      setOnlineCount(data.count);
+    });
+
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, []);
 
   const handleEnterChat = (mode: "text" | "video") => {
     const randomNum = Math.floor(Math.random() * 90000) + 10000;
@@ -187,7 +189,7 @@ const DynamicSeoPage = () => {
           </h2>
         </div>
 
-        {/* CONTADOR */}
+        {/* CONTADOR EM TEMPO REAL */}
         <div className="flex flex-col items-center justify-center mb-12 animate-in fade-in zoom-in duration-700 delay-200">
           <div className="bg-zinc-900/50 backdrop-blur-md border border-zinc-800/50 px-8 py-4 rounded-2xl flex flex-col items-center shadow-[0_0_30px_rgba(0,0,0,0.5)]">
             <div className="relative flex items-center justify-center mb-3">

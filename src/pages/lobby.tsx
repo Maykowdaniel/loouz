@@ -2,7 +2,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Video, LogOut } from "lucide-react";
 import BottomNav from "@/components/BottomNav"; 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { io, Socket } from "socket.io-client";
+
+// Ajuste a URL do servidor se necessário (ex: "http://localhost:3001" para testes locais)
+const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 
 const Lobby = () => {
   const navigate = useNavigate();
@@ -11,27 +15,22 @@ const Lobby = () => {
   const userName = state?.name || "Guest";
   const userGender = state?.gender;
 
-  // ✅ 1. FAIXA AJUSTADA PARA 1000 - 2000 (IGUAL AO INDEX.TSX)
-  const [onlineCount, setOnlineCount] = useState(
-    Math.floor(Math.random() * (51))
-  );
+  // Estado do número real de usuários online
+  const [onlineCount, setOnlineCount] = useState<number>(1);
+  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-  const interval = setInterval(() => {
-    setOnlineCount((prev) => {
-      // Variação orgânica entre -3 e +3 pessoas a cada ciclo
-      const change = Math.floor(Math.random() * 7) - 3;
-      const newValue = prev + change;
-      
-      // Limita o valor para nunca passar de 50 ou cair abaixo de 0
-      if (newValue < 0) return 0;
-      if (newValue > 50) return 50;
-      return newValue;
-    });
-  }, 4000);
+    // Conecta ao servidor para escutar o evento real de conexões
+    socketRef.current = io(SOCKET_URL);
 
-  return () => clearInterval(interval);
-}, []);
+    socketRef.current.on("global_online_count", (data: { count: number }) => {
+      setOnlineCount(data.count);
+    });
+
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, []);
 
   return (
     <div className="gradient-bg flex h-screen flex-col pb-16">
@@ -58,7 +57,7 @@ const Lobby = () => {
       </header>
 
       <div className="flex-1 flex flex-col items-center justify-center gap-6 px-6 animate-fade-in-up">
-        {/* Prova Social Dinâmica - Agora com números consistentes */}
+        {/* Prova Social Dinâmica - Número real em tempo real */}
         <div className="flex items-center gap-2 bg-black/40 border border-green-500/30 px-4 py-2 rounded-full shadow-lg shadow-green-900/10 backdrop-blur-md mb-2">
             <div className="relative flex h-3 w-3">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>

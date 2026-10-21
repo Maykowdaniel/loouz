@@ -1,14 +1,34 @@
-import { useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useNavigate, useParams, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Video, MessageSquare } from "lucide-react";
 import Footer from "@/components/Footer";
 import { getNicheBySlug } from "@/data/nichePages";
+import { io, Socket } from "socket.io-client";
+
+// Ajuste a URL do servidor se necessário (ex: "http://localhost:3001" para testes locais)
+const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 
 const NicheChat = () => {
   const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
   const niche = slug ? getNicheBySlug(slug) : undefined;
+
+  // Estado do número real de usuários online via Socket.io
+  const [onlineCount, setOnlineCount] = useState<number>(1);
+  const socketRef = useRef<Socket | null>(null);
+
+  useEffect(() => {
+    socketRef.current = io(SOCKET_URL);
+
+    socketRef.current.on("global_online_count", (data: { count: number }) => {
+      setOnlineCount(data.count);
+    });
+
+    return () => {
+      socketRef.current?.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     if (niche) {
@@ -74,6 +94,20 @@ const NicheChat = () => {
       <section className="relative z-10 pt-16 pb-12 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="text-7xl sm:text-8xl mb-4">{niche.emoji}</div>
+          
+          {/* Contador de Usuários Online em Tempo Real */}
+          <div className="flex justify-center mb-6">
+            <div className="inline-flex items-center gap-2 bg-black/40 border border-green-500/30 px-4 py-2 rounded-full shadow-lg shadow-green-900/10 backdrop-blur-md">
+              <div className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+              </div>
+              <span className="text-green-400 font-bold text-sm tracking-wide">
+                {onlineCount.toLocaleString()} Online Users
+              </span>
+            </div>
+          </div>
+
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-white uppercase tracking-tight mb-6 drop-shadow-lg">
             {niche.h1Title}
           </h1>
