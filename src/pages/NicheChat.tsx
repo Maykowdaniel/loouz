@@ -41,11 +41,16 @@ const NicheChat = () => {
   }, [niche]);
 
   const handleEnterChat = (mode: "text" | "video") => {
-    const randomNum = Math.floor(Math.random() * 90000) + 10000;
-    navigate(mode === "video" ? "/video" : "/text-chat", {
-      state: { name: `Guest${randomNum}`, gender: "unspecified" },
-    });
-  };
+  const randomNum = Math.floor(Math.random() * 90000) + 10000;
+  
+  navigate(mode === "video" ? "/video" : "/text-chat", {
+    state: { 
+      name: `Guest${randomNum}`, 
+      gender: "unspecified",
+      from: window.location.pathname // 👈 GUARDA A ROTA ATUAL (ex: "/chat/usa")
+    },
+  });
+};
 
   if (slug !== undefined && !niche) {
     return <Navigate to="/" replace />;

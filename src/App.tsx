@@ -12,19 +12,19 @@ import TermsOfService from "./pages/Legal/TermsOfService";
 import CommunityGuidelines from "./pages/Legal/CommunityGuidelines";
 import NotFound from "./pages/NotFound";
 import SeoLandingPage from "./pages/SeoLandingPage";
-import NicheChat from "./pages/NicheChat";
+import DynamicSeoPage from "./pages/DynamicSeoPage"; // <--- ATUALIZADO PARA USAR O MODAL DE MATCH SETTINGS
 import AnonymousChat from "./pages/LandingPages/AnonymousChat";
 import TalkToStrangers from "./pages/LandingPages/TalkToStrangers";
 import OmegleAlternative from "./pages/LandingPages/OmegleAlternative";
 import BlogIndex from "./pages/Blog/BlogIndex";
 import BlogPost from "./pages/Blog/BlogPost";
 
-import Lobby from "./pages/lobby"; // Agora é o "Lar"
-import Rooms from "./pages/Rooms"; // <--- IMPORTAR NOVO ARQUIVO "Quartos"
+import Lobby from "./pages/lobby"; 
+import Rooms from "./pages/Rooms"; 
 
 import VideoChat from "./pages/VideoChat";
 import TextChat1v1 from "./pages/TextChat1v1";
-import Chat from "./pages/Chat"; // Chat de sala específica
+import Chat from "./pages/Chat"; 
 
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -60,12 +60,12 @@ const App = () => (
           <Route path="/lobby" element={<Lobby />} />
 
           {/* Quartos (Lista de Salas) */}
-          <Route path="/rooms" element={<Rooms />} />  {/* <--- MUDANÇA AQUI: Usa o Rooms, não o Chat */}
+          <Route path="/rooms" element={<Rooms />} />
 
           {/* Modos de Conversa */}
           <Route path="/text-chat" element={<TextChat1v1 />} />
           <Route path="/video" element={<VideoChat />} />
-          <Route path="/chat/:slug" element={<NicheChat />} />
+          <Route path="/chat/:slug" element={<DynamicSeoPage />} /> {/* <--- Rota atualizada com o DynamicSeoPage */}
           <Route path="/chat" element={<Chat />} />
 
           {/* Blog */}

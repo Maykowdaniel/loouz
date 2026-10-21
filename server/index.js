@@ -3,6 +3,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const geoip = require('geoip-lite');
+const mongoose = require('mongoose');
 
 const app = express();
 app.use(cors());
@@ -12,6 +13,21 @@ const server = http.createServer(app);
 const io = new Server(server, {
     cors: { origin: "*", methods: ["GET", "POST"] }
 });
+
+// --- CONEXÃO COM O MONGODB ATLAS ---
+const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://louuz_user:VCerrouasenha4321$@cluster0.lajklua.mongodb.net/?retryWrites=true&w=majority";
+
+mongoose.connect(MONGO_URI)
+  .then(() => console.log("📦 Conectado ao MongoDB Atlas com sucesso!"))
+  .catch((err) => console.error("❌ Erro ao conectar no MongoDB:", err));
+
+// Schema e Modelo para salvar os e-mails de notificação
+const emailSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  createdAt: { type: Date, default: Date.now }
+});
+
+const NotificationEmail = mongoose.model("NotificationEmail", emailSchema);
 
 // MEMÓRIA (Somente Humanos)
 let textQueue = [];
@@ -39,6 +55,25 @@ function getCountryByIp(socket) {
 io.on("connection", (socket) => {
     // Assim que alguém conecta, atualiza a contagem global
     broadcastOnlineCount();
+
+    // Ouvinte para registrar e-mail de notificação de horário de pico permanentemente no MongoDB
+    socket.on("register_notification_email", async (data) => {
+        const { email } = data || {};
+        if (email && email.includes("@")) {
+            try {
+                const existing = await NotificationEmail.findOne({ email });
+                if (!existing) {
+                    await NotificationEmail.create({ email });
+                    console.log(`[E-mail Salvo no Banco]: ${email}`);
+                } else {
+                    console.log(`[E-mail Já Cadastrado]: ${email}`);
+                }
+                socket.emit("email_registered_success", { message: "E-mail cadastrado com sucesso!" });
+            } catch (error) {
+                console.error("Erro ao salvar e-mail no MongoDB:", error);
+            }
+        }
+    });
 
     socket.on("join_video_queue", () => {
         videoQueue = videoQueue.filter(id => id !== socket.id);

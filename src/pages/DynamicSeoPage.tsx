@@ -1,14 +1,15 @@
 import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Home, Layers, HelpCircle, Video, Keyboard } from "lucide-react";
+import { 
+  Home, Layers, HelpCircle, Video, Keyboard, X, Mail, CheckCircle2 
+} from "lucide-react";
 import Footer from "@/components/Footer";
 import { getNicheBySlug, type NichePage } from "@/data/nichePages";
 import { io, Socket } from "socket.io-client";
 
 const SITE_URL = "https://www.louuz.com";
 const CHAT_BASE = "/chat";
-// Ajuste a URL se necessário ("http://localhost:3001" para testes locais)
 const SOCKET_URL = "https://loouz-oficial-final.onrender.com";
 
 const FAQ_TEMPLATES = [
@@ -34,18 +35,30 @@ const FAQ_TEMPLATES = [
   },
 ];
 
-/** Replaces [Niche], [NicheName], [Emoji] in a string */
+/** Substitui as tags de texto simples sem bugar com Regex */
 function applyPlaceholders(text: string, niche: NichePage): string {
   return text
-    .replace(/[Niche]/g, niche.name)
-    .replace(/[NicheName]/g, niche.name)
-    .replace(/[Emoji]/g, niche.emoji);
+    .replaceAll("[NicheName]", niche.name)
+    .replaceAll("[Niche]", niche.name)
+    .replaceAll("[Emoji]", niche.emoji);
 }
 
 const DynamicSeoPage = () => {
   const navigate = useNavigate();
   const { slug } = useParams<{ slug: string }>();
+
+  // Estados Globais da Página
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [pendingMode, setPendingMode] = useState<'text' | 'video' | null>(null);
+
+  // Estados de Filtros (Gênero)
+  const [myGender, setMyGender] = useState<'m' | 'f'>('m'); 
+  const [lookingFor, setLookingFor] = useState<'m' | 'f' | 'any'>('any'); 
+
+  // Estados do E-mail de Notificação
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [emailRegistered, setEmailRegistered] = useState<boolean>(false);
 
   // Estado do número real de usuários online
   const [onlineCount, setOnlineCount] = useState<number>(1);
@@ -66,16 +79,43 @@ const DynamicSeoPage = () => {
     };
   }, []);
 
-  const handleEnterChat = (mode: "text" | "video") => {
+  // Intercepta o clique para abrir o Modal de Configurações
+  const handleInitialClick = (mode: 'text' | 'video') => {
+    setPendingMode(mode);
+    setIsFilterModalOpen(true);
+  };
+
+  // Confirma e redireciona para o chat com as configurações
+  const handleConfirmChat = () => {
+    if (!pendingMode) return;
     const randomNum = Math.floor(Math.random() * 90000) + 10000;
-    navigate(mode === "video" ? "/video" : "/text-chat", {
-      state: { name: `Guest${randomNum}`, gender: "unspecified" },
+    const guestName = `Guest${randomNum}`;
+    const targetPath = pendingMode === 'video' ? "/video" : "/text-chat";
+
+    navigate(targetPath, { 
+      state: { 
+        name: guestName, 
+        country: slug || "global", // Envia o país atual da rota (ex: "usa")
+        gender: myGender,
+        lookingFor: lookingFor,
+        from: window.location.pathname // Guarda a rota de origem
+      } 
     });
   };
 
+  // Envia o e-mail para o backend via Socket.io para salvar no MongoDB
+  const handleRegisterNotificationEmail = () => {
+    if (userEmail && userEmail.includes("@")) {
+      socketRef.current?.emit("register_notification_email", { email: userEmail });
+      setEmailRegistered(true);
+    } else {
+      alert("Please enter a valid email address.");
+    }
+  };
+
   useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
-  }, [isMenuOpen]);
+    document.body.style.overflow = (isMenuOpen || isFilterModalOpen) ? "hidden" : "unset";
+  }, [isMenuOpen, isFilterModalOpen]);
 
   useEffect(() => {
     if (niche) {
@@ -115,6 +155,101 @@ const DynamicSeoPage = () => {
       {/* Efeitos de Fundo */}
       <div className="fixed top-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px] pointer-events-none" />
       <div className="fixed bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/20 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* --- MODAL DE CONFIGURAÇÕES (MATCH SETTINGS) --- */}
+      {isFilterModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-md animate-in fade-in duration-300" onClick={() => setIsFilterModalOpen(false)} />
+          <div className="relative w-full max-w-lg bg-[#18181b] border border-white/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh] overflow-y-auto">
+            
+            <div className="p-6 border-b border-white/5 flex justify-between items-center bg-zinc-900/50">
+              <h3 className="text-xl font-bold text-white">Match Settings</h3>
+              <Button variant="ghost" size="icon" onClick={() => setIsFilterModalOpen(false)}>
+                <X className="text-zinc-400" />
+              </Button>
+            </div>
+
+            <div className="p-6 space-y-6">
+                {/* 1. SELEÇÃO DE GÊNERO */}
+                <div>
+                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-3 block">I am</label>
+                    <div className="grid grid-cols-2 gap-3">
+                        <button onClick={() => setMyGender('m')} className={`h-12 rounded-xl border flex items-center justify-center gap-2 font-bold transition-all ${myGender === 'm' ? 'bg-blue-500/20 border-blue-500 text-blue-400' : 'bg-zinc-800/50 border-white/5 text-zinc-400'}`}>
+                            <span className="text-lg">👨</span> Male
+                        </button>
+                        <button onClick={() => setMyGender('f')} className={`h-12 rounded-xl border flex items-center justify-center gap-2 font-bold transition-all ${myGender === 'f' ? 'bg-pink-500/20 border-pink-500 text-pink-400' : 'bg-zinc-800/50 border-white/5 text-zinc-400'}`}>
+                            <span className="text-lg">👩</span> Female
+                        </button>
+                    </div>
+                </div>
+
+                {/* 2. PROCURANDO POR */}
+                <div>
+                    <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-3 block">Looking for</label>
+                    <div className="grid grid-cols-3 gap-2">
+                        <button onClick={() => setLookingFor('m')} className={`h-12 rounded-xl border flex items-center justify-center gap-2 font-bold transition-all ${lookingFor === 'm' ? 'bg-blue-500/20 border-blue-500 text-blue-400' : 'bg-zinc-800/50 border-white/5 text-zinc-400'}`}>
+                            <span className="text-lg">👨</span> Guys
+                        </button>
+                        <button onClick={() => setLookingFor('f')} className={`h-12 rounded-xl border flex items-center justify-center gap-2 font-bold transition-all ${lookingFor === 'f' ? 'bg-pink-500/20 border-pink-500 text-pink-400' : 'bg-zinc-800/50 border-white/5 text-zinc-400'}`}>
+                            <span className="text-lg">👩</span> Girls
+                        </button>
+                        <button onClick={() => setLookingFor('any')} className={`h-12 rounded-xl border flex items-center justify-center gap-2 font-bold transition-all ${lookingFor === 'any' ? 'bg-purple-500/20 border-purple-500 text-purple-400' : 'bg-zinc-800/50 border-white/5 text-zinc-400'}`}>
+                            <span className="text-lg">👥</span> Both
+                        </button>
+                    </div>
+                </div>
+
+                {/* 3. AVISO DE HORÁRIO DE PICO & E-MAIL DE NOTIFICAÇÃO (OPCIONAL) */}
+                <div className="pt-4 border-t border-white/10 space-y-3">
+                  <div className="bg-cyan-950/40 border border-cyan-500/20 rounded-xl p-3 flex flex-col gap-1 text-center">
+                      <span className="text-xs font-bold text-cyan-400 uppercase tracking-wider">
+                          🔥 Best Peak Hours
+                      </span>
+                      <span className="text-xs text-zinc-300">
+                          Higher activity daily from <strong className="text-white">8 PM to 11 PM (UTC)</strong>
+                      </span>
+                  </div>
+
+                  <div>
+                      <label className="text-xs font-bold text-zinc-500 uppercase tracking-widest mb-1.5 block">
+                          Notify me when active (Optional)
+                      </label>
+                      <div className="flex gap-2">
+                          <input 
+                              type="email" 
+                              placeholder="your@email.com"
+                              value={userEmail}
+                              onChange={(e) => setUserEmail(e.target.value)}
+                              disabled={emailRegistered}
+                              className="flex-1 bg-zinc-800/60 border border-white/10 rounded-xl px-3 py-2 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-cyan-500 disabled:opacity-50"
+                          />
+                          <button
+                              type="button"
+                              onClick={handleRegisterNotificationEmail}
+                              disabled={emailRegistered || !userEmail}
+                              className="bg-cyan-500 hover:bg-cyan-400 text-black font-bold px-3 py-2 rounded-xl text-xs uppercase transition-all disabled:opacity-40 flex items-center gap-1"
+                          >
+                              {emailRegistered ? <CheckCircle2 size={14} /> : <Mail size={14} />}
+                              {emailRegistered ? "Saved" : "Notify"}
+                          </button>
+                      </div>
+                      {emailRegistered && (
+                          <p className="text-[11px] text-emerald-400 mt-1">
+                              ✓ We will notify you when peak activity starts!
+                          </p>
+                      )}
+                  </div>
+                </div>
+
+            </div>
+            <div className="p-6 border-t border-white/5 bg-zinc-900/50">
+              <Button onClick={handleConfirmChat} className="w-full h-14 rounded-xl text-lg font-black uppercase tracking-wide bg-white text-black hover:bg-zinc-200">
+                Start {pendingMode === 'video' ? 'Video' : 'Text'} Chat
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Header com Menu */}
       <div className="absolute top-0 right-0 p-6 z-[60]">
@@ -208,7 +343,7 @@ const DynamicSeoPage = () => {
         {/* BOTÕES DE AÇÃO */}
         <div className="w-full max-w-lg space-y-4 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-300 pb-12">
           <Button
-            onClick={() => handleEnterChat("video")}
+            onClick={() => handleInitialClick("video")}
             className="w-full h-16 sm:h-[80px] rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-0 shadow-[0_0_30px_rgba(6,182,212,0.4)] hover:shadow-[0_0_50px_rgba(6,182,212,0.6)] active:scale-95 transition-all duration-200 animate-pulse-scale"
           >
             <div className="flex items-center gap-4">
@@ -229,7 +364,7 @@ const DynamicSeoPage = () => {
           </Button>
 
           <Button
-            onClick={() => handleEnterChat("text")}
+            onClick={() => handleInitialClick("text")}
             className="w-full h-16 sm:h-[72px] rounded-full bg-white text-black hover:bg-zinc-200 hover:scale-[1.01] active:scale-95 transition-all duration-200 border-0 shadow-lg group"
           >
             <div className="flex items-center gap-4">
